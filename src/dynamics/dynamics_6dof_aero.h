@@ -9,7 +9,7 @@ public:
     Dynamics6dofAero(Rocket* rocket, Environment* env);
 
     void operator()(const state& x, state& dx, const double t);
-    long long count = 0;
+
 private:
     Rocket* p_rocket;
     Environment* p_env;

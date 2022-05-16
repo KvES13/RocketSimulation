@@ -5,7 +5,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QDebug>
-//#include <chrono>
 
 #define EIGEN_MPL2_ONLY
 #include "Eigen/Core"
@@ -15,8 +14,6 @@
 #include "environment.h"
 #include "stage.h"
 #include "wrocket.h"
-//#include "dynamics/dynamics_base.h"
-//#include "environment/sequence_clock.h"
 
 
 namespace Ui {

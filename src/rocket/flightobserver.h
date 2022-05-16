@@ -24,7 +24,7 @@ class FlightObserver {
     int counter = 0;
 
     FlightObserver() {};
-    FlightObserver(Rocket* rocket); /// @todo Explicit
+    FlightObserver(Rocket* rocket);
 
     Rocket* p_rocket;
     Coordinate crd;
@@ -73,24 +73,12 @@ class FlightObserver {
     QVector<Moment> moment;
     QVector<double> downrage;
 
-
-
-        QVector<QVector<double>> vposition = QVector(9,QVector<double>()); /*={QVector<double>(),QVector<double>(),QVector<double>(),
-                                             QVector<double>(),QVector<double>(),QVector<double>(),
-                                             QVector<double>(),QVector<double>(),QVector<double>()}; //9*/
-        QVector<QVector<double>> vvelocity= QVector(9,QVector<double>()); /*={QVector<double>(),QVector<double>(),QVector<double>(),
-                                              QVector<double>(),QVector<double>(),QVector<double>(),
-                                             QVector<double>(),QVector<double>(),QVector<double>()}; //9*/
-        QVector<QVector<double>> vacceleration= QVector(6,QVector<double>()); /*={QVector<double>(),QVector<double>(),QVector<double>(),
-
-                                                 QVector<double>(),QVector<double>(),QVector<double>()}; //6*/
-        QVector<QVector<double>> vforce= QVector(9,QVector<double>());/*={QVector<double>(),QVector<double>(),QVector<double>(),
-                                          QVector<double>(),QVector<double>(),QVector<double>(),
-                                          QVector<double>(),QVector<double>(),QVector<double>()}; //9*/
-        QVector<QVector<double>> vattitude;
-        QVector<QVector<double>> vangular_velocity;
-
-//        Eigen::Vector3d LLHStart;
+    QVector<QVector<double>> vposition = QVector(9,QVector<double>());
+    QVector<QVector<double>> vvelocity= QVector(9,QVector<double>());
+    QVector<QVector<double>> vacceleration= QVector(6,QVector<double>());
+    QVector<QVector<double>> vforce= QVector(9,QVector<double>());
+    QVector<QVector<double>> vattitude;
+    QVector<QVector<double>> vangular_velocity;
 
         std::string filePath = "";
 };

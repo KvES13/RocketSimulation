@@ -23,8 +23,6 @@ public:
 
 
     void FlightSequence(Environment *env, DynamicsBase::state& x0);
-//    void SwitchDynamics(const double time_start, DynamicsBase** dynamics,
-//                        SequenceClock* master_clock, Environment* env);
 
     int stageNumber;
     std::shared_ptr<Rocket> rocket;

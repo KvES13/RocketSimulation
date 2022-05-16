@@ -119,6 +119,5 @@ void Dynamics6dofAero::operator()(const state& x, state& dx, const double t)
 //    dx[12] = p_rocket->angular_acceleration[2];  //
 //    dx[13] = -p_rocket->engine.mdot_prop;  // massdot => mass_prop
 
-    count++;
 };
 

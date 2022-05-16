@@ -1,7 +1,6 @@
 #include "velocity.h"
 
 
-/// @todo initialization list
 Velocity::Velocity() {
     ECI << 0.0, 0.0, 0.0;
     ECEF << 0.0, 0.0, 0.0;

@@ -6,7 +6,7 @@ Coordinate::Coordinate() {
 };
 
 void Coordinate::setWind2Body(const double alpha, const double beta) {
-    // Input: radian
+
     dcm.wind2body << std::cos(alpha) * std::cos(beta), std::cos(alpha) * std::sin(beta), -std::sin(alpha),
                     -std::sin(beta)                  , std::cos(beta)                  ,              0.0,
                     std::sin(alpha) * std::cos(beta) , std::sin(alpha) * std::sin(beta), std::cos(alpha);
@@ -15,7 +15,7 @@ void Coordinate::setWind2Body(const double alpha, const double beta) {
 
 
 void Coordinate::setNED2Body(const Eigen::Vector3d &euler_angle) {
-    // Input: radian
+
     double azi = euler_angle(0);
     double elv = euler_angle(1);
     double rol = euler_angle(2);
@@ -47,7 +47,7 @@ void Coordinate::setECI2ECEF(const double epoch_time) {
 
 
 void Coordinate::setECEF2NED(const Eigen::Vector3d &pos_LLH) {
-    // Input: degree
+
     double lat = deg2rad(pos_LLH(0));
     double lon = deg2rad(pos_LLH(1));
 
@@ -59,7 +59,6 @@ void Coordinate::setECEF2NED(const Eigen::Vector3d &pos_LLH) {
 
 
 Eigen::Vector3d Coordinate::ECEF2LLH(const Eigen::Vector3d &pos_ECEF) {
-    // return: degree
 
     double x = pos_ECEF[0];
     double y = pos_ECEF[1];
@@ -76,7 +75,7 @@ Eigen::Vector3d Coordinate::ECEF2LLH(const Eigen::Vector3d &pos_ECEF) {
 };
 
 Eigen::Vector3d Coordinate::LLH2ECEF(const Eigen::Vector3d &pos_LLH) {
-    // Input: degree
+
     double lat = deg2rad(pos_LLH[0]);
     double lon = deg2rad(pos_LLH[1]);
     double height = pos_LLH[2];
@@ -90,7 +89,7 @@ Eigen::Vector3d Coordinate::LLH2ECEF(const Eigen::Vector3d &pos_LLH) {
 
 
 Eigen::Vector4d Coordinate::Quaternion(const Eigen::Vector3d &euler_angle) {
-    // Input: radian
+
     setNED2Body(euler_angle);
     Eigen::Vector4d q;
     q(0) = 0.5 * std::sqrt(1.0 + dcm.NED2body(0, 0) - dcm.NED2body(1, 1) - dcm.NED2body(2, 2));
@@ -99,7 +98,7 @@ Eigen::Vector4d Coordinate::Quaternion(const Eigen::Vector3d &euler_angle) {
     q(3) = 0.5 * std::sqrt(1.0 + dcm.NED2body(0, 0) + dcm.NED2body(1, 1) + dcm.NED2body(2, 2));
 
     Eigen::VectorXd::Index index_quat_max;
-    /*double quat_max = */q.maxCoeff(&index_quat_max);
+    /*double quat_max =*/q.maxCoeff(&index_quat_max);
     switch(index_quat_max) {
         case 0:
             q(0) = 0.5 * sqrt(1.0 + dcm.NED2body(0, 0) - dcm.NED2body(1,1) - dcm.NED2body(2,2));
@@ -134,7 +133,7 @@ Eigen::Vector4d Coordinate::Quaternion(const Eigen::Vector3d &euler_angle) {
 
 
 Eigen::Vector3d Coordinate::EulerAngle() {
-    // return: radian
+
     double azimuth = std::atan2(dcm.NED2body(0, 1), dcm.NED2body(0, 0));
     double elevation = -std::asin(dcm.NED2body(0, 2));
     double roll = std::atan2(dcm.NED2body(1, 2), dcm.NED2body(2, 2));
@@ -147,12 +146,12 @@ Eigen::Vector3d Coordinate::EulerAngle() {
 
 double Coordinate::distance_surface(const Eigen::Vector3d& pos0_LLH_,
                         const Eigen::Vector3d& pos1_LLH_){
-    double const earth_radius = 6378137; // 地球半径 m
-   // static Coordinate c;
+    double const earth_radius = 6378137;
+
     Eigen::Vector3d pos0_ECEF_ = LLH2ECEF(pos0_LLH_);
     Eigen::Vector3d pos1_ECEF_ = LLH2ECEF(pos1_LLH_);
     double theta = acos(pos0_ECEF_.dot(pos1_ECEF_) /
-                        pos0_ECEF_.norm() / pos1_ECEF_.norm()); // radius
+                        pos0_ECEF_.norm() / pos1_ECEF_.norm());
     return earth_radius * theta;
 }
 

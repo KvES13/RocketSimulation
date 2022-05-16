@@ -37,7 +37,6 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
     coordinate.setECEF2NED(p_rocket->position.LLH);
 
     p_rocket->velocity.ECI = Eigen::Map<Eigen::Vector3d>(std::vector<double>(x.begin()+3, x.begin()+6).data());
-    // p_rocket->velocity.ECEF = coordinate.dcm.ECI2ECEF * p_rocket->velocity.ECI - coordinate.dcm.EarthRotate * p_rocket->position.ECI;
     p_rocket->velocity.ECEF = coordinate.dcm.ECI2ECEF * (p_rocket->velocity.ECI - coordinate.dcm.EarthRotate * p_rocket->position.ECI);
     p_rocket->velocity.NED = coordinate.dcm.ECEF2NED * p_rocket->velocity.ECEF;
 
@@ -47,17 +46,11 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
 
     p_rocket->attitude.euler_angle = coordinate.EulerAngle();
 
-    // p_rocket->angular_velocity = Eigen::Map<Eigen::Vector3d>(std::vector<double>(x.begin()+10, x.begin()+13).data());
-
     p_rocket->mass.propellant = x[13];
 
 
     // Update Environment
     double altitude = p_rocket->position.LLH[2];
-    //EnvironmentAir air(altitude);
-    //EnvironmentAir air_sea_level(0.0);
-    // Air airg;
-    // Atmosphere atm(altitude);
 
     p_env->atmosphere->setAltitude(altitude);
 
@@ -80,9 +73,6 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
     p_rocket->Cmq = p_rocket->getCmq(p_rocket->velocity.mach_number);
     p_rocket->Cnr = p_rocket->getCnr(p_rocket->velocity.mach_number);
 
-    // Calculate AoA
-    // p_rocket->angle_of_attack = std::atan2(p_rocket->velocity.air_body[2], p_rocket->velocity.air_body[0]);
-    if (p_rocket->velocity.air_body.norm() <= 0.0) {
         p_rocket->angle_of_attack = 0.0;
         p_rocket->sideslip_angle = 0.0;
     } else {
@@ -105,19 +95,6 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
         p_rocket->acceleration.ECI << 0.0, 0.0, 0.0;
     }
 
-    // // Calculate Moment
-    // p_rocket->moment.gyro = GyroEffectMoment();
-    // p_rocket->moment.thrust = ThrustMoment();
-    // p_rocket->moment.aero_force = AeroForceMoment();
-    // p_rocket->moment.aero_dumping = AeroDampingMoment();
-    // p_rocket->moment.jet_dumping = JetDampingMoment();
-    
-    // // Calculate Angle Velocity
-    // p_rocket->angular_acceleration = p_rocket->getInertiaTensor().inverse() * p_rocket->moment.Sum();
-
-    // // Calculate Quaternion
-    // p_rocket->quaternion_dot = 0.5 * QuaternionDiff();
-
 
     dx[0] = p_rocket->velocity.ECI[0];  // vel_ECI => pos_ECI
     dx[1] = p_rocket->velocity.ECI[1];  // 
@@ -134,9 +111,5 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
     dx[12] = 0.0;  // 
     dx[13] = -p_rocket->engine.mdot_prop;  // massdot => mass_prop
 
-    #ifdef DEBUG_NO
-    std::cout << p_rocket->force.thrust << std::endl;
-    std::cout << p_rocket->CA << std::endl;
-    #endif
 
 };

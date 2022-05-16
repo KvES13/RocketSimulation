@@ -9,9 +9,7 @@
 RocketStage::RocketStage(int stageNumber, std::shared_ptr<Rocket> rocket)
 {
     this->stageNumber = stageNumber;
-   // this->rocket = std::make_shared<Rocket>(rocket);
     this->rocket = rocket;
- //  this->rocket->reset(rocket);//std::make_shared<Rocket>(rocket);
 }
 
 RocketStage RocketStage::create(const int stage,

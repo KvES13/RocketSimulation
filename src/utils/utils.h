@@ -8,10 +8,9 @@
 #define EIGEN_MPL2_ONLY
 #include "Eigen/Core"
 
-//template <typename T>
+
 QString printEigenVector(const Eigen::Vector3d &vec, const QStringList&& args, char separator = ',');
 
-// QString printEigenVector<Eigen::Vector3d> (const Eigen::Vector3d &vec, const QStringList&& args, char separator = ',');
 
 /*!
 * @brief       Converts an angle in degrees to radians.

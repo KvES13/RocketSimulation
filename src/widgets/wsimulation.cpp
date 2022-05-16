@@ -26,9 +26,6 @@ void wSimulation::on_pbBackToSettings_clicked()
 
 void wSimulation::on_pbStartSim_clicked()
 {
-  //  ui->pbStopSim->setEnabled(true);
-
-
 
     QString text =
     "Запуск симуляции"
@@ -102,11 +99,8 @@ void wSimulation::run()
                   rocket->angular_velocity[2],
                  rocket->mass.propellant};
 
-          //  std::cout<<"stop";
             // Simulation
             stageVector[i].FlightSequence(environment,x0);
-
-       //     std::string csv = qApp->applicationDirPath() +"../"
 
             QString str =qApp->applicationDirPath()+Constants::OutputPath+"/stage"+QString::number(i)+".csv";
             stageVector[i].fdr.DumpCsv(str.toStdString());

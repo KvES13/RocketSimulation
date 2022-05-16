@@ -5,10 +5,7 @@
 #include <QDebug>
 
 #include "Constants.h"
-//#include "environment.h"
 #include "stage.h"
-//#include "dynamics/dynamics_base.h"
-//#include "environment/sequence_clock.h"
 #include "utils/utils.h"
 
 namespace Ui {
@@ -30,12 +27,10 @@ public slots:
     void init(std::vector<RocketStage>& stages, Environment* env) {
         if(&stages != &stageVector)
         {
-         qDebug()<<"proverka";
             stageVector = stages;
             environment = env;
         }
-            else
-            qDebug()<<"ODINAKOV";};
+            };
 
 private slots:
     void on_pbBackToSettings_clicked();

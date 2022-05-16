@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-//#include <iosfwd>
 #include <iostream>
 #include <cmath>
 
@@ -51,7 +50,6 @@ class Interp1d {
 
         double operator()(const double x);
         std::vector<double> operator()(const std::vector<double> x);
-      //  Eigen::VectorXd operator()(const Eigen::VectorXd x);
     
         std::vector<double> x_src;
         std::vector<double> y_src;
@@ -61,7 +59,6 @@ class Interp1d {
         Polator1D* polator;
 
         bool need_sort(const std::vector<double>& x);
-        // bool less(const std::pair<double, double>& a, const std::pair<double, double>& b);
         void ascending_order_sort(std::vector<double>& x, std::vector<double>& y);
 
 };
@@ -73,12 +70,11 @@ class Interp2d {
         Interp2d(const std::vector<double> x, const std::vector<double> y, const std::vector<double> z, const std::string fill_value);
 
         double operator()(const double x, const double y);
-        //TODO: method coding
+
 
     private:
         std::vector<double> x_src;
         std::vector<double> y_src;
-//        Eigen::MatrixXd z_src;
         int fill_value;
 };
 }  // namespace interpolate

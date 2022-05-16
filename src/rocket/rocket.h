@@ -2,7 +2,6 @@
 #define ROCKET_H
 
 #include <vector>
-//#include "Vector3.h"
 #include "csvreader.h"
 
 #define EIGEN_MPL2_ONLY
@@ -32,7 +31,6 @@ class Rocket {
 
 
         // Parameter Setter
-        // void setEngine(Engine engine);
         void setLengthCG(const InterpolateParameter length_CG);
         void setLengthCP(const InterpolateParameter length_CP);
         void setCA(const InterpolateParameter CA);

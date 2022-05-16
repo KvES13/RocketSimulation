@@ -8,7 +8,6 @@ MyTableModel::MyTableModel(const QVector<QVector<double> > &vec,
 
 MyTableModel::~MyTableModel()
 {
-   // fdr = nullptr;
 }
 
 int MyTableModel::rowCount(const QModelIndex &parent) const

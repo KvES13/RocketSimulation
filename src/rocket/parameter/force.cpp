@@ -1,7 +1,6 @@
 #include "force.h"
 
 
-/// @todo initialization list
 Force::Force() {
     thrust << 0.0, 0.0, 0.0;
     aero << 0.0, 0.0, 0.0;
