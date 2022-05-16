@@ -57,15 +57,16 @@ void FlightSettings::on_btnLoadCfg_clicked()
     int numberOfStages =json.getInt("Number of Stage");
     ui->sbStagesNumber->setValue(numberOfStages);
 
-    QString filePath = qApp->applicationDirPath() + Constants::CfgPath+"/";
+    QString filePath = QFileInfo(jsonFilePath).path()+"/";
+           // qApp->applicationDirPath() + Constants::CfgPath+"/";
     for(int i = 1; i <= numberOfStages; i++)
     {
         auto jsStage = json.getSubItem("Stage"+QString::number(numberOfStages)+" Config File List");
-        v_stages.push_back(
-                    RocketStage::create(i,
-                    filePath + jsStage.getString("Rocket Configuration File Path"),
-                    filePath + jsStage.getString("Engine Configuration File Path"),
-                    filePath + jsStage.getString("Sequence of Event File Path")));
+
+        JsonWrapper js(filePath + jsStage.getString("Rocket Configuration File Path"));
+
+
+        v_stages.push_back(RocketStage::create(i,js));
 
         auto& stage = v_stages[i-1];
         stage.fdr = FlightObserver(stage.rocket.get());

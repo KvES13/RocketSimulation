@@ -4,6 +4,7 @@
 #include <vector>
 #include "rocket/parameter/interpolate_parameter.h"
 #include "Constants.h"
+#include "jsonwrapper.h"
 ///
 /// \brief The Engine class
 ///  Класс, описывающий двигетели
@@ -44,7 +45,7 @@ public:
     /// \param filepath Путь к конфигурационному файлу
     /// \return Экземпляр класса
     ///
-    static Engine create(QString filepath);
+    static Engine create(JsonWrapper& json);
 
     ///
     /// \brief Обновление параметров тяги двигателя

@@ -6,11 +6,4 @@
         <file alias="icon3">icons/icon3.png</file>
         <file alias="icon4">icons/icon4.png</file>
     </qresource>
-	    <qresource prefix="/textures">
-        <file alias="A">textures/A.png</file>
-        <file alias="AA">textures/AA.png</file>
-        <file alias="AAA">textures/AAA.png</file>
-        <file alias="AAAA">textures/AAAA.png</file>
-        <file alias="OOO">textures/OOO.png</file>
-    </qresource>
 </RCC>

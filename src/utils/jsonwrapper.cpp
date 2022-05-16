@@ -1,5 +1,11 @@
 #include "jsonwrapper.h"
 
+#include <QMessageBox>
+#include <QFile>
+#include <QJsonValue>
+#include <QJsonParseError>
+#include <QJsonDocument>
+
 JsonWrapper::JsonWrapper(QString jsonFilePath)
 {
     QFile file(jsonFilePath);
@@ -11,6 +17,8 @@ JsonWrapper::JsonWrapper(QString jsonFilePath)
     }
     jsObj = QJsonDocument::fromJson(file.readAll()).object();
     file.close();
+
+
 }
 
 JsonWrapper::JsonWrapper(QJsonObject obj)

@@ -8,6 +8,7 @@
 #include "dynamics/dynamics_6dof_aero.h"
 #include "dynamics/dynamics_3dof_onlauncher.h"
 #include "dynamics/dynamics_3dof_parachute.h"
+#include "jsonwrapper.h"
 
 class Rocket;
 
@@ -17,9 +18,7 @@ public:
     RocketStage(int stageNumber, std::shared_ptr<Rocket> rocket);
 
     static RocketStage create(const int stage,
-                              QString rocket_config_json_file,
-                              QString engine_config_json_file,
-                              QString sequence_of_event_json_file);
+                              JsonWrapper &json);
 
 
     void FlightSequence(Environment *env, DynamicsBase::state& x0);

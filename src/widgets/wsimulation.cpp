@@ -41,10 +41,11 @@ void wSimulation::on_pbStartSim_clicked()
     "\nКоличество ступеней: " + QString::number(stageVector.size());
     for(const auto& stage : stageVector)
     {
-        text += "\nПараметры " + QString::number(stage.stageNumber) + " ступени:"
+        text += "==========================================================="
+         "\nПараметры " + QString::number(stage.stageNumber) + " ступени:"
                 "\nМасса: " + QString::number(stage.rocket->mass.Sum()) +
                 "кг ,длина " + QString::number(stage.rocket->length) +
-                "м ,диаметр \n" + QString::number(stage.rocket->diameter) + "м";
+                "м ,диаметр " + QString::number(stage.rocket->diameter) + "м";
     }
 
 
@@ -65,7 +66,8 @@ void wSimulation::on_pbStartSim_clicked()
 
     for(const auto& stage : stageVector)
     {
-    text = "\nМаксимальная высота: " + QString::number(stage.fdr.max_alt) +
+    text = "\n ==========================================================="
+            " \nМаксимальная высота: " + QString::number(stage.fdr.max_alt) +
             "м\nМаксимальная скорость: " + QString::number(stage.fdr.max_speed) +
             "м/с\nМаксимальное ускорение: " + QString::number(stage.fdr.max_accelerarion) +
             "м/с^2\nРасстояние от точки старта: " + QString::number(stage.fdr.max_downrage) + "м";

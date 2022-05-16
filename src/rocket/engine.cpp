@@ -97,22 +97,22 @@ void Engine::setAreaExit(double diameter_exit)
     area_exit = 0.25 * std::pow(diameter_exit, 2) * Constants::pi;
 };
 
-Engine Engine::create(QString filepath)
+Engine Engine::create(JsonWrapper &json)
 {
-    JsonWrapper js(filepath);
-    double diameter_exit = js.getDouble("Throat diameter[m]");
-    double isp_vac =js.getDouble("Const Isp vac[s]");
-    double nozzle_expansion_ratio = js.getDouble("nozzle expansion ratio[-]");
+    JsonWrapper jsEngine(json);
+    double diameter_exit = json.getDouble("Throat diameter[m]");
+    double isp_vac =json.getDouble("Const Isp vac[s]");
+    double nozzle_expansion_ratio = json.getDouble("nozzle expansion ratio[-]");
 
     double area_exit = 0.25 * std::pow(diameter_exit, 2) * Constants::pi;
 
-    if (js.getBool("Enable Thrust File")) {
-        JsonWrapper jc_file =  js.getSubItem("Thrust File");
+    if (json.getBool("Enable Thrust File")) {
+        JsonWrapper jc_file =  json.getSubItem("Thrust File");
         auto thrust_log = LoadCsvLog(jc_file.getString("Thrust at vacuum File Path").toStdString());
         return Engine(thrust_log[0], thrust_log[1], diameter_exit,area_exit,isp_vac);
         }
     else {
-        auto jc_const = js.getSubItem("Constant Thrust");
+        auto jc_const = json.getSubItem("Constant Thrust");
         double thrust_coef = jc_const.getDouble("Thrust coefficient[-]");
         double thrust = jc_const.getDouble("Thrust at vacuum [N]");
    //     double mdot_p = jc_const.getDouble("Propellant Mass Flow Rate [kg/s]");

@@ -25,10 +25,7 @@
 class Rocket {
     public:
         Rocket();
-        Rocket(QString rocket_config_json_file,
-               QString engine_config_json_file);
-
-
+        Rocket(JsonWrapper& json);
 
         // Parameter Setter
         void setLengthCG(const InterpolateParameter length_CG);

@@ -2,12 +2,7 @@
 #define JSONWRAPPER_H
 
 #include <QString>
-#include <QFile>
-#include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonValue>
-#include <QJsonParseError>
-#include <QMessageBox>
 
 
 class JsonWrapper

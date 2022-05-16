@@ -23,14 +23,13 @@ Rocket::Rocket() {
 
 }
 
-Rocket::Rocket(QString rocket_config_json_file,
-               QString engine_config_json_file)
+Rocket::Rocket(JsonWrapper& json)
 {
 
-    engine = Engine::create(engine_config_json_file);
+    auto jsEngine = json.getSubItem("Engine");
+    engine = Engine::create(jsEngine);
 
-    JsonWrapper js(rocket_config_json_file);
-
+    auto js = json.getSubItem("Stage");
 
     diameter = js.getDouble("Diameter [m]") ;
     area = 0.25 * std::pow(diameter, 2) * Constants::pi;

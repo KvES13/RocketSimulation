@@ -13,12 +13,12 @@ RocketStage::RocketStage(int stageNumber, std::shared_ptr<Rocket> rocket)
 }
 
 RocketStage RocketStage::create(const int stage,
-                                QString rocket_config_json_file,
-                                QString engine_config_json_file,
-                                QString sequence_of_event_json_file)
+                                JsonWrapper &json)
 {
-    RocketStage rs(stage, std::make_shared<Rocket>(rocket_config_json_file,engine_config_json_file));
-    JsonWrapper js(sequence_of_event_json_file);
+    RocketStage rs(stage, std::make_shared<Rocket>(json));
+
+    auto js = json.getSubItem("Events");
+
     rs.time_start = js.getDouble("Flight Start Time [s]");
     rs.time_ignittion = js.getDouble("Engine Ignittion Time [s]");
 

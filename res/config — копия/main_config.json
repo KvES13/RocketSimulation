@@ -1,9 +1,11 @@
 {
-	"Launch DateTime": "29/11/2021 9:00:00.0",
+	"Model ID": "sample",
+	
+	"Launch DateTime": "2022/04/22 9:00:00.0",
 	"Launch Condition": {
-		"Latitude [deg]": 40.242865,
-		"Longitude [deg]": 140.01045,
-		"Height [deg]": 20.0,
+		"Latitude [deg]": 37.834,
+		"Longitude [deg]": 75.488,
+		"Height for WGS84 [deg]": 20.0,
 		
 		"Azimuth [deg]": 270.0,
 		"Elevation [deg]": 85.0,
@@ -12,6 +14,7 @@
 		"East Velocity [m/s]": 0.0,
 		"Down Velocity [m/s]": 0.0
 	},
+
 	
 	"Finish Condition":{
 		"Exist" : false,
@@ -29,7 +32,7 @@
 	"Stage1 Config File List": {
 		"Rocket Configuration File Path": "sample_rocket_config.json",
 		"Engine Configuration File Path": "sample_engine_config.json",
-		"Sequence of Event File Path": "sample_sequence_of_event.json"
+		"Sequence of Event File Path":    "sample_sequence_of_event.json"
 	}
 }
 

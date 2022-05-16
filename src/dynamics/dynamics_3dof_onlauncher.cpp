@@ -73,6 +73,7 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
     p_rocket->Cmq = p_rocket->getCmq(p_rocket->velocity.mach_number);
     p_rocket->Cnr = p_rocket->getCnr(p_rocket->velocity.mach_number);
 
+    if (p_rocket->velocity.air_body.norm() <= 0.0) {
         p_rocket->angle_of_attack = 0.0;
         p_rocket->sideslip_angle = 0.0;
     } else {
