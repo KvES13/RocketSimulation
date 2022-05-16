@@ -1,0 +1,15 @@
+{
+    "Throat diameter[m]": 0.2,
+
+    "Enable Thrust File": false,
+    "Thrust File": {
+        "Thrust at vacuum File Path": "sample_thrust.csv"
+    },
+    "Constant Thrust": {
+        "Thrust at vacuum [N]": 190000.0,
+        "Burn Duration [sec]": 155,
+		"Thrust coefficient[-]": 1.00
+    },
+	"Const Isp vac[s]": 303.0,
+	"nozzle expansion ratio[-]": 18.86
+}

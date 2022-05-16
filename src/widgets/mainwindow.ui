@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1144</width>
+    <height>766</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Rocket Simulation</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="SideBar" name="widget" native="true"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QStackedWidget" name="stackedWidget">
+      <widget class="FlightSettings" name="FSettings"/>
+      <widget class="wSimulation" name="Sim"/>
+      <widget class="Results" name="Res"/>
+      <widget class="Geometric" name="geoCore"/>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1144</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SideBar</class>
+   <extends>QWidget</extends>
+   <header>sidebar.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FlightSettings</class>
+   <extends>QWidget</extends>
+   <header>flightsettings.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>wSimulation</class>
+   <extends>QWidget</extends>
+   <header>wsimulation.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Results</class>
+   <extends>QWidget</extends>
+   <header>results.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Geometric</class>
+   <extends>QWidget</extends>
+   <header>geometric.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
