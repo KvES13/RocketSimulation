@@ -10,6 +10,9 @@
 *.dll
 *.dylib
 
+
+.*.bak
+
 # Qt-es
 object_script.*.Release
 object_script.*.Debug
@@ -38,6 +41,10 @@ target_wrapper.*
 # QtCreator
 *.autosave
 
+# MinGW generated files
+*.Debug
+*.Release
+
 # QtCreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
@@ -52,3 +59,11 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+
+# Python byte code
+*.pyc
+
+# Binaries
+# --------
+*.dll
+*.exe
