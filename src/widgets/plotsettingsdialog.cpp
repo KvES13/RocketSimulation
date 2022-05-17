@@ -103,8 +103,8 @@ void PlotSettingsDialog::setUI()
     QDialogButtonBox *btnBox = new QDialogButtonBox(this);
     btnBox ->setOrientation(Qt::Horizontal);
     btnBox ->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-    connect(btnBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(btnBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(btnBox,&QDialogButtonBox::accepted, this, &PlotSettingsDialog::accept);
+    connect(btnBox, &QDialogButtonBox::rejected, this, &PlotSettingsDialog::reject);
 
 
     mainGrid->addWidget(btnBox);

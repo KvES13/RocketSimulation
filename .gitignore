@@ -11,7 +11,7 @@
 *.dylib
 
 
-.*.bak
+*.*.bak
 
 # Qt-es
 object_script.*.Release

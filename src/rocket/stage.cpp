@@ -72,7 +72,7 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
 {
     namespace odeint = boost::numeric::odeint;
 
-    // Sterpper Select
+    // Stepper Select
     ////////////////////////////////////
     double eps_abs = 1.0e-6;//1.0e-12;
     double eps_rel =  1.0e-6;//1.0e-7;
@@ -90,7 +90,6 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
     // Dynamics6dofAero dynamics_6dof_aero(&rocket, master_clock, env);
     // Dynamics6dofProgramRate dynamics_6dof_programrate(&rocket, master_clock, env);
     DynamicsBase* p_dynamics;
- //   auto env = new Environment(new Atmosphere()); /// @todo MEMORY LEAK
     p_dynamics = new Dynamics6dofAero(rocket.get(), env);
 
     double start, end=10;
@@ -108,7 +107,6 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
     //    SwitchDynamics(time_start, &p_dynamics, master_clock, env);
         odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_in_stage, time_start, time_ignittion, time_step, std::ref(fdr));
         start = time_ignittion;
-        std::cout<<"=========================start = "<<time_ignittion<<std::endl;
         rocket->IgnitionEngine(env->masterClock.UTC_date_init, env->masterClock.countup_time);
     }
 
@@ -120,10 +118,8 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
         FlightObserver fdr_on_launcher(&rocket_on_launcher);
         p_dynamics = new Dynamics3dofOnLauncher(&rocket_on_launcher, &env_launch);
         odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_on_launcher, start, start+10, time_step_on_launcher, std::ref(fdr_on_launcher));
-        std::cout<<"=========================enable_launcher "<<std::endl;
 
         fdr_on_launcher.DumpCsv("test_estimate_launcher.csv");
-
 
         for (int i=0; i < fdr_on_launcher.countup_burn_time.size(); ++i) {
             double distance = (fdr_on_launcher.position[i].LLH(2) - fdr_on_launcher.position[0].LLH(2)) / sin(fdr_on_launcher.attitude[i].euler_angle(1));
@@ -144,7 +140,6 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
     // до сих пор было выполнено воспламенение от инерционного полета или чистого полета.
     //  Включение/выключение двигателя
     if (enable_cutoff) {
-        std::cout<<"=========================enable_cutoff "<<std::endl;
         p_dynamics = new Dynamics6dofAero(rocket.get(), env);
        // SwitchDynamics(start, &p_dynamics, master_clock, env);
        // stepper.initialize(std::ref(*p_dynamics), x0_in_stage, start);
@@ -154,7 +149,6 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
     }
 
     if (enable_fairing_jettson) {
-        std::cout<<"enable_fairing_jettson "<<std::endl;
        // SwitchDynamics(start, &p_dynamics, master_clock, env);
         p_dynamics = new Dynamics6dofAero(rocket.get(), env);
        // stepper.initialize(std::ref(*p_dynamics), x0_in_stage, start);
@@ -164,7 +158,6 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
     }
 
     if (enable_separation) {
-        std::cout<<"=========================enable_sepation "<<std::endl;
         // SwitchDynamics(start, &p_dynamics, master_clock, env);
          p_dynamics = new Dynamics6dofAero(rocket.get(),env);
      //   stepper.initialize(std::ref(*p_dynamics), x0_in_stage, start);
@@ -175,22 +168,16 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
     }
 
     if (!enable_parachute_open) {
-        QElapsedTimer t;
-        t.start();
-
-
         // SwitchDynamics(start, &p_dynamics, master_clock, env);
          p_dynamics = new Dynamics6dofAero(rocket.get(), env);
     //    stepper.initialize(std::ref(*p_dynamics), x0_in_stage, start);
         odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_in_stage, start, time_end, time_step, std::ref(fdr));
-         std::cout<<t.elapsed()<<"======================= e!enable_parachute_open "/*<<((Dynamics6dofAero*)p_dynamics)->count*/<<std::endl;
     } else {
         QElapsedTimer t;
         t.start();
         // Парашютный зонт
         if (enable_apogee_parachute_open) {
-            std::cout<<"=========================enable_apogee_parachute_open "<<std::endl;
-            // Поворот с копией для определения времени вершины
+
             Rocket rocket_apogee_estimate = *rocket.get();
             Environment env_apogee = *env;
             DynamicsBase::state x0_apogee_estimate = x0;
@@ -210,16 +197,12 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
         } else {
             end = time_open_parachute;
         }
-        // Инерциальная летная книжка до открытия зонтика
-        std::cout<<"========================= MAIN INTEGRATE"<<std::endl;
-        std::cout<<start<<" <--> "<<end;
         // SwitchDynamics(start, &p_dynamics, master_clock, env);
          p_dynamics = new Dynamics6dofAero(rocket.get(),env);
     //    stepper.initialize(std::ref(*p_dynamics), x0_in_stage, start);
         odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_in_stage, start, end, time_step, std::ref(fdr));
         start = end;
 
-        // до сих пор он работал до вершины или времени открытия.
         odeint::runge_kutta4<DynamicsBase::state> stepper;
         rocket->OpenParachute();
         Dynamics3dofParachute dynamics_3dof_parachute(rocket.get(), env);
@@ -233,9 +216,7 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
             QElapsedTimer tp;
             tp.start();
             odeint::integrate_const(stepper, dynamics_3dof_parachute, x0_in_stage, start, time_end, time_step_decent_parachute, std::ref(fdr));
-            std::cout<<tp.elapsed()<<" ======================= exist_parashute_parachute "<<std::endl;
         }
-        std::cout<<t.elapsed()<<" ======================= enable_parachute_open "<<std::endl;
     }
 }
 

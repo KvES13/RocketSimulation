@@ -20,19 +20,19 @@ void SideBar::paintEvent(QPaintEvent *event) {
     p.setFont(fontText);
 
     int action_y = 0;
-    p.fillRect(rect(), QColor(255, 255, 255));
+    p.fillRect(rect(),QColor(0, 20, 30) ); //QColor(255, 255, 255)
     for (const auto action : qAsConst(mActions)) {
 
     QRect actionRect(0, action_y, event->rect().width(), action_height);
 
     if (action->isChecked()) {
-      p.fillRect(actionRect, QColor(159, 203, 255));
+      p.fillRect(actionRect, QColor(25, 35, 45));
     }
 
     if (action == mOverAction) {
-      p.fillRect(actionRect, QColor(200, 200, 200));
+      p.fillRect(actionRect, QColor(47, 53, 57));
     }
-    p.setPen(QColor(0, 0, 0));
+    p.setPen(QColor(255, 255, 255));
     QSize size = p.fontMetrics().size(Qt::TextSingleLine, action->text());
     QRect actionTextRect(QPoint(actionRect.width() / 2 - size.width() / 2,
                                 actionRect.bottom() - size.height() - 5),
@@ -72,6 +72,7 @@ void SideBar::addAction(QAction *action) {
 QAction *SideBar::addAction(const QString &text, const QIcon &icon) {
     QAction *action = new QAction(icon, text, this);
     action->setCheckable(true);
+  //  action->
     mActions.push_back(action);
     update();
     return action;

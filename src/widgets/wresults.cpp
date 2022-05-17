@@ -2,6 +2,7 @@
 
 #include "qcustomplot.h"
 
+
 wResults::wResults(const QVector<QVector<double> > &data,
                    QStringList&& header, QWidget *parent)  :
     QWidget(parent), values (data), headerData(header)
@@ -31,7 +32,10 @@ wResults::wResults(const QVector<QVector<double> > &data,
         vPlots[i]->addGraph(vPlots[i]->xAxis,vPlots[i]->yAxis);
         vPlots[i]->graph(0)->setName(headerData[i+1]);
         //Цвет графика
-        vPlots[i]->graph(0)->setPen(QPen(colors[i]));
+        QPen pen;
+        pen.setWidth(3);
+        pen.setColor(colors[i]);
+        vPlots[i]->graph(0)->setPen(pen);
         //Заполнение данными
         vPlots[i]->graph(0)->setData(data[0],data[i+1]);
 
@@ -46,6 +50,20 @@ wResults::wResults(const QVector<QVector<double> > &data,
         auto [min,max] = std::minmax_element(std::begin(data[i+1]),std::end(data[i+1]));
         vPlots[i]->yAxis->setRange(*min, *max);
 
+        vPlots[i]->setBackground(QBrush(QColor(30, 30, 30)));
+
+        vPlots[i]->xAxis->setBasePen(QPen(Qt::white));
+        vPlots[i]->yAxis->setBasePen(QPen(Qt::white));
+        vPlots[i]->xAxis->setLabelColor(Qt::white);
+        vPlots[i]->yAxis->setLabelColor(Qt::white);
+
+        vPlots[i]->xAxis->setTickPen(QPen(Qt::white));
+        vPlots[i]->xAxis->setSubTickPen(QPen(Qt::white));
+        vPlots[i]->xAxis->setTickLabelColor(Qt::white);
+
+        vPlots[i]->yAxis->setTickPen(QPen(Qt::white));
+        vPlots[i]->yAxis->setSubTickPen(QPen(Qt::white));
+        vPlots[i]->yAxis->setTickLabelColor(Qt::white);
 
         //Перерисовка
         vPlots[i]->replot();
@@ -58,7 +76,7 @@ wResults::wResults(const QVector<QVector<double> > &data,
         vPlots[i]->legend->setFont(QFont("Helvetica", 9));
     }
 
-   tableView->setMaximumWidth(plotsCount*150);
+   tableView->setMaximumWidth(450);
 
 
    tableModel = new MyTableModel(values,headerData);

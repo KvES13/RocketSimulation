@@ -27,7 +27,7 @@ public slots:
 
 private:
 
-    static constexpr std::array<Qt::GlobalColor,4> colors = {Qt::blue,Qt::red, Qt::green, Qt::black};
+    static constexpr std::array<Qt::GlobalColor,4> colors = {Qt::blue,Qt::red, Qt::green, Qt::white};
 
     const QVector<QVector<double>> &values;
 

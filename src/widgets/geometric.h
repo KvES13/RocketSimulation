@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QDateTime>
+#include "simulationgl.h"
 
 namespace Ui {
 class Geometric;
@@ -21,6 +22,7 @@ private slots:
 
 private:
     Ui::Geometric *ui;
+    SimulationGL *ogl;
 
 };
 

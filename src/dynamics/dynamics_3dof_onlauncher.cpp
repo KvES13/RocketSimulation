@@ -30,17 +30,17 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
     // Update Flight Infomation
     coordinate.setECI2ECEF(t);
 
-    p_rocket->position.ECI = Eigen::Map<Eigen::Vector3d>(std::vector<double>(x.begin()+0, x.begin()+3).data());
+    p_rocket->position.ECI << x[0],x[1],x[2];//Eigen::Map<Eigen::Vector3d>(std::vector<double>(x.begin()+0, x.begin()+3).data());
     p_rocket->position.ECEF = coordinate.dcm.ECI2ECEF * p_rocket->position.ECI;
     p_rocket->position.LLH = coordinate.ECEF2LLH(p_rocket->position.ECEF);
 
     coordinate.setECEF2NED(p_rocket->position.LLH);
 
-    p_rocket->velocity.ECI = Eigen::Map<Eigen::Vector3d>(std::vector<double>(x.begin()+3, x.begin()+6).data());
+    p_rocket->velocity.ECI << x[3],x[4],x[5] ;//Eigen::Map<Eigen::Vector3d>(std::vector<double>(x.begin()+3, x.begin()+6).data());
     p_rocket->velocity.ECEF = coordinate.dcm.ECI2ECEF * (p_rocket->velocity.ECI - coordinate.dcm.EarthRotate * p_rocket->position.ECI);
     p_rocket->velocity.NED = coordinate.dcm.ECEF2NED * p_rocket->velocity.ECEF;
 
-    p_rocket->attitude.quaternion = Eigen::Map<Eigen::Vector4d>(std::vector<double>(x.begin()+6, x.begin()+10).data()).normalized();
+    p_rocket->attitude.quaternion << Eigen::Vector4d{x[6],x[7],x[8],x[9]}.normalized();//Eigen::Map<Eigen::Vector4d>(std::vector<double>(x.begin()+6, x.begin()+10).data()).normalized();
 
     coordinate.setNED2Body(p_rocket->attitude.quaternion);
 

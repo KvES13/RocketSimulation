@@ -7,7 +7,8 @@ Geometric::Geometric(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
+  //  ogl = new SimulationGL(this);
+   // ogl->resize(this->width(),this->height());
 }
 
 Geometric::~Geometric()

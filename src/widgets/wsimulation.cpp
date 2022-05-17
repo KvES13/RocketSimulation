@@ -62,12 +62,13 @@ void wSimulation::on_pbStartSim_clicked()
     else
         text = QString::number(msec)+" мс";
 
-    ui->textBrowser->append("Симуляция завершена\nВремя расчёта: "+text);
+    ui->textBrowser->append("\n ==========================================================="
+                            "\nСимуляция завершена\nВремя расчёта: "+text);
 
     for(const auto& stage : stageVector)
     {
-    text = "\n ==========================================================="
-            " \nМаксимальная высота: " + QString::number(stage.fdr.max_alt) +
+    text =
+            "\nМаксимальная высота: " + QString::number(stage.fdr.max_alt) +
             "м\nМаксимальная скорость: " + QString::number(stage.fdr.max_speed) +
             "м/с\nМаксимальное ускорение: " + QString::number(stage.fdr.max_accelerarion) +
             "м/с^2\nРасстояние от точки старта: " + QString::number(stage.fdr.max_downrage) + "м";

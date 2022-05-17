@@ -23,7 +23,7 @@
       <widget class="FlightSettings" name="FSettings"/>
       <widget class="wSimulation" name="Sim"/>
       <widget class="Results" name="Res"/>
-      <widget class="Geometric" name="geoCore"/>
+      <widget class="SimulationGL" name="geoCore"/>
      </widget>
     </item>
    </layout>
@@ -66,9 +66,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Geometric</class>
+   <class>SimulationGL</class>
    <extends>QWidget</extends>
-   <header>geometric.h</header>
+   <header>simulationgl.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

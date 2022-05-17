@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->Sim,&wSimulation::finish,ui->Res,&Results::paintResults);
 
 
-    QStringList names = {"Настройки","Симуляция","Результаты","Геометрическое ядро"};
+    QStringList names = {"Настройки","Симуляция","Результаты","Траектория"};
     for(int i = 0; i < names.size();++i)
     {
         QAction *action = new QAction(QIcon(QString(":/icons/icon%1").arg(i)),

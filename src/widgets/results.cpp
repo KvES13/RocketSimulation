@@ -28,7 +28,7 @@ void Results::paintResults()
 
         Environment env;
         QVector<double> temp,alt,denst,press;
-        for(int i = 0; i < 20000; i+=100)
+        for(int i = 0; i < 80000; i+=100)
         {
             env.updateAltitude(i);
             alt.push_back(i);

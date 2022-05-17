@@ -1,5 +1,5 @@
-QT       += core gui #opengl
-#LIBS     += -lopengl32 #-lglu32
+QT       += core gui opengl
+LIBS     += -lopengl32 #-lglu32
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport #openglwidgets
 

@@ -42,6 +42,7 @@ Engine::Engine(const double burn_duration,
     this->burn_duration = burn_duration;
     thrust_vacuum_src = InterpolateParameter(thrust_const);
     this->thrust_coefficient = thrust_coef;
+    this->thrust = thrust_const;
     this->ISPvac = ISP;
 
     getTotalImpulse(thrust_const, burn_duration);
@@ -59,6 +60,7 @@ Engine::Engine(const std::vector<double> &time_vector,
     this->area_exit = area_exit;
     this->burn_duration = time_vector[time_vector.size()-1];
     thrust_vacuum_src = InterpolateParameter(time_vector, thrust_vacuum_vector, "zero");
+
     ISPvac = isp;
     getTotalImpulse(thrust_vacuum_vector, time_vector.back());
 };
