@@ -1,10 +1,10 @@
 #include "dynamics_6dof_aero.h"
 
 
-Dynamics6dofAero::Dynamics6dofAero(Rocket* rocket, Environment* env) {
-    p_rocket = rocket;
-    p_env = env;
-};
+//Dynamics6dofAero::Dynamics6dofAero(Rocket* rocket, Environment* env) {
+//    p_rocket = rocket;
+//    p_env = env;
+//};
 
 void Dynamics6dofAero::operator()(const state& x, state& dx, const double t)
 {
@@ -75,7 +75,7 @@ void Dynamics6dofAero::operator()(const state& x, state& dx, const double t)
 
     // Calculate Force
     p_rocket->force.thrust = p_rocket->getThrust(p_env->atmosphere->getPressure());
-    p_rocket->force.aero = AeroForce(p_rocket);
+    p_rocket->force.aero = AeroForce();
     p_rocket->force.gravity = (coordinate.dcm.NED2body * gravity_NED) * p_rocket->mass.Sum();
 
     // Calculate Acceleration

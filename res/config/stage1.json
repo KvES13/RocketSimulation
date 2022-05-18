@@ -1,0 +1,119 @@
+{
+	"Engine":
+	{
+		"Throat diameter[m]": 0.2,
+
+		"Enable Thrust File": false,
+		"Thrust File": {
+			"Thrust at vacuum File Path": "sample_thrust.csv"
+		},
+		"Constant Thrust": {
+			"Thrust at vacuum [N]": 190000.0,
+			"Burn Duration [sec]": 155,
+			"Thrust coefficient[-]": 1.00
+		},
+		"Const Isp vac[s]": 303.0,
+		"nozzle expansion ratio[-]": 18.86
+	},
+	
+	"Stage":
+	{
+		"Diameter [m]": 1.2,
+		"Length [m]": 18,
+		"Mass": {
+			"Inert [kg]": 13000.0,
+			"Propellant [kg]": 0.0
+		},
+
+		"Enable Program Attitude": false,
+		"Program Attitude File": {
+			"Program Attitude File Path": "attitude.csv"
+		},
+
+		"Constant X-C.G.": {
+			"Constant X-C.G. from BodyTail [m]": 1.100
+		},
+		
+		"Constant M.I.": {
+			"Yaw Axis [kg-m2]": 45.0,
+			"Pitch Axis [kg-m2]": 45.0,
+			"Roll Axis [kg-m2]": 0.5
+		},
+
+		"Constant X-C.P.": {
+			"Constant X-C.P. from BodyTail [m]": 0.835
+		},
+
+		"X-ThrustLoadingPoint from BodyTail [m]": 0.300,
+
+		"Constant CA": {
+			"Constant CA [-]": 0.4,
+			"Constant BurnOut CA [-]": 0.5
+		},
+
+		"Constant CNa": {
+			"Constant CNa [1/rad]": 10.0
+		},
+
+		"Fin Cant Angle [deg]": 0.0,
+		"Constant Cld": {
+			"Constant Cld [1/rad]": 0.0
+		},
+
+		"Constant Clp": {
+			"Constant Clp [-]": 0.03
+		},
+
+		"Constant Cmq": {
+			"Constant Cmq [-]": 7.0
+		},
+
+		"Constant Cnr": {
+			"Constant Cnr [-]": 7.0
+		}
+
+	},
+
+	"Events":
+	{
+		"Flight Start Time [s]": 0.0,
+
+		"Engine Ignittion Time [s]": 0.0,
+		
+		"Enable Rail-Launcher Launch": true,
+		"Rail Launcher": {
+			"Length [m]": 25.0
+		},
+
+		"Enable Engine Cutoff": false,
+		"Cutoff": {
+			"Cutoff Time [s]": 0.0
+		},
+
+		"Enable Stage Separation": true,
+		"Upper Stage": {
+			"Stage Separation Time [s]": 160.0,
+			"Upper Stage Mass [kg]": 2400.0
+		},
+
+		"Enable Fairing Jettson": false,
+		"Fairing": {
+			"Jettson Time [s]": 0.0,
+			"Mass [s]": 1.0
+		},
+
+		"Enable Parachute Open": true,
+		"Parachute": {
+			"Open Time [s]": 200.0,
+			"Enable Forced Apogee Open": false
+		},
+
+		"Enable Secondary Parachute Open": false,
+		"Secondary Parachute": {
+			"Open Time [s]": 600.0
+		},
+
+		"Flight End Time [s]": 600.0,
+		"Time Step [s]": 0.1
+	}
+}

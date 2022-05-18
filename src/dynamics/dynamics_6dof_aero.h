@@ -6,13 +6,13 @@
 class Dynamics6dofAero : public DynamicsBase {
 
 public:
-    Dynamics6dofAero(Rocket* rocket, Environment* env);
+    Dynamics6dofAero(Rocket* rocket, Environment* env): DynamicsBase(rocket,env){};
+
 
     void operator()(const state& x, state& dx, const double t);
 
 private:
-    Rocket* p_rocket;
-    Environment* p_env;
+
 };
 
 

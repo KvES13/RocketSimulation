@@ -10,7 +10,7 @@ FlightSettings::FlightSettings(QWidget *parent) :
     ui->sbTimeStep->setRange(0.0,1.0);
     ui->sbTimeStep->setValue(0.1);
     ui->sbTimeStep->setSingleStep(0.05);
-    ui->leSaveFilePath->setText(qApp->applicationDirPath()+"/log" +
+    ui->leSaveFilePath->setText( qApp->applicationDirPath()+Constants::OutputPath+"/log" +
                                 QDate::currentDate().toString("ddMMyy")+"_"+
                                 QTime::currentTime().toString("hhmm")+".csv");
 
@@ -58,12 +58,10 @@ void FlightSettings::on_btnLoadCfg_clicked()
     ui->sbStagesNumber->setValue(numberOfStages);
 
     QString filePath = QFileInfo(jsonFilePath).path()+"/";
-           // qApp->applicationDirPath() + Constants::CfgPath+"/";
     for(int i = 1; i <= numberOfStages; i++)
     {
-        auto jsStage = json.getSubItem("Stage"+QString::number(numberOfStages)+" Config File List");
-
-        JsonWrapper js(filePath + jsStage.getString("Rocket Configuration File Path"));
+        QString path = filePath + json.getString("Stage"+QString::number(i)+" Config File");
+        JsonWrapper js(filePath + json.getString("Stage"+QString::number(i)+" Config File"));
 
 
         v_stages.push_back(RocketStage::create(i,js));

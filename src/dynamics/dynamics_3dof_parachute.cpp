@@ -1,11 +1,11 @@
 
 #include "dynamics_3dof_parachute.h"
 
-Dynamics3dofParachute::Dynamics3dofParachute(Rocket* rocket,
-                                             Environment* env) {
-    p_rocket = rocket;
-    p_env = env;
-};
+//Dynamics3dofParachute::Dynamics3dofParachute(Rocket* rocket,
+//                                             Environment* env) {
+//    p_rocket = rocket;
+//    p_env = env;
+//};
 
 void Dynamics3dofParachute::operator()(const state& x, state& dx, const double t) {
     Coordinate coordinate;

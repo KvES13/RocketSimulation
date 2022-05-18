@@ -7,15 +7,14 @@ class Dynamics3dofOnLauncher : public DynamicsBase {
     public:
 
 public:
-    Dynamics3dofOnLauncher(Rocket* rocket, Environment* env);
+    Dynamics3dofOnLauncher(Rocket* rocket, Environment* env) : DynamicsBase(rocket,env){};
 
     void operator()(const state& x, state& dx, const double t);
 
     Eigen::Vector3d AeroForce(Rocket* p_rocket);
 
 private:
-    Rocket* p_rocket;
-    Environment* p_env;
+
 
 };
 

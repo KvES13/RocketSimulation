@@ -4,7 +4,7 @@
 //#include "Vector3.h"
 
 
-Eigen::Vector3d DynamicsBase::AeroForce(Rocket* p_rocket) {
+Eigen::Vector3d DynamicsBase::AeroForce() {
 
     Eigen::Vector3d force_aero;
 
@@ -18,7 +18,7 @@ Eigen::Vector3d DynamicsBase::AeroForce(Rocket* p_rocket) {
 };
 
 
-Eigen::Vector3d DynamicsBase::GyroEffectMoment(Rocket* p_rocket) {
+Eigen::Vector3d DynamicsBase::GyroEffectMoment() {
 
     Eigen::Vector3d gyro_effect;
 
@@ -29,7 +29,7 @@ Eigen::Vector3d DynamicsBase::GyroEffectMoment(Rocket* p_rocket) {
 };
 
 
-Eigen::Vector3d DynamicsBase::ThrustMoment(Rocket* p_rocket) {
+Eigen::Vector3d DynamicsBase::ThrustMoment() {
     Eigen::Vector3d moment_thrust;
 
     Eigen::Vector3d moment_arm(p_rocket->length_CG - p_rocket->length_thrust, 0.0, 0.0);
@@ -39,7 +39,7 @@ Eigen::Vector3d DynamicsBase::ThrustMoment(Rocket* p_rocket) {
 };
 
 
-Eigen::Vector3d DynamicsBase::AeroForceMoment(Rocket* p_rocket) {
+Eigen::Vector3d DynamicsBase::AeroForceMoment() {
     Eigen::Vector3d moment_aero;
 
     Eigen::Vector3d moment_arm(p_rocket->length_CG - p_rocket->length_CP, 0.0, 0.0);
@@ -50,7 +50,7 @@ Eigen::Vector3d DynamicsBase::AeroForceMoment(Rocket* p_rocket) {
 };
 
 
-Eigen::Vector3d DynamicsBase::AeroDampingMoment(Rocket* p_rocket) {
+Eigen::Vector3d DynamicsBase::AeroDampingMoment() {
     Eigen::Vector3d moment_aero_dumping;
 
     Eigen::Vector3d coefficient_aero_dumping(p_rocket->Clp, p_rocket->Cmq, p_rocket->Cnr);
@@ -62,8 +62,7 @@ Eigen::Vector3d DynamicsBase::AeroDampingMoment(Rocket* p_rocket) {
 };
 
 
-Eigen::Vector3d DynamicsBase::JetDampingMoment(Rocket* p_rocket) {
-    Q_UNUSED(p_rocket);
+Eigen::Vector3d DynamicsBase::JetDampingMoment() {
     Eigen::Vector3d moment_jet_dumping;
 
     moment_jet_dumping << 0.0, 0.0, 0.0;
@@ -72,7 +71,7 @@ Eigen::Vector3d DynamicsBase::JetDampingMoment(Rocket* p_rocket) {
 };
 
 
-Eigen::Matrix4d  DynamicsBase::QuaternionDiff(Rocket* p_rocket) {
+Eigen::Matrix4d  DynamicsBase::QuaternionDiff() {
     double p = p_rocket->angular_velocity[0];
     double q = p_rocket->angular_velocity[1];
     double r = p_rocket->angular_velocity[2];
@@ -82,13 +81,18 @@ Eigen::Matrix4d  DynamicsBase::QuaternionDiff(Rocket* p_rocket) {
                 q, -p, 0, r,
                 -p, -q, -r, 0;
     return quat_dot;
+}
+
+void DynamicsBase::reset(Rocket *rocket, Environment *env)
+{
+    p_rocket = rocket;
+    p_env = env;
 };
 
 
 std::pair<double, Eigen::Vector3d> IIP(Eigen::Vector3d& pos_ECI, Eigen::Vector3d& vel_ECI)
 {
-    // arg: Current ECI, Current ECI Vel
-    // return IIP LLH [lat, lon, height]
+
 
     Eigen::Vector3d ir0;  // initial posint unit vector
     Eigen::Vector3d iv0;  // initial velocity unit vector

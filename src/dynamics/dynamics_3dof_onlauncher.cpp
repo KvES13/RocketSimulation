@@ -2,11 +2,11 @@
 #include "dynamics_3dof_onlauncher.h"
 
 
-Dynamics3dofOnLauncher::Dynamics3dofOnLauncher(Rocket* rocket,Environment*env) {
+//Dynamics3dofOnLauncher::Dynamics3dofOnLauncher(Rocket* rocket,Environment*env) {
 
-    p_rocket = rocket;
-    p_env = env;
-};
+//    p_rocket = rocket;
+//    p_env = env;
+//};
 
 
 Eigen::Vector3d Dynamics3dofOnLauncher::AeroForce(Rocket* p_rocket) {

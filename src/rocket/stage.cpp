@@ -73,117 +73,103 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
     namespace odeint = boost::numeric::odeint;
 
     // Stepper Select
-    ////////////////////////////////////
-    double eps_abs = 1.0e-6;//1.0e-12;
-    double eps_rel =  1.0e-6;//1.0e-7;
-    // 4th Order Runge-Kutta Method
-    // odeint::runge_kutta4<forrocket::DynamicsBase::state> stepper;
+    double eps_abs = 1.0e-6;
+    double eps_rel =  1.0e-6;
 
     // 5th Order Runge-Kutta-Dormand-Prince Method : Controled : Dense output : Internal info
     using base_stepper_type = odeint::runge_kutta_dopri5<DynamicsBase::state>;
-   // auto stepper = make_controlled( eps_abs , eps_rel , base_stepper_type());
     auto stepper = make_dense_output(eps_abs, eps_rel, 1.0, base_stepper_type());
-    // 8th Order Runge-Kutta-Fehlberg Method : Controled
-    // using base_stepper_type = odeint::runge_kutta_fehlberg78<forrocket::DynamicsBase::state>;
-    // auto stepper = make_controlled( eps_abs , eps_rel , base_stepper_type());
-
-    // Dynamics6dofAero dynamics_6dof_aero(&rocket, master_clock, env);
-    // Dynamics6dofProgramRate dynamics_6dof_programrate(&rocket, master_clock, env);
-    DynamicsBase* p_dynamics;
-    p_dynamics = new Dynamics6dofAero(rocket.get(), env);
 
     double start, end=10;
-    double time_step_on_launcher = 0.1;  // 1000 Hz
-    double time_step_decent_parachute = 0.1;  // 10 Hz
+
     fdr.ReserveCapacity(static_cast<int>((time_end - time_start) / time_step) * 1.3);
 
     DynamicsBase::state x0_in_stage = x0;
 
     if (time_ignittion <= time_start) {
-        rocket->IgnitionEngine(env->masterClock.UTC_date_init, env->masterClock.countup_time);
+        rocket->IgnitionEngine(env->masterClock.UTC_date_init,
+                               env->masterClock.countup_time);
         start = time_start;
     } else {
-        p_dynamics = new Dynamics6dofAero(rocket.get(), env);
-    //    SwitchDynamics(time_start, &p_dynamics, master_clock, env);
-        odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_in_stage, time_start, time_ignittion, time_step, std::ref(fdr));
+        Dynamics6dofAero aero(rocket.get(), env);
+        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage,
+                                time_start, time_ignittion, time_step, std::ref(fdr));
         start = time_ignittion;
-        rocket->IgnitionEngine(env->masterClock.UTC_date_init, env->masterClock.countup_time);
+        rocket->IgnitionEngine(env->masterClock.UTC_date_init,
+                               env->masterClock.countup_time);
     }
 
     if (enable_launcher) {
+        double time_step_on_launcher = 0.1;
         Rocket rocket_on_launcher = *rocket.get();
         Environment env_launch = *env;
-      //  SequenceClock clock_on_launcher = env->masterClock.; // copy
         DynamicsBase::state x0_on_launcher = x0;
         FlightObserver fdr_on_launcher(&rocket_on_launcher);
-        p_dynamics = new Dynamics3dofOnLauncher(&rocket_on_launcher, &env_launch);
-        odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_on_launcher, start, start+10, time_step_on_launcher, std::ref(fdr_on_launcher));
+        Dynamics3dofOnLauncher launcher(&rocket_on_launcher, &env_launch);
+        odeint::integrate_const(stepper, std::ref(launcher), x0_on_launcher,
+                                start, start+10, time_step_on_launcher,
+                                std::ref(fdr_on_launcher));
 
         fdr_on_launcher.DumpCsv("test_estimate_launcher.csv");
 
         for (int i=0; i < fdr_on_launcher.countup_burn_time.size(); ++i) {
-            double distance = (fdr_on_launcher.position[i].LLH(2) - fdr_on_launcher.position[0].LLH(2)) / sin(fdr_on_launcher.attitude[i].euler_angle(1));
+            double distance = (fdr_on_launcher.position[i].LLH(2) -
+                               fdr_on_launcher.position[0].LLH(2)) /
+                    sin(fdr_on_launcher.attitude[i].euler_angle(1));
+
             if (distance >= length_launcher_rail) {
                 end = time_step_on_launcher * i;
                 break;
             }
         }
-        p_dynamics = new Dynamics3dofOnLauncher(rocket.get(),env);
-        //stepper.initialize(std::ref(*p_dynamics), x0_in_stage, start);
-        odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_in_stage, start, start + end, time_step_on_launcher, std::ref(fdr));
-        // odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_in_stage, start, start + end, time_step_on_launcher, std::ref(fdr));
+        launcher.reset(rocket.get(),env);
+        odeint::integrate_const(stepper, std::ref(launcher), x0_in_stage,
+                                start, start + end, time_step_on_launcher,
+                                std::ref(fdr));
         start = start + end;
 
         fdr.DumpCsv("debug_onlauncher_log.csv");
 
     }
-    // до сих пор было выполнено воспламенение от инерционного полета или чистого полета.
-    //  Включение/выключение двигателя
+
+    Dynamics6dofAero aero(rocket.get(), env);
+
     if (enable_cutoff) {
-        p_dynamics = new Dynamics6dofAero(rocket.get(), env);
-       // SwitchDynamics(start, &p_dynamics, master_clock, env);
-       // stepper.initialize(std::ref(*p_dynamics), x0_in_stage, start);
-        odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_in_stage, start, time_cutoff, time_step, std::ref(fdr));
+        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
+                                time_cutoff, time_step, std::ref(fdr));
         start = time_cutoff;
         rocket->CutoffEngine();
     }
 
     if (enable_fairing_jettson) {
-       // SwitchDynamics(start, &p_dynamics, master_clock, env);
-        p_dynamics = new Dynamics6dofAero(rocket.get(), env);
-       // stepper.initialize(std::ref(*p_dynamics), x0_in_stage, start);
-        odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_in_stage, start, time_jettson_fairing, time_step, std::ref(fdr));
+        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
+                                time_jettson_fairing, time_step, std::ref(fdr));
         start = time_jettson_fairing;
         rocket->JettsonFairing(mass_fairing);
     }
 
     if (enable_separation) {
-        // SwitchDynamics(start, &p_dynamics, master_clock, env);
-         p_dynamics = new Dynamics6dofAero(rocket.get(),env);
-     //   stepper.initialize(std::ref(*p_dynamics), x0_in_stage, start);
-        odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_in_stage, start, time_separation, time_step, std::ref(fdr));
+        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
+                                time_separation, time_step, std::ref(fdr));
         start = time_separation;
         rocket->SeparateUpperStage(mass_upper_stage);
         x0 = x0_in_stage;
     }
 
     if (!enable_parachute_open) {
-        // SwitchDynamics(start, &p_dynamics, master_clock, env);
-         p_dynamics = new Dynamics6dofAero(rocket.get(), env);
-    //    stepper.initialize(std::ref(*p_dynamics), x0_in_stage, start);
-        odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_in_stage, start, time_end, time_step, std::ref(fdr));
+        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
+                                time_end, time_step, std::ref(fdr));
     } else {
-        QElapsedTimer t;
-        t.start();
-        // Парашютный зонт
         if (enable_apogee_parachute_open) {
 
             Rocket rocket_apogee_estimate = *rocket.get();
             Environment env_apogee = *env;
             DynamicsBase::state x0_apogee_estimate = x0;
             FlightObserver fdr_apogee_estimate(&rocket_apogee_estimate);
-            p_dynamics = new Dynamics6dofAero(rocket.get(), &env_apogee);
-            odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_apogee_estimate, start, time_end, time_step, std::ref(fdr_apogee_estimate));
+            aero.reset(rocket.get(), &env_apogee);
+            odeint::integrate_const(stepper, std::ref(aero), x0_apogee_estimate,
+                                    start, time_end, time_step,
+                                    std::ref(fdr_apogee_estimate));
             double max_alt = 0.0;
             for (int i=0; i < fdr_apogee_estimate.position.size(); ++i) {
                 double alt = fdr_apogee_estimate.position[i].LLH(2);
@@ -197,25 +183,30 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
         } else {
             end = time_open_parachute;
         }
-        // SwitchDynamics(start, &p_dynamics, master_clock, env);
-         p_dynamics = new Dynamics6dofAero(rocket.get(),env);
-    //    stepper.initialize(std::ref(*p_dynamics), x0_in_stage, start);
-        odeint::integrate_const(stepper, std::ref(*p_dynamics), x0_in_stage, start, end, time_step, std::ref(fdr));
+        aero.reset(rocket.get(), env);
+        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
+                                end, time_step, std::ref(fdr));
         start = end;
-
+        double time_step_decent_parachute = 0.1;
         odeint::runge_kutta4<DynamicsBase::state> stepper;
         rocket->OpenParachute();
-        Dynamics3dofParachute dynamics_3dof_parachute(rocket.get(), env);
+        Dynamics3dofParachute parachute(rocket.get(), env);
 
         if (exist_second_parachute) {
 
-            odeint::integrate_const(stepper, dynamics_3dof_parachute, x0_in_stage, start, time_open_second_parachute, time_step_decent_parachute, std::ref(fdr));
+            odeint::integrate_const(stepper, parachute, x0_in_stage, start,
+                                    time_open_second_parachute,
+                                    time_step_decent_parachute, std::ref(fdr));
             rocket->OpenParachute();
-            odeint::integrate_const(stepper, dynamics_3dof_parachute, x0_in_stage, time_open_second_parachute, time_end, time_step_decent_parachute, std::ref(fdr));
+            odeint::integrate_const(stepper, parachute, x0_in_stage,
+                                    time_open_second_parachute, time_end,
+                                    time_step_decent_parachute, std::ref(fdr));
         } else {
             QElapsedTimer tp;
             tp.start();
-            odeint::integrate_const(stepper, dynamics_3dof_parachute, x0_in_stage, start, time_end, time_step_decent_parachute, std::ref(fdr));
+            odeint::integrate_const(stepper, parachute, x0_in_stage, start,
+                                    time_end, time_step_decent_parachute,
+                                    std::ref(fdr));
         }
     }
 }
