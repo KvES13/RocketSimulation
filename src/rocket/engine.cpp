@@ -74,7 +74,7 @@ void Engine::Update(const double t, const double pressure) {
     }
 
     if (burning) {
-        this->thrust = thrust_vacuum_src(t) - (pressure *0.3);// area_exit);
+        this->thrust = thrust_vacuum_src(t) - (pressure * area_exit);//(pressure *0.3);// area_exit);
         mdot_prop = thrust/ISPvac/Constants::g_earth;
     } else {
         thrust = 0.0;

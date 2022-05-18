@@ -45,7 +45,6 @@ private:
 
 
     Environment *environment;
-    //SimulationGL *ogl;
     Ui::wSimulation *ui;
 };
 

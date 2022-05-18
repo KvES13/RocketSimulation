@@ -1,7 +1,7 @@
 QT       += core gui opengl
-LIBS     += -lopengl32 #-lglu32
+LIBS     += -lopengl32
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport #openglwidgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++17
 

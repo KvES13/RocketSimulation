@@ -52,7 +52,7 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
     // Update Environment
     double altitude = p_rocket->position.LLH[2];
 
-    p_env->atmosphere->setAltitude(altitude);
+    p_env->atmosphere->calculate(altitude);
 
     Eigen::Vector3d gravity_NED {0.0, 0.0, p_env->getGravity(altitude)};
 

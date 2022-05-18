@@ -6,7 +6,7 @@ class Mass {
         double inert;
         double propellant;
 
-        double Sum() {return inert + propellant;}
+        double Sum() {return inert /*+ propellant*/;}
 };
 
 #endif

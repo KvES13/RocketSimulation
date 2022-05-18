@@ -41,7 +41,7 @@ void wSimulation::on_pbStartSim_clicked()
     "\nКоличество ступеней: " + QString::number(stageVector.size());
     for(const auto& stage : stageVector)
     {
-        text += "==========================================================="
+        text += "\n==========================================================="
          "\nПараметры " + QString::number(stage.stageNumber) + " ступени:"
                 "\nМасса: " + QString::number(stage.rocket->mass.Sum()) +
                 "кг ,длина " + QString::number(stage.rocket->length) +
@@ -62,7 +62,7 @@ void wSimulation::on_pbStartSim_clicked()
     else
         text = QString::number(msec)+" мс";
 
-    ui->textBrowser->append("\n ==========================================================="
+    ui->textBrowser->append("\n==========================================================="
                             "\nСимуляция завершена\nВремя расчёта: "+text);
 
     for(const auto& stage : stageVector)

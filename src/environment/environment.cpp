@@ -8,7 +8,7 @@ Environment::~Environment()
 
 void Environment::updateAltitude(double altitude)
 {
-    atmosphere->setAltitude(altitude);
+    atmosphere->calculate(altitude);
 }
 
 double Environment::getGravity(const double altitude)
