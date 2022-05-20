@@ -93,7 +93,7 @@
 		"Enable Parachute Open": false,
 		"Enable Secondary Parachute Open": false,
 
-		"Flight End Time [s]": 600.0,
+		"Flight End Time [s]": 1000.0,
 		"Time Step [s]": 0.1
 	}
 }

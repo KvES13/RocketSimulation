@@ -137,7 +137,30 @@ void Rocket::setCdSParachute(const double CdS_first, const double CdS_second) {
 
 
 // Parameter Getter //////////////////
-////////////////////////////////////////////////////////
+
+double Rocket::calcOverload(double lambda,double separation_height,double angle )
+{
+    angle = 0; // tg(Vx/Vy)
+    double n_max = -((15*angle)/std::exp(1.0))*std::sqrt(separation_height*lambda);
+    return n_max;;
+}
+
+double Rocket::calcHeatFlow(double mass,double lambda,double separation_height,
+                            double density,double velocity,double velocity_kr,
+                            double radius)
+{
+    lambda = 0;
+    velocity_kr = 0;
+    radius = 0;
+    double y = ((CA*area)/mass)*sqrt((separation_height*density)/lambda);
+    double x = std::log2(velocity/velocity_kr);
+    double e = std::exp(1.0);
+    double q_max = (105*std::pow(y,0.8)*std::pow(e,-3.19*x))/
+            (std::pow(radius,0.2)*std::pow((CA*area/mass),0.8));
+    return q_max;
+}
+
+
 double Rocket::getLengthCG() {
     if (engine.burning) {
         this->length_CG = length_CG_src(burn_clock.countup_time);

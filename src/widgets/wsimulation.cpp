@@ -63,7 +63,7 @@ void wSimulation::on_pbStartSim_clicked()
         text = QString::number(msec)+" мс";
 
     ui->textBrowser->append("\n==========================================================="
-                            "\nСимуляция завершена\nВремя расчёта: "+text);
+                            "\nСимуляция завершена\nВремя расчёта: "/*+text*/);
 
     for(const auto& stage : stageVector)
     {
@@ -105,8 +105,8 @@ void wSimulation::run()
             // Simulation
             stageVector[i].FlightSequence(environment,x0);
 
-            QString str =qApp->applicationDirPath()+Constants::OutputPath+"/stage"+QString::number(i)+".csv";
-            stageVector[i].fdr.DumpCsv(str.toStdString());
+         //   QString str =qApp->applicationDirPath()+Constants::OutputPath+QString("/stage")+QString::number(i)+QString(".csv");
+        //    stageVector[i].fdr.DumpCsv(str.toStdString());
 
             // Update next stage
             if (stageVector.size() != i+1 && stageVector[i].enable_separation) {

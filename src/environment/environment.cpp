@@ -1,14 +1,23 @@
 #include "environment.h"
 
 
+//Environment::Environment(const Environment &env)
+//{
+//    if(atmosphere != nullptr)
+//        delete atmosphere;
+//    masterClock = env.masterClock;
+//    atmosphere = new Atmosphere(0);
+//    atmosphere = env.atmosphere;
+//}
+
 Environment::~Environment()
 {
-    delete atmosphere;
+ //   delete atmosphere;
 }
 
 void Environment::updateAltitude(double altitude)
 {
-    atmosphere->calculate(altitude);
+    atmosphere.calculate(altitude);
 }
 
 double Environment::getGravity(const double altitude)

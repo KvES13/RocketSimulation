@@ -1,7 +1,7 @@
 #include "mytablemodel.h"
 
 MyTableModel::MyTableModel(const QVector<QVector<double> > &vec,
-                           const QStringList &header) : QAbstractTableModel() ,
+                           const QStringList &header, QObject *parent) : QAbstractTableModel(parent) ,
     HorizontalHeader(header), columns(vec)
 {
 }

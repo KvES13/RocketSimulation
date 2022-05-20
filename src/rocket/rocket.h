@@ -38,6 +38,8 @@ class Rocket {
         void setCmq(const InterpolateParameter Cmq);
         void setCnr(const InterpolateParameter Cnr);
 
+
+
         void setInertiaTensor(const InterpolateParameter MOI_xx, const InterpolateParameter MOI_yy, const InterpolateParameter MOI_zz);
         void setAttitudeProgram(const InterpolateParameter azimuth, const InterpolateParameter elevation, const InterpolateParameter roll);
 
@@ -45,6 +47,10 @@ class Rocket {
         void setCdSParachute(const double CdS_first, const double CdS_second);
 
         // Parameter Getter
+        double calcOverload(double lambda,double separation_height,double angle );
+        double calcHeatFlow(double mass,double lambda,double separation_height,
+                                    double density,double velocity,double velocity_kr,
+                                    double radius);
         double getLengthCG();
         double getLengthCP(const double mach_number);
         double getCA(const double mach_number);

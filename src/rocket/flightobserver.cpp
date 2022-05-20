@@ -5,11 +5,12 @@
 
 FlightObserver::FlightObserver(Rocket* rocket) {
     p_rocket = rocket;
+
 };
 
 
 void FlightObserver::ReserveCapacity(int capacity) {
-   // capacity = capacity/100;
+    capacity = capacity/10;
     countup_time.reserve(capacity);
     countup_burn_time.reserve(capacity);
     thrust.reserve(capacity);
@@ -272,16 +273,16 @@ void FlightObserver::DumpCsv(const std::string &file_name, bool full_dump) {
     // yaw
     // nutation
     if (full_dump) {
-        ofs << "Time [s],";
-        ofs << "Time of IIP [s],";
-        ofs << "Latitude of IIP [deg],";
-        ofs << "Longitude of IIP [deg],";
+//        ofs << "Time [s],";
+//        ofs << "Time of IIP [s],";
+//        ofs << "Latitude of IIP [deg],";
+//        ofs << "Longitude of IIP [deg],";
    //     ofs << "Downrange of IIP [m],";
     }
 
     ofs << std::endl;
-    
-     Environment env (new Atmosphere(0));
+    Environment env;
+  //   Environment env (new Atmosphere(0));
  //    Atmosphere atm (0);
     double g0 = env.getGravity(0);
     ofs << std::fixed;
@@ -294,10 +295,10 @@ void FlightObserver::DumpCsv(const std::string &file_name, bool full_dump) {
         ofs << std::setprecision(4) << countup_burn_time[i] << ",";
         if (full_dump) {
             ofs << std::setprecision(8) << 322<<",";//distance_surface(position[0].LLH,position[i].LLH)<< ",";
-            ofs << std::setprecision(6) << env.atmosphere->getDensity() << ",";
-            ofs << std::setprecision(6) << env.atmosphere->getPressure() / 1e3 << ",";  // [kPa]
-            ofs << std::setprecision(6) << env.atmosphere->getTemperature() << ",";  // [K]
-            ofs << std::setprecision(6) << env.atmosphere->getSpeedOfSound() << ",";
+            ofs << std::setprecision(6) << env.atmosphere.getDensity() << ",";
+            ofs << std::setprecision(6) << env.atmosphere.getPressure() / 1e3 << ",";  // [kPa]
+            ofs << std::setprecision(6) << env.atmosphere.getTemperature() << ",";  // [K]
+            ofs << std::setprecision(6) << env.atmosphere.getSpeedOfSound() << ",";
             ofs << std::setprecision(8) << mass_prop[i] << ",";
             ofs << std::setprecision(8) << mass[i] << ",";
 //            ofs << std::setprecision(2) << length_CG[i] / p_rocket->length * 100.0 << ",";  // [%]
@@ -402,11 +403,11 @@ void FlightObserver::DumpCsv(const std::string &file_name, bool full_dump) {
 
 
         if (full_dump) {
-            ofs << std::setprecision(4) << countup_burn_time[i] << ",";
-            auto iip = IIP(position[i].ECI, velocity[i].ECI);
-            ofs << std::setprecision(4) << iip.first << ",";  // [s]
-            ofs << std::setprecision(8) << iip.second[0] << ",";  // [deg]
-            ofs << std::setprecision(8) << iip.second[1] << ",";  // [deg]
+//            ofs << std::setprecision(4) << countup_burn_time[i] << ",";
+//            auto iip = IIP(position[i].ECI, velocity[i].ECI);
+//            ofs << std::setprecision(4) << iip.first << ",";  // [s]
+//            ofs << std::setprecision(8) << iip.second[0] << ",";  // [deg]
+//            ofs << std::setprecision(8) << iip.second[1] << ",";  // [deg]
   //      ofs << std::setprecision(8) << vdownrange(position[0].LLH, iip.second).first << ",";
         }
 

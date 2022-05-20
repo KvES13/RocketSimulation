@@ -48,8 +48,8 @@ void Dynamics6dofAero::operator()(const state& x, state& dx, const double t)
 
     // Update Airspeed
     p_rocket->velocity.air_body = coordinate.dcm.NED2body * (p_rocket->velocity.NED /*- p_wind->getNED(altitude)*/);
-    p_rocket->dynamic_pressure = 0.5 * p_env->atmosphere->getDensity() * std::pow(p_rocket->velocity.air_body.norm(), 2);
-    p_rocket->velocity.mach_number = p_rocket->velocity.air_body.norm() / p_env->atmosphere->getSpeedOfSound();
+    p_rocket->dynamic_pressure = 0.5 * p_env->atmosphere.getDensity() * std::pow(p_rocket->velocity.air_body.norm(), 2);
+    p_rocket->velocity.mach_number = p_rocket->velocity.air_body.norm() / p_env->atmosphere.getSpeedOfSound();
 
     // Update time and mach parameter
     p_rocket->inertia_tensor = p_rocket->getInertiaTensor();
@@ -74,7 +74,7 @@ void Dynamics6dofAero::operator()(const state& x, state& dx, const double t)
     }
 
     // Calculate Force
-    p_rocket->force.thrust = p_rocket->getThrust(p_env->atmosphere->getPressure());
+    p_rocket->force.thrust = p_rocket->getThrust(p_env->atmosphere.getPressure());
     p_rocket->force.aero = AeroForce();
     p_rocket->force.gravity = (coordinate.dcm.NED2body * gravity_NED) * p_rocket->mass.Sum();
 

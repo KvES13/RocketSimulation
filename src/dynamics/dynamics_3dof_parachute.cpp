@@ -34,7 +34,7 @@ void Dynamics3dofParachute::operator()(const state& x, state& dx, const double t
 
     Eigen::Vector3d gravity_NED(0.0, 0.0, p_env->getGravity(altitude));
 
-    Eigen::Vector3d drag_NED(0.0, 0.0, -0.5 * p_env->atmosphere->getDensity() * decent_velosity * abs(decent_velosity) * p_rocket->CdS_parachute);
+    Eigen::Vector3d drag_NED(0.0, 0.0, -0.5 * p_env->atmosphere.getDensity() * decent_velosity * abs(decent_velosity) * p_rocket->CdS_parachute);
     Eigen::Vector3d acceleration_NED = drag_NED / (p_rocket->mass.Sum()) + gravity_NED;
     p_rocket->acceleration.ECI = coordinate.dcm.ECEF2ECI * (coordinate.dcm.NED2ECEF * acceleration_NED);
 

@@ -4,7 +4,6 @@ PlotSettingsDialog::PlotSettingsDialog(QVector<QCustomPlot *> &plots, QWidget *p
     QDialog(parent),vPlots(plots)
 {
     setUI();
-
 }
 
 PlotSettingsDialog::~PlotSettingsDialog()

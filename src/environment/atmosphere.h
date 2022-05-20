@@ -7,6 +7,7 @@
 class Atmosphere
 {
 public:
+
     Atmosphere(double currentAltitude = 0);
 
     void calculate(double currentAltitude);

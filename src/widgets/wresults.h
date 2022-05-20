@@ -18,7 +18,7 @@ class wResults : public QWidget
 
 public:
     explicit wResults(const QVector<QVector<double> > &data,
-                      QStringList&& header,
+                      QStringList&& header, int stagesCount,
                       QWidget *parent = nullptr);
     ~wResults();
 
@@ -27,16 +27,15 @@ public slots:
 
 private:
 
-    static constexpr std::array<Qt::GlobalColor,4> colors = {Qt::blue,Qt::red, Qt::green, Qt::white};
+    static constexpr std::array<Qt::GlobalColor,10> colors =
+    {Qt::blue,Qt::red,Qt::darkRed, Qt::green,Qt::darkGreen, Qt::lightGray,
+     Qt::yellow,Qt::darkYellow, Qt::darkCyan,Qt::white};
 
     const QVector<QVector<double>> &values;
 
     QVector<QCustomPlot*> vPlots;
     QStringList headerData;
-    QTableView *tableView;
-    QGridLayout *grid;
-    MyTableModel *tableModel;
-    QPushButton *btnSettingsDialog;
+    int graphsCount;
 
 };
 

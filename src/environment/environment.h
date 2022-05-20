@@ -9,13 +9,13 @@ class Environment
 {
 public:
 
-    explicit Environment(){ atmosphere = new Atmosphere(0);};
-    explicit Environment (Atmosphere* atmosphere) : atmosphere(atmosphere){};
-
+    explicit Environment(){ /*atmosphere = new Atmosphere(0);*/};
+ //   explicit Environment (Atmosphere* atmosphere) : atmosphere(atmosphere){};
+  //  Environment (const Environment& env);
 
     ~Environment();
 
-    Atmosphere *atmosphere;
+    Atmosphere /***/atmosphere;
     void updateAltitude(double altitude);
     SequenceClock masterClock;
 

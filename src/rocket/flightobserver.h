@@ -5,6 +5,7 @@
 
 #include <string>
 #include <QVector>
+#include <QMap>
 
 #define EIGEN_MPL2_ONLY
 #include "Eigen/Core"
@@ -28,7 +29,6 @@ class FlightObserver {
 
     Rocket* p_rocket;
     Coordinate crd;
-
 
     double max_alt = 0;
     double max_downrage= 0;

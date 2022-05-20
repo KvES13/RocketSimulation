@@ -22,7 +22,9 @@ void interpolate::Interp1d::ascending_order_sort(std::vector<double>& x, std::ve
     }
 };
 
-interpolate::Interp1d::Interp1d(const std::vector<double> x, const std::vector<double> y, const std::string kind, const std::string fill_value) {
+interpolate::Interp1d::Interp1d(const std::vector<double>& x,
+                                const std::vector<double>& y,
+                                const std::string kind, const std::string fill_value) {
     if (x.size() != y.size()) {
         std::cerr << "Error! Diffirent number of array: " << x.size() << "/" << y.size() << std::endl;
         exit(EXIT_FAILURE);
@@ -85,7 +87,7 @@ double interpolate::Interp1d::operator()(const double x) {
 };
 
 
-std::vector<double> interpolate::Interp1d::operator()(const std::vector<double> x) {
+std::vector<double> interpolate::Interp1d::operator()(const std::vector<double>& x) {
     std::vector<double> res;
     for(size_t i=0; i < x.size(); ++i) {
         res.push_back(polator->polate(x[i], x_src, y_src, fill_value));

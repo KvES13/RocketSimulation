@@ -52,14 +52,14 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
     // Update Environment
     double altitude = p_rocket->position.LLH[2];
 
-    p_env->atmosphere->calculate(altitude);
+    p_env->atmosphere.calculate(altitude);
 
     Eigen::Vector3d gravity_NED {0.0, 0.0, p_env->getGravity(altitude)};
 
     // Update Airspeed
     p_rocket->velocity.air_body = coordinate.dcm.NED2body * p_rocket->velocity.NED;
-    p_rocket->dynamic_pressure = 0.5 * p_env->atmosphere->getDensity() * std::pow(p_rocket->velocity.air_body.norm(), 2);
-    p_rocket->velocity.mach_number = p_rocket->velocity.air_body.norm() / p_env->atmosphere->getSpeedOfSound();//air.speed_of_sound;
+    p_rocket->dynamic_pressure = 0.5 * p_env->atmosphere.getDensity() * std::pow(p_rocket->velocity.air_body.norm(), 2);
+    p_rocket->velocity.mach_number = p_rocket->velocity.air_body.norm() / p_env->atmosphere.getSpeedOfSound();//air.speed_of_sound;
 
     // Update time and mach parameter
     p_rocket->inertia_tensor = p_rocket->getInertiaTensor();
@@ -82,7 +82,7 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
     }
 
     // Calculate Force
-    p_rocket->force.thrust = p_rocket->getThrust(p_env->atmosphere->getPressure());
+    p_rocket->force.thrust = p_rocket->getThrust(p_env->atmosphere.getPressure());
     p_rocket->force.thrust(1) = 0.0; p_rocket->force.thrust(2) = 0.0;
     p_rocket->force.aero = AeroForce(p_rocket);
     p_rocket->force.gravity = (coordinate.dcm.NED2body * gravity_NED) * (p_rocket->mass.Sum());

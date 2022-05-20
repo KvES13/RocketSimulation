@@ -43,7 +43,10 @@ void MainWindow::uptageWidgets(std::vector<RocketStage> &stages,Environment* env
 {
     ui->stackedWidget->setCurrentIndex(1);
     ui->Sim->init(stages,env);
-    ui->Res->SetFilePath(QString::fromStdString(stages[0].fdr.filePath),&ui->Sim->stageVector[0].fdr);
+    QVector<FlightObserver*> obs;
+    for(auto &stage : ui->Sim->stageVector)
+        obs.append(&stage.fdr);
+    ui->Res->SetFilePath(QString::fromStdString(stages[0].fdr.filePath),obs);
 }
 
 
