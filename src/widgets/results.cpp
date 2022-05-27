@@ -6,6 +6,7 @@ Results::Results(QWidget *parent) :
     ui(new Ui::Results)
 {
     ui->setupUi(this);
+
 }
 
 Results::~Results()
@@ -13,16 +14,16 @@ Results::~Results()
     delete ui;
 }
 
-void Results::SetFilePath(const QString &filepath, QVector<FlightObserver*>obs)
+void Results::SetObservers(QVector<FlightObserver*>obs)
 {
-    CsvStageFilePath = filepath;
-    ui->leCSVfile->setText(CsvStageFilePath);
-    observers = obs;
+    resetData();
+    observers = obs; 
     stagesCount = observers.size();
 }
 
 void Results::paintResults()
 {
+    plot();
     plotPosition();
     plotVelocity();
     plotForce();
@@ -31,85 +32,127 @@ void Results::paintResults()
     plotAmtosphere();
 }
 
+void Results::plot()
+{
+    QTabWidget *tab = new QTabWidget(ui->tabWidget);
+    ui->tabWidget->addTab(tab,"Общий");
+
+    QVector<QVector<double>> posLatLon,distance,velocity;
+    for(auto &fdr: observers)
+    {
+
+        posLatLon.push_back(fdr->vposition[6]);
+        posLatLon.push_back(fdr->vposition[7]);
+
+        distance.push_back(std::move(fdr->downrage));
+        distance.push_back(fdr->vposition[8]);
+
+        velocity.push_back(fdr->countup_time);
+        velocity.push_back(std::move(fdr->sum_velocity));
+    }
+
+    wResults *dist = new wResults(distance,
+                                     QStringList{"Дистанция","Высота"},
+                                      stagesCount,false,tab);
+    wResults *latLon = new wResults(posLatLon,
+                                     QStringList{"Долгота","Широта"},
+                                      stagesCount,false,tab);
+
+    wResults *vel = new wResults(velocity,
+                                    QStringList{"Время","Скорость"},
+                                      stagesCount,false,tab);
+
+  //  QWidget *pos = new QWidget(tab);
+    auto grid = new QGridLayout(tab);
+    grid->addWidget(dist);
+    grid->addWidget(latLon);
+    grid->addWidget(vel);
+}
+
 void Results::plotVelocity()
 {
     QTabWidget *tabVelocity = new QTabWidget(ui->tabWidget);
     ui->tabWidget->addTab(tabVelocity,"Скорость");
 
+    QVector<QVector<double>> velECEF,velECI,velNED;
     for(auto &fdr: observers)
     {
-        vVelocityECEF.push_back(fdr->countup_time);
-        vVelocityECEF.push_back(std::move(fdr->vvelocity[0]));
-        vVelocityECEF.push_back(std::move(fdr->vvelocity[1]));
-        vVelocityECEF.push_back(std::move(fdr->vvelocity[2]));
+        velECEF.push_back(fdr->countup_time);
+        velECEF.push_back(std::move(fdr->vvelocity[0]));
+        velECEF.push_back(std::move(fdr->vvelocity[1]));
+        velECEF.push_back(std::move(fdr->vvelocity[2]));
 
-        vVelocityECI.push_back(fdr->countup_time);
-        vVelocityECI.push_back(std::move(fdr->vvelocity[3]));
-        vVelocityECI.push_back(std::move(fdr->vvelocity[4]));
-        vVelocityECI.push_back(std::move(fdr->vvelocity[5]));
+        velECI.push_back(fdr->countup_time);
+        velECI.push_back(std::move(fdr->vvelocity[3]));
+        velECI.push_back(std::move(fdr->vvelocity[4]));
+        velECI.push_back(std::move(fdr->vvelocity[5]));
 
-        vVelocityNED.push_back(fdr->countup_time);
-        vVelocityNED.push_back(std::move(fdr->vvelocity[6]));
-        vVelocityNED.push_back(std::move(fdr->vvelocity[7]));
-        vVelocityNED.push_back(std::move(fdr->vvelocity[8]));
+        velNED.push_back(fdr->countup_time);
+        velNED.push_back(std::move(fdr->vvelocity[6]));
+        velNED.push_back(std::move(fdr->vvelocity[7]));
+        velNED.push_back(std::move(fdr->vvelocity[8]));
     }
-    wResults  *resECEF = new wResults(vVelocityECEF,
-                             QStringList{"Время","X","Y","Z"},
-                              stagesCount,tabVelocity);
-    tabVelocity->addTab(resECEF,"Скорость ECEF");
+    wResults *ECEF = new wResults(velECEF, QStringList{"Время","X","Y","Z"},
+                                   stagesCount,tabVelocity);
 
-    wResults  *resECI = new wResults(vVelocityECI,
-                                     QStringList{"Время","X","Y","Z"},
+    wResults *ECI = new wResults(velECI,QStringList{"Время","X","Y","Z"},
                                      stagesCount,tabVelocity);
-    tabVelocity->addTab(resECI,"Скорость ECI");
 
-    wResults  *resNED = new wResults(vVelocityNED,
-                                 QStringList{"Время",
-                                             "North Velocity [m/s]",
-                                             "East Velocity [m/s]",
-                                             "Down Velocity [m/s]"},
-                                 stagesCount,tabVelocity);
-    tabVelocity->addTab(resNED,"NED");
+    wResults *NED = new wResults(velNED,QStringList{"Время",
+                                                     "North Velocity [m/s]",
+                                                     "East Velocity [m/s]",
+                                                     "Down Velocity [m/s]"},
+                                  stagesCount,tabVelocity);
+    tabVelocity->addTab(ECEF,"Скорость ECEF");
+    tabVelocity->addTab(ECI,"Скорость ECI");
+    tabVelocity->addTab(NED,"NED");
 }
 
 void Results::plotPosition()
 {
     QTabWidget *tabPosition = new QTabWidget(ui->tabWidget);
     ui->tabWidget->addTab(tabPosition,"Координаты");
+
+    QVector<QVector<double>> posECEF,posECI,posLLH;
     for(auto &fdr: observers)
     {
-        vPosECEF.push_back(fdr->countup_time);
-        vPosECEF.push_back(std::move(fdr->vposition[0]));
-        vPosECEF.push_back(std::move(fdr->vposition[1]));
-        vPosECEF.push_back(std::move(fdr->vposition[2]));
+        posECEF.push_back(fdr->countup_time);
+        posECEF.push_back(std::move(fdr->vposition[0]));
+        posECEF.push_back(std::move(fdr->vposition[1]));
+        posECEF.push_back(std::move(fdr->vposition[2]));
 
-        vPosECI.push_back(fdr->countup_time);
-        vPosECI.push_back(std::move(fdr->vposition[3]));
-        vPosECI.push_back(std::move(fdr->vposition[4]));
-        vPosECI.push_back(std::move(fdr->vposition[5]));
+        posECI.push_back(fdr->countup_time);
+        posECI.push_back(std::move(fdr->vposition[3]));
+        posECI.push_back(std::move(fdr->vposition[4]));
+        posECI.push_back(std::move(fdr->vposition[5]));
 
-        vPosLLH.push_back(fdr->countup_time);
-        vPosLLH.push_back(std::move(fdr->vposition[6]));
-        vPosLLH.push_back(std::move(fdr->vposition[7]));
-        vPosLLH.push_back(std::move(fdr->vposition[8]));
+        posLLH.push_back(fdr->countup_time);
+        posLLH.push_back(fdr->vposition[6]);
+        posLLH.push_back(fdr->vposition[7]);
+        posLLH.push_back(fdr->vposition[8]);
     }
-    wResults  *posECEF = new wResults(vPosECEF,
-                                     QStringList{"Время","X","Y","Z"},
-                                      stagesCount,tabPosition);
-    tabPosition->addTab(posECEF,"Координаты ECEF");
 
-    wResults  *posECI = new wResults(vPosECI,
-                                     QStringList{"Время","X","Y","Z"},
-                                     stagesCount,tabPosition);
-    tabPosition->addTab(posECI,"Координаты ECI");
 
-    wResults  *posLLH = new wResults(vPosLLH,
+    wResults  *ECEF = new wResults(posECEF,
+                                     QStringList{"Время","X","Y","Z"},
+                                      stagesCount,false,tabPosition);
+
+    wResults  *ECI = new wResults(posECI,
+                                     QStringList{"Время","X","Y","Z"},
+                                     stagesCount,false,tabPosition);
+
+    wResults  *LLH = new wResults(posLLH,
                                      QStringList{"Время",
                                                  "Latitude [deg]",
                                                  "Longitude [deg]",
                                                  "Height for WGS84 [deg]"},
-                                     stagesCount,tabPosition);
-    tabPosition->addTab(posLLH,"Координаты LLH");
+                                     stagesCount,false,tabPosition);
+
+
+    tabPosition->addTab(LLH,"Координаты LLH");
+    tabPosition->addTab(ECEF,"Координаты ECEF");
+    tabPosition->addTab(ECI,"Координаты ECI");
+
 }
 
 void Results::plotForce()
@@ -117,48 +160,47 @@ void Results::plotForce()
     QTabWidget *tabForce = new QTabWidget(ui->tabWidget);
     ui->tabWidget->addTab(tabForce,"Силы");
 
+    QVector<QVector<double>> force,forceThrust,forceAero,forceGravity;
     for(auto &fdr: observers)
     {
-    vForce.push_back(fdr->countup_time);
-    vForce.push_back(std::move(fdr->thrust));
+        force.push_back(fdr->countup_time);
+        force.push_back(std::move(fdr->thrust));
 
-    vForceThrust.push_back(fdr->countup_time);
-    vForceThrust.push_back(std::move(fdr->vforce[0]));
-    vForceThrust.push_back(std::move(fdr->vforce[1]));
-    vForceThrust.push_back(std::move(fdr->vforce[2]));
+        forceThrust.push_back(fdr->countup_time);
+        forceThrust.push_back(std::move(fdr->vforce[0]));
+        forceThrust.push_back(std::move(fdr->vforce[1]));
+        forceThrust.push_back(std::move(fdr->vforce[2]));
 
-    vForceAero.push_back(fdr->countup_time);
-    vForceAero.push_back(std::move(fdr->vforce[3]));
-    vForceAero.push_back(std::move(fdr->vforce[4]));
-    vForceAero.push_back(std::move(fdr->vforce[5]));
+        forceAero.push_back(fdr->countup_time);
+        forceAero.push_back(std::move(fdr->vforce[3]));
+        forceAero.push_back(std::move(fdr->vforce[4]));
+        forceAero.push_back(std::move(fdr->vforce[5]));
 
-    vForceGravity.push_back(fdr->countup_time);
-    vForceGravity.push_back(std::move(fdr->vforce[6]));
-    vForceGravity.push_back(std::move(fdr->vforce[7]));
-    vForceGravity.push_back(std::move(fdr->vforce[8]));
-
+        forceGravity.push_back(fdr->countup_time);
+        forceGravity.push_back(std::move(fdr->vforce[6]));
+        forceGravity.push_back(std::move(fdr->vforce[7]));
+        forceGravity.push_back(std::move(fdr->vforce[8]));
     }
-    wResults  *resForce = new wResults(vForce,
-                                  QStringList{"Время","Thrust [N]]"},
+    wResults  *resForce = new wResults(force,QStringList{"Время","Thrust [N]]"},
                                        stagesCount,tabForce);
-    tabForce->addTab(resForce,"Общая");
 
-    wResults  *resThrust = new wResults(vForceThrust,
-                                  QStringList{"Время","Fx-thrust [N]",
-                                              "Fy-thrust [N]","Fz-thrust [N]"},
+    wResults *resThrust = new wResults(forceThrust, QStringList{
+                                            "Время","Fx-thrust [N]",
+                                            "Fy-thrust [N]","Fz-thrust [N]"},
                                         stagesCount,tabForce);
-    tabForce->addTab(resThrust,"Сила тяги");
 
-    wResults  *resAero = new wResults(vForceAero,
-                                  QStringList{"Время","Fx-aero [N]",
-                                              "Fy-aero [N]","Fz-aero [N]"},
+    wResults *resAero = new wResults(forceAero, QStringList{
+                                          "Время","Fx-aero [N]",
+                                          "Fy-aero [N]","Fz-aero [N]"},
                                       stagesCount,tabForce);
-    tabForce->addTab(resAero,"Аэродинамические силы");
 
-    wResults  *resGravity = new wResults(vForceGravity,
-                                  QStringList{"Время","Fx-gravity [N]",
-                                              "Fy-gravity [N]","Fz-gravity [N]"},
+    wResults *resGravity = new wResults(forceGravity,QStringList{
+                                             "Время","Fx-gravity [N]",
+                                             "Fy-gravity [N]","Fz-gravity [N]"},
                                          stagesCount,tabForce);
+    tabForce->addTab(resForce,"Общая");
+    tabForce->addTab(resThrust,"Сила тяги");
+    tabForce->addTab(resAero,"Аэродинамические силы");
     tabForce->addTab(resGravity,"Вес");
 }
 
@@ -167,43 +209,45 @@ void Results::plotAcceleration()
     QTabWidget *tabAc = new QTabWidget(ui->tabWidget);
     ui->tabWidget->addTab(tabAc,"Ускорение");
 
+    QVector<QVector<double>> acECI,acBody;
     for(auto &fdr: observers)
     {
-        vAcECI.push_back(fdr->countup_time);
-        vAcECI.push_back(std::move(fdr->vacceleration[0]));
-        vAcECI.push_back(std::move(fdr->vacceleration[1]));
-        vAcECI.push_back(std::move(fdr->vacceleration[2]));
+        acECI.push_back(fdr->countup_time);
+        acECI.push_back(std::move(fdr->vacceleration[0]));
+        acECI.push_back(std::move(fdr->vacceleration[1]));
+        acECI.push_back(std::move(fdr->vacceleration[2]));
 
-        vAcBody.push_back(fdr->countup_time);
-        vAcBody.push_back(std::move(fdr->vacceleration[3]));
-        vAcBody.push_back(std::move(fdr->vacceleration[4]));
-        vAcBody.push_back(std::move(fdr->vacceleration[5]));
+        acBody.push_back(fdr->countup_time);
+        acBody.push_back(std::move(fdr->vacceleration[3]));
+        acBody.push_back(std::move(fdr->vacceleration[4]));
+        acBody.push_back(std::move(fdr->vacceleration[5]));
     }
-    wResults  *resAcECI = new wResults(vAcECI,
-                                      QStringList{"Время","X","Y","Z"},
+    wResults *resAcECI = new wResults(acECI, QStringList{"Время","X","Y","Z"},
                                        stagesCount,tabAc);
-    tabAc->addTab(resAcECI,"ECI");
 
-    wResults  *resAcBody = new wResults(vAcBody,
-                                      QStringList{"Время","Accx-body [m/s2]",
-                                                  "Accy-body [m/s2]",
-                                                  "Accz-body [m/s2]"},
+    wResults *resAcBody = new wResults(acBody,QStringList{
+                                            "Время","Accx-body [m/s2]",
+                                            "Accy-body [m/s2]",
+                                            "Accz-body [m/s2]"},
                                         stagesCount,tabAc);
+    tabAc->addTab(resAcECI,"ECI");
     tabAc->addTab(resAcBody,"body");
 
 }
 
 void Results::plotMass()
 {
+
+    QVector<QVector<double>> mass;
     for(auto &fdr: observers)
     {
-        vmass.push_back(fdr->countup_time);
-        vmass.push_back(std::move(fdr->mass));
-        vmass.push_back(std::move(fdr->mass_prop));
+        mass.push_back(fdr->countup_time);
+        mass.push_back(std::move(fdr->mass));
+        mass.push_back(std::move(fdr->mass_prop));
     }
-    wResults *resMass = new wResults(vmass,QStringList{"Время","Mass [kg]",
+    wResults *resMass = new wResults(mass,QStringList{"Время","Mass [kg]",
                                                        "Propellant Mass [kg]"},
-                                     stagesCount,this);
+                                     stagesCount,ui->tabWidget);
     ui->tabWidget->addTab(resMass,"Масса");
 
 }
@@ -211,6 +255,7 @@ void Results::plotMass()
 void Results::plotAmtosphere()
 {
     Environment env;
+    QVector<QVector<double>> atmosphere;
     QVector<double> temp,alt,denst,press;
     for(auto &fdr: observers)
     {
@@ -222,14 +267,19 @@ void Results::plotAmtosphere()
              denst.push_back(env.atmosphere.getDensity());
              press.push_back(env.atmosphere.getPressure());
         }
-        vvv.push_back(alt);
-        vvv.push_back(temp);
-        vvv.push_back(denst);
-        vvv.push_back(press);
+        atmosphere.push_back(alt);
+        atmosphere.push_back(temp);
+        atmosphere.push_back(denst);
+        atmosphere.push_back(press);
     }
 
-    wResults *res = new wResults(vvv,QStringList{"Высота","Температура",
+    wResults *res = new wResults(atmosphere,QStringList{"Высота","Температура",
                                                  "Плотность","Давление"},
-                                 stagesCount,this);
+                                 stagesCount,ui->tabWidget);
     ui->tabWidget->addTab(res,"Атмосфера");
+}
+
+void Results::resetData()
+{
+    qDebug()<<"void Results::resetData() "<<ui->tabWidget->children();
 }

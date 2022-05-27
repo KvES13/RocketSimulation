@@ -22,7 +22,7 @@ public:
     explicit Results(QWidget *parent = nullptr);
     ~Results();
 
-    void SetFilePath(const QString& filepath, QVector<FlightObserver*> obs);
+    void SetObservers(QVector<FlightObserver *> obs);
 
 public slots:
     void paintResults();
@@ -30,6 +30,7 @@ public slots:
 private:
     Ui::Results *ui;
 
+    void plot();
     void plotVelocity();
     void plotPosition();
     void plotForce();
@@ -37,30 +38,10 @@ private:
     void plotMass();
     void plotAmtosphere();
 
+    void resetData();
 
-    QString CsvStageFilePath;
     QVector<FlightObserver*> observers;
     int stagesCount;
-
-    QVector<QVector<double>> vvv;
-    QVector<QVector<double>> vmass;
-    QVector<QVector<double>> vVelocityECEF;
-    QVector<QVector<double>> vVelocityECI;
-    QVector<QVector<double>> vVelocityNED;
-
-    QVector<QVector<double>> vPosECEF;
-    QVector<QVector<double>> vPosECI;
-    QVector<QVector<double>> vPosLLH;
-
-    QVector<QVector<double>> vForce;
-    QVector<QVector<double>> vForceThrust;
-    QVector<QVector<double>> vForceAero;
-    QVector<QVector<double>> vForceGravity;
-
-
-    QVector<QVector<double>> vAcECI;
-    QVector<QVector<double>> vAcBody;
-
 };
 
 #endif // RESULTS_H

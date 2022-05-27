@@ -104,16 +104,16 @@
 
 		"Enable Parachute Open": true,
 		"Parachute": {
-			"Open Time [s]": 270.0,
+			"Open Time [s]": 300.0,
 			"Enable Forced Apogee Open": false
 		},
 
 		"Enable Secondary Parachute Open": true,
 		"Secondary Parachute": {
-			"Open Time [s]": 300.0
+			"Open Time [s]": 320.0
 		},
 
-		"Flight End Time [s]": 600.0,
+		"Flight End Time [s]": 400.0,
 		"Time Step [s]": 0.1
 	}
 }

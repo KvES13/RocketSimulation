@@ -72,8 +72,8 @@
 			"Thrust at vacuum File Path": "sample_thrust.csv"
 		},
 		"Constant Thrust": {
-			"Thrust at vacuum [N]": 22000.0,
-			"Burn Duration [sec]": 210,
+			"Thrust at vacuum [N]": 30000.0,
+			"Burn Duration [sec]": 250,
 			"Thrust coefficient[-]": 1.00
 		},
 		"Const Isp vac[s]": 313.0,

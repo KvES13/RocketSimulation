@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iomanip>
 
-FlightObserver::FlightObserver(Rocket* rocket) {
+FlightObserver::FlightObserver(const Rocket *rocket) {
     p_rocket = rocket;
 
 };
@@ -103,12 +103,12 @@ void FlightObserver::operator()(const DynamicsBase::state& x, const double t)
         sideslip_angle.push_back(p_rocket->sideslip_angle);
         moment.push_back(p_rocket->moment);
 
-        vposition[0].append(p_rocket->position.ECEF[0]);
-        vposition[1].append(p_rocket->position.ECEF[1]);
-        vposition[2].append(p_rocket->position.ECEF[2]);
-        vposition[3].append(p_rocket->position.ECI[0]);
-        vposition[4].append(p_rocket->position.ECI[1]);
-        vposition[5].append(p_rocket->position.ECI[2]);
+        vposition[0].append(p_rocket->position.ECEF[0]/1e3);
+        vposition[1].append(p_rocket->position.ECEF[1]/1e3);
+        vposition[2].append(p_rocket->position.ECEF[2]/1e3);
+        vposition[3].append(p_rocket->position.ECI[0]/1e3);
+        vposition[4].append(p_rocket->position.ECI[1]/1e3);
+        vposition[5].append(p_rocket->position.ECI[2]/1e3);
         vposition[6].append(p_rocket->position.LLH[0]);
         vposition[7].append(p_rocket->position.LLH[1]);
         vposition[8].append(p_rocket->position.LLH[2]);
@@ -143,14 +143,16 @@ void FlightObserver::operator()(const DynamicsBase::state& x, const double t)
         if(p_rocket->position.LLH[2] > max_alt)
             max_alt = p_rocket->position.LLH[2];
 
-       double downrange = crd.distance_surface(
-                   position[0].LLH,p_rocket->position.LLH);
-        if (max_downrage < downrange)
-            max_downrage = downrange;
+        double range = crd.distance_surface(
+               position[0].LLH,p_rocket->position.LLH);
+        downrage.append(range);
+        if (max_downrage < range)
+            max_downrage = range;
 
         double speed = p_rocket->velocity.ECI.norm();
         if(speed > max_speed)
             max_speed = speed;
+        sum_velocity.append(speed);
 
         double acc = p_rocket->acceleration.ECI.norm();
         if(acc > max_accelerarion)
@@ -272,18 +274,16 @@ void FlightObserver::DumpCsv(const std::string &file_name, bool full_dump) {
     // pitch
     // yaw
     // nutation
-    if (full_dump) {
+//    if (full_dump) {
 //        ofs << "Time [s],";
 //        ofs << "Time of IIP [s],";
 //        ofs << "Latitude of IIP [deg],";
 //        ofs << "Longitude of IIP [deg],";
    //     ofs << "Downrange of IIP [m],";
-    }
+//    }
 
     ofs << std::endl;
     Environment env;
-  //   Environment env (new Atmosphere(0));
- //    Atmosphere atm (0);
     double g0 = env.getGravity(0);
     ofs << std::fixed;
     for (int i=0; i < countup_burn_time.size(); ++i) {

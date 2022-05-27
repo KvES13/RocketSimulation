@@ -20,17 +20,10 @@ MainWindow::MainWindow(QWidget *parent)
 //            ([this](){ui->stackedWidget->setCurrentIndex(0);}));
 
     connect(ui->Sim,&wSimulation::finish,ui->Res,&Results::paintResults);
+  //  connect(ui->Sim,&wSimulation::finish,ui->Res,&Results::paintResults);
 
+    setSideBar();
 
-    QStringList names = {"Настройки","Симуляция","Результаты","Траектория"};
-    for(int i = 0; i < names.size();++i)
-    {
-        QAction *action = new QAction(QIcon(QString(":/icons/icon%1").arg(i)),
-                                      names[i],ui->widget);
-        ui->widget->addAction(action);
-        connect(action,&QAction::toggled,[this,i](){ui->stackedWidget->setCurrentIndex(i);});
-    }
-    ui->widget->activateFirstAction();
 
 }
 
@@ -43,10 +36,26 @@ void MainWindow::uptageWidgets(std::vector<RocketStage> &stages,Environment* env
 {
     ui->stackedWidget->setCurrentIndex(1);
     ui->Sim->init(stages,env);
+
     QVector<FlightObserver*> obs;
     for(auto &stage : ui->Sim->stageVector)
         obs.append(&stage.fdr);
-    ui->Res->SetFilePath(QString::fromStdString(stages[0].fdr.filePath),obs);
+
+
+    ui->Res->SetObservers(obs);
+}
+
+void MainWindow::setSideBar()
+{
+    QStringList names = {"Настройки","Симуляция","Результаты","Траектория"};
+    for(int i = 0; i < names.size();++i)
+    {
+        QAction *action = new QAction(QIcon(QString(":/icons/icon%1").arg(i)),
+                                      names[i],ui->widget);
+        ui->widget->addAction(action);
+        connect(action,&QAction::toggled,[this,i](){ui->stackedWidget->setCurrentIndex(i);});
+    }
+    ui->widget->activateFirstAction();
 }
 
 

@@ -25,9 +25,9 @@ class FlightObserver {
     int counter = 0;
 
     FlightObserver() {};
-    FlightObserver(Rocket* rocket);
+    explicit FlightObserver(const Rocket* rocket);
 
-    Rocket* p_rocket;
+    const Rocket* p_rocket;
     Coordinate crd;
 
     double max_alt = 0;
@@ -72,6 +72,7 @@ class FlightObserver {
     QVector<double> sideslip_angle;
     QVector<Moment> moment;
     QVector<double> downrage;
+    QVector<double> sum_velocity;
 
     QVector<QVector<double>> vposition = QVector(9,QVector<double>());
     QVector<QVector<double>> vvelocity= QVector(9,QVector<double>());

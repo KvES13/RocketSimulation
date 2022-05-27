@@ -3,19 +3,18 @@
 #include "qcustomplot.h"
 
 
-wResults::wResults(const QVector<QVector<double> > &data,
-                   QStringList&& header, int stagesCount, QWidget *parent)  :
-    QWidget(parent), values (data), headerData(header), graphsCount(stagesCount)
+wResults::wResults(const QVector<QVector<double> > &data, QStringList&& header,
+                   int stagesCount, bool displayTable, QWidget *parent)  :
+    QWidget(parent), values (data), headerData(header),graphsCount(stagesCount),
+    isDisplayedTable(displayTable)
 {
     auto grid = new QGridLayout(this);
     auto btnSettingsDialog = new QPushButton(this);
     btnSettingsDialog->setText("Настройка отображения");
-    vPlots.resize(data.size()-1);
     size_t plotsCount = (data.size()-1)/graphsCount;
-    auto *tabWidget = new QTabWidget(this);
-    tabWidget->setMaximumWidth(450);
-    grid->addWidget(tabWidget,0,0,4,1);
-    grid->addWidget(btnSettingsDialog,0,1);
+    vPlots.resize(plotsCount);
+
+    grid->addWidget(btnSettingsDialog,0,0);
 
 
     connect(btnSettingsDialog,&QPushButton::clicked,this,&wResults::slotOpenDialog);
@@ -25,7 +24,7 @@ wResults::wResults(const QVector<QVector<double> > &data,
     {
         //Создание объекта класса
         vPlots[i] = new QCustomPlot(this);
-        grid->addWidget(vPlots[i],i+1,1);
+        grid->addWidget(vPlots[i],i+1,0);
 
 
         double minX = std::numeric_limits<double>::max();
@@ -37,7 +36,7 @@ wResults::wResults(const QVector<QVector<double> > &data,
         {
             vPlots[i]->addGraph(vPlots[i]->xAxis,vPlots[i]->yAxis);
             //Подпись графика
-            vPlots[i]->graph(g)->setName(QString::number(g)+" ступень " +headerData[i+1]);
+            vPlots[i]->graph(g)->setName(QString::number(g+1)+" ступень " +headerData[i+1]);
             //Размер и цвет линии
             QPen pen;
             pen.setWidth(3);
@@ -99,14 +98,22 @@ wResults::wResults(const QVector<QVector<double> > &data,
     }
 
 
-    //Добавление табличного отображения для каждой ступени
-    for(int g = 0 ; g < graphsCount; g++)
+    if(isDisplayedTable)
     {
-        auto tableView = new QTableView(tabWidget);
-        tabWidget->addTab(tableView,QString::number(g)+" ступень");
-        auto tableModel = new MyTableModel(
-                    values.mid(g*(plotsCount+1),plotsCount+1),headerData,tableView);
-        tableView->setModel(tableModel);
+        auto tabWidget = new QTabWidget(this);
+        tabWidget->setMaximumWidth(450);
+        grid->addWidget(tabWidget,0,0,plotsCount+1,1);
+        //Добавление табличного отображения для каждой ступени
+        for(int g = 0 ; g < graphsCount; g++)
+        {
+            auto tableView = new QTableView(tabWidget);
+            tabWidget->addTab(tableView,QString::number(g+1)+" ступень");
+            auto tableModel = new MyTableModel(
+                        values.mid(g*(plotsCount+1),plotsCount+1),headerData,tableView);
+            tableView->setModel(tableModel);
+        }
+
+        tabWidget->setVisible(false);
     }
 
 

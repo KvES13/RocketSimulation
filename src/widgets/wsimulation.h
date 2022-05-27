@@ -21,25 +21,20 @@ public:
     ~wSimulation();
     std::vector<RocketStage> stageVector;
 signals:
-    void BackToSettings();
+   // void BackToSettings();
     void finish();
+    void reset();
 public slots:
-    void init(std::vector<RocketStage>& stages, Environment* env) {
-        if(&stages != &stageVector)
-        {
-            stageVector = stages;
-            environment = env;
-        }
-            };
+    void init(std::vector<RocketStage>& stages, Environment* env);
 
 private slots:
-    void on_pbBackToSettings_clicked();
     void on_pbStartSim_clicked();
     void on_pbResults_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     void run();
-    void clear();
 
     int index = 0;
 

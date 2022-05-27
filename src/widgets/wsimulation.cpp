@@ -8,9 +8,6 @@ wSimulation::wSimulation(QWidget *parent) :
     ui->setupUi(this);
     ui->pbResults->setEnabled(false);
     ui->textBrowser->setFontPointSize(12);
-  //  ogl = new SimulationGL(ui->tabTrajectoryGL);
-    //ogl->resize(qApp->desktop()->width(),qApp->desktop()->height());
-
 }
 
 wSimulation::~wSimulation()
@@ -18,9 +15,16 @@ wSimulation::~wSimulation()
     delete ui;
 }
 
-void wSimulation::on_pbBackToSettings_clicked()
-{
-    emit(BackToSettings());
+void wSimulation::init(std::vector<RocketStage> &stages, Environment *env) {
+    if(&stages != &stageVector)
+    {
+        stageVector = stages;
+        environment = env;
+    }
+    else
+    {
+        qDebug()<<" EEEEEEEEEEEEEEEEE";
+    }
 }
 
 
@@ -28,10 +32,10 @@ void wSimulation::on_pbStartSim_clicked()
 {
 
     QString text =
-    "Запуск симуляции"
-    "\nВремя пуска: "+environment->masterClock.UTC_date_init.toString()+
-    "\nКоординаты старта: " +
-    printEigenVector(stageVector[0].rocket->position.LLH,QStringList{"Долгота","Широта","Высота"}) +
+            "Запуск симуляции"
+            "\nВремя пуска: "+environment->masterClock.UTC_date_init.toString()+
+            "\nКоординаты старта: " +
+            printEigenVector(stageVector[0].rocket->position.LLH,QStringList{"Долгота","Широта","Высота"}) +
     "\nНачальная скорость: "+
     printEigenVector(stageVector[0].rocket->velocity.NED,QStringList{"X","Y","Z"}) +
     "\nВремя полёта: "+ QString::number(stageVector[0].time_end) +
@@ -63,7 +67,7 @@ void wSimulation::on_pbStartSim_clicked()
         text = QString::number(msec)+" мс";
 
     ui->textBrowser->append("\n==========================================================="
-                            "\nСимуляция завершена\nВремя расчёта: "/*+text*/);
+                            "\nСимуляция завершена\nВремя расчёта: "+text);
 
     for(const auto& stage : stageVector)
     {
@@ -83,11 +87,6 @@ void wSimulation::on_pbStartSim_clicked()
 
 
 
-void wSimulation::clear()
-{
-    ui->textBrowser->clear();
-}
-
 void wSimulation::run()
 {
         DynamicsBase::state x0;
@@ -105,8 +104,9 @@ void wSimulation::run()
             // Simulation
             stageVector[i].FlightSequence(environment,x0);
 
-         //   QString str =qApp->applicationDirPath()+Constants::OutputPath+QString("/stage")+QString::number(i)+QString(".csv");
-        //    stageVector[i].fdr.DumpCsv(str.toStdString());
+            QString str =qApp->applicationDirPath()+Constants::OutputPath+
+                    "/stage"+QString::number(i)+".csv";
+            stageVector[i].fdr.DumpCsv(str.toStdString());
 
             // Update next stage
             if (stageVector.size() != i+1 && stageVector[i].enable_separation) {
@@ -135,5 +135,14 @@ void wSimulation::run()
 void wSimulation::on_pbResults_clicked()
 {
    // ui->tabWidget->setCurrentWidget(ui->tabTables);
+}
+
+
+void wSimulation::on_pushButton_clicked()
+{
+    ui->textBrowser->clear();
+    ui->pbStartSim->setEnabled(true);
+    emit reset();
+
 }
 

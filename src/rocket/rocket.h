@@ -25,7 +25,7 @@
 class Rocket {
     public:
         Rocket();
-        Rocket(JsonWrapper& json);
+        explicit Rocket(JsonWrapper& json);
 
         // Parameter Setter
         void setLengthCG(const InterpolateParameter length_CG);

@@ -10,7 +10,8 @@ class PlotSettingsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit PlotSettingsDialog(QVector<QCustomPlot*>& plots,QWidget *parent = nullptr);
+    explicit PlotSettingsDialog(QVector<QCustomPlot*>& plots,
+                                QWidget *parent = nullptr);
     ~PlotSettingsDialog();
 
     QVector<QCustomPlot*> &vPlots;

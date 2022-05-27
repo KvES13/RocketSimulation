@@ -19,7 +19,7 @@ class wResults : public QWidget
 public:
     explicit wResults(const QVector<QVector<double> > &data,
                       QStringList&& header, int stagesCount,
-                      QWidget *parent = nullptr);
+                      bool displayTable = true, QWidget *parent = nullptr);
     ~wResults();
 
 public slots:
@@ -31,11 +31,14 @@ private:
     {Qt::blue,Qt::red,Qt::darkRed, Qt::green,Qt::darkGreen, Qt::lightGray,
      Qt::yellow,Qt::darkYellow, Qt::darkCyan,Qt::white};
 
-    const QVector<QVector<double>> &values;
+    const QVector<QVector<double>> values;
+
 
     QVector<QCustomPlot*> vPlots;
     QStringList headerData;
     int graphsCount;
+    bool isDisplayedTable;
+
 
 };
 

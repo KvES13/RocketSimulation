@@ -67,3 +67,5 @@ compile_commands.json
 # --------
 *.dll
 *.exe
+output/stage1.csv
+output/stage0.csv

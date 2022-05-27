@@ -44,7 +44,7 @@ void FlightSettings::on_btnSelectCfgFile_clicked()
 }
 
 void FlightSettings::on_btnLoadCfg_clicked()
-{
+{  
     QString jsonFilePath = ui->leCfgFilePath->text();
     if(jsonFilePath.isEmpty())
     {
@@ -52,17 +52,18 @@ void FlightSettings::on_btnLoadCfg_clicked()
         return;
     }
     ui->btnStartSimulation->setEnabled(true);
-
+    v_stages.clear();
     JsonWrapper json(jsonFilePath);
     int numberOfStages =json.getInt("Number of Stage");
     ui->sbStagesNumber->setValue(numberOfStages);
 
     QString filePath = QFileInfo(jsonFilePath).path()+"/";
+
+
     for(int i = 1; i <= numberOfStages; i++)
     {
-        QString path = filePath + json.getString("Stage"+QString::number(i)+" Config File");
-        JsonWrapper js(filePath + json.getString("Stage"+QString::number(i)+" Config File"));
-
+        JsonWrapper js(filePath + json.getString(
+                           "Stage"+QString::number(i)+" Config File"));
 
         v_stages.push_back(RocketStage::create(i,js));
 
@@ -78,7 +79,7 @@ void FlightSettings::on_btnLoadCfg_clicked()
     environment = std::make_shared<Environment>();
     environment->masterClock = SequenceClock(ui->dateTimeLaunch->dateTime(),0.0);
 
-    auto rocketFirstStage = v_stages[0].rocket.get();
+    auto firstStage = v_stages[0].rocket.get();
 
     JsonWrapper jsLaunch = json.getSubItem("Launch Condition");
 
@@ -86,7 +87,7 @@ void FlightSettings::on_btnLoadCfg_clicked()
     Eigen::Vector3d posInitLLH {jsLaunch.getDouble("Latitude [deg]"),
                            jsLaunch.getDouble("Longitude [deg]"),
                            jsLaunch.getDouble("Height for WGS84 [deg]")};
-    rocketFirstStage->position.Initialize(environment->masterClock.UTC_date_init,
+    firstStage->position.Initialize(environment->masterClock.UTC_date_init,
                                           posInitLLH);
 
 
@@ -94,10 +95,10 @@ void FlightSettings::on_btnLoadCfg_clicked()
     Eigen::Vector3d velInitNED  {jsLaunch.getDouble("North Velocity [m/s]"),
                             jsLaunch.getDouble("East Velocity [m/s]"),
                             jsLaunch.getDouble("Down Velocity [m/s]")};
-    rocketFirstStage->velocity.Initialize(environment->masterClock.UTC_date_init,
+    firstStage->velocity.Initialize(environment->masterClock.UTC_date_init,
                                           velInitNED,
                                           posInitLLH,
-                                          rocketFirstStage->position.ECI);
+                                          firstStage->position.ECI);
 
     //Углы эйлера
     Eigen::Vector3d euler {jsLaunch.getDouble("Azimuth [deg]"),
@@ -108,9 +109,9 @@ void FlightSettings::on_btnLoadCfg_clicked()
     ui->leStartElevation->setText(QString::number(euler[1]));
 
     euler = euler / 180.0 * Constants::pi;
-    rocketFirstStage->attitude.Initialize(euler);
+    firstStage->attitude.Initialize(euler);
 
-    rocketFirstStage->angular_acceleration = {0.0,0.0,0.0};
+    firstStage->angular_acceleration = {0.0,0.0,0.0};
 
 
     ui->leStartLatitude->setText(QString::number(posInitLLH[0]));
@@ -157,7 +158,6 @@ void FlightSettings::on_sbStagesNumber_valueChanged(int arg1)
 
 void FlightSettings::on_leStartLongtitude_editingFinished()
 {
-    qDebug()<<" on_leStartLongtitude_editingFinished()";
     //Стартовая позиция
     v_stages[0].rocket->
             position.Initialize(environment->masterClock.UTC_date_init,
@@ -169,7 +169,6 @@ void FlightSettings::on_leStartLongtitude_editingFinished()
 
 void FlightSettings::on_leStartLatitude_editingFinished()
 {
-    qDebug()<<" on_leStartLatitude_editingFinished()";
     //Стартовая позиция
     v_stages[0].rocket->
             position.Initialize(environment->masterClock.UTC_date_init,
@@ -181,7 +180,6 @@ void FlightSettings::on_leStartLatitude_editingFinished()
 
 void FlightSettings::on_leStartAltitude_editingFinished()
 {
-    qDebug()<<" on_leStartAltitude_editingFinished()";
     //Стартовая позиция
     v_stages[0].rocket->
             position.Initialize(environment->masterClock.UTC_date_init,

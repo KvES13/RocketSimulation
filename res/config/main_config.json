@@ -3,8 +3,8 @@
 	
 	"Launch DateTime": "2022/04/22 9:00:00.0",
 	"Launch Condition": {
-		"Latitude [deg]": 37.834,
-		"Longitude [deg]": 75.488,
+		"Latitude [deg]": 45.6167,
+		"Longitude [deg]": 63.3167,
 		"Height for WGS84 [deg]": 20.0,
 		
 		"Azimuth [deg]": 270.0,
