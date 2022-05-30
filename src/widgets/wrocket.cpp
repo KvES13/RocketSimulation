@@ -55,5 +55,4 @@ void WRocket::fillWidget(const RocketStage& stage)
 
     }
 
-
 }

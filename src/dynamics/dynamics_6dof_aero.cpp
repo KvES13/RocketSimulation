@@ -1,11 +1,6 @@
 #include "dynamics_6dof_aero.h"
 
 
-//Dynamics6dofAero::Dynamics6dofAero(Rocket* rocket, Environment* env) {
-//    p_rocket = rocket;
-//    p_env = env;
-//};
-
 void Dynamics6dofAero::operator()(const state& x, state& dx, const double t)
 {
     Coordinate coordinate;
@@ -18,17 +13,18 @@ void Dynamics6dofAero::operator()(const state& x, state& dx, const double t)
     // Update Flight Infomation
     coordinate.setECI2ECEF(t);
 
-    p_rocket->position.ECI  << x[0],x[1],x[2];//Eigen::Map<Eigen::Vector3d>(std::vector<double>(x.begin()+0, x.begin()+3).data());
+    p_rocket->position.ECI  << x[0],x[1],x[2];
     p_rocket->position.ECEF = coordinate.dcm.ECI2ECEF * p_rocket->position.ECI;
     p_rocket->position.LLH = coordinate.ECEF2LLH(p_rocket->position.ECEF);
 
     coordinate.setECEF2NED(p_rocket->position.LLH);
 
-    p_rocket->velocity.ECI << x[3],x[4],x[5];// Eigen::Map<Eigen::Vector3d>(std::vector<double>(x.begin()+3, x.begin()+6).data());
-    p_rocket->velocity.ECEF = coordinate.dcm.ECI2ECEF * (p_rocket->velocity.ECI - coordinate.dcm.EarthRotate * p_rocket->position.ECI);
+    p_rocket->velocity.ECI << x[3],x[4],x[5];
+    p_rocket->velocity.ECEF = coordinate.dcm.ECI2ECEF *
+            (p_rocket->velocity.ECI - coordinate.dcm.EarthRotate * p_rocket->position.ECI);
     p_rocket->velocity.NED = coordinate.dcm.ECEF2NED * p_rocket->velocity.ECEF;
 
-    p_rocket->attitude.quaternion = Eigen::Vector4d{x[6],x[7],x[8],x[9]}.normalized();// Eigen::Map<Eigen::Vector4d>(std::vector<double>(x.begin()+6, x.begin()+10).data()).normalized();
+    p_rocket->attitude.quaternion = Eigen::Vector4d{x[6],x[7],x[8],x[9]}.normalized();
 
     coordinate.setNED2Body(p_rocket->attitude.quaternion);
 
@@ -48,8 +44,10 @@ void Dynamics6dofAero::operator()(const state& x, state& dx, const double t)
 
     // Update Airspeed
     p_rocket->velocity.air_body = coordinate.dcm.NED2body * (p_rocket->velocity.NED /*- p_wind->getNED(altitude)*/);
-    p_rocket->dynamic_pressure = 0.5 * p_env->atmosphere.getDensity() * std::pow(p_rocket->velocity.air_body.norm(), 2);
-    p_rocket->velocity.mach_number = p_rocket->velocity.air_body.norm() / p_env->atmosphere.getSpeedOfSound();
+    p_rocket->dynamic_pressure = 0.5 * p_env->atmosphere.getDensity() *
+            std::pow(p_rocket->velocity.air_body.norm(), 2);
+    p_rocket->velocity.mach_number = p_rocket->velocity.air_body.norm() /
+            p_env->atmosphere.getSpeedOfSound();
 
     // Update time and mach parameter
     p_rocket->inertia_tensor = p_rocket->getInertiaTensor();
@@ -69,18 +67,22 @@ void Dynamics6dofAero::operator()(const state& x, state& dx, const double t)
         p_rocket->angle_of_attack = 0.0;
         p_rocket->sideslip_angle = 0.0;
     } else {
-        p_rocket->angle_of_attack = std::asin(p_rocket->velocity.air_body[2] / p_rocket->velocity.air_body.norm());
-        p_rocket->sideslip_angle = std::asin(-p_rocket->velocity.air_body[1] / p_rocket->velocity.air_body.norm());
+        p_rocket->angle_of_attack = std::asin(p_rocket->velocity.air_body[2] /
+                p_rocket->velocity.air_body.norm());
+        p_rocket->sideslip_angle = std::asin(-p_rocket->velocity.air_body[1] /
+                p_rocket->velocity.air_body.norm());
     }
 
     // Calculate Force
     p_rocket->force.thrust = p_rocket->getThrust(p_env->atmosphere.getPressure());
     p_rocket->force.aero = AeroForce();
-    p_rocket->force.gravity = (coordinate.dcm.NED2body * gravity_NED) * p_rocket->mass.Sum();
+    p_rocket->force.gravity = (coordinate.dcm.NED2body * gravity_NED) *
+            p_rocket->mass.Sum();
 
     // Calculate Acceleration
     p_rocket->acceleration.body = p_rocket->force.Sum() / p_rocket->mass.Sum();
-    p_rocket->acceleration.ECI = coordinate.dcm.ECEF2ECI * (coordinate.dcm.NED2ECEF * (coordinate.dcm.body2NED * p_rocket->acceleration.body));
+    p_rocket->acceleration.ECI = coordinate.dcm.ECEF2ECI *
+            (coordinate.dcm.NED2ECEF * (coordinate.dcm.body2NED * p_rocket->acceleration.body));
 
     // Calculate Moment
 //    p_rocket->moment.gyro = GyroEffectMoment(p_rocket);

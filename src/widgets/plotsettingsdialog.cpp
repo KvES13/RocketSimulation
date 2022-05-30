@@ -14,37 +14,38 @@ PlotSettingsDialog::~PlotSettingsDialog()
 
 void PlotSettingsDialog::setUI()
 {
-    int row = 0;
+
     QGridLayout *mainGrid =  new QGridLayout(this);
 
+    int row = 0;
     for(auto& plot : vPlots)
     {
-         QGroupBox *gb = new QGroupBox(this);
-         gb->setTitle("D");
+        QGroupBox *gb = new QGroupBox(this);
 
         QGridLayout *grid = new QGridLayout(gb);
+
         for(int i = 0; i < plot->graphCount(); i++)
         {
 
             auto graph = plot->graph(i); 
+            auto gbGraph = new QGroupBox(graph->name(),gb);
+            auto gridGraph = new QGridLayout(gbGraph);
 
-            QLabel *lblX = new QLabel(gb);
+            QLabel *lblX = new QLabel(gbGraph);
             lblX->setText("X: ");
             lblX->setMaximumSize(QSize(20, 20));
-            QLabel *lblY = new QLabel(gb);
+            QLabel *lblY = new QLabel(gbGraph);
             lblY->setText("Y: ");
             lblY->setMaximumSize(QSize(20, 20));
-            QLabel *lblWidth = new QLabel(gb);
-            lblWidth->setText("Толщина линии");
-            QLabel *lblColor = new QLabel(gb);
-            lblColor->setText("Текущий цвет отрисовки");
+            QLabel *lblWidth = new QLabel("Толщина линии",gbGraph);
+            QLabel *lblColor = new QLabel("Текущий цвет отрисовки",gbGraph);
 
-            QLineEdit *leX = new QLineEdit(gb);
-            QLineEdit *leY = new QLineEdit(gb);
+            QLineEdit *leX = new QLineEdit(gbGraph);
+            QLineEdit *leY = new QLineEdit(gbGraph);
             leX->setText(plot->xAxis->label());
             leY->setText(plot->yAxis->label());
 
-            QLineEdit *lineColor = new QLineEdit(gb);
+            QLineEdit *lineColor = new QLineEdit(gbGraph);
             lineColor->setReadOnly(true);
             lineColor->setMinimumSize(QSize(20, 20));
             lineColor->setMaximumSize(QSize(20, 20));
@@ -54,7 +55,7 @@ void PlotSettingsDialog::setUI()
                             graph->pen().color().name()));
             v_leColor.append(lineColor);
 
-            QSpinBox *spBox = new QSpinBox(gb);
+            QSpinBox *spBox = new QSpinBox(gbGraph);
             spBox->setValue(graph->pen().width());
             spBox->setMinimum(1);
             spBox->setWhatsThis(QString::number(i));
@@ -72,8 +73,7 @@ void PlotSettingsDialog::setUI()
             });
 
 
-            QPushButton *pbColor = new QPushButton(gb);
-            pbColor->setText("Выбрать цвет");
+            QPushButton *pbColor = new QPushButton("Выбрать цвет",gbGraph);
             pbColor->setWhatsThis(QString::number(i));
             v_btn.append(pbColor);
 
@@ -96,23 +96,29 @@ void PlotSettingsDialog::setUI()
                 }
             });
 
-            grid->addWidget(lblX,row+i,0+i*5);
-            grid->addWidget(leX,row+i,1+i*5);
-            grid->addWidget(lblWidth,row+i,2+i*5);
-            grid->addWidget(spBox,row+i,3+i*5);
+            // Все графы одного полотна находятся на одной строке
+            int plotRow =row;
+            // Смещение i графика на
+            gridGraph->addWidget(lblX,plotRow,0);
+            gridGraph->addWidget(leX,plotRow,1);
+            gridGraph->addWidget(lblWidth,plotRow,2);
+            gridGraph->addWidget(spBox,plotRow,3);
 
-            row++;
+            plotRow++;
 
-            grid->addWidget(lblY,row+i,0+i*5);
-            grid->addWidget(leY,row+i,1+i*5);
+            gridGraph->addWidget(lblY,plotRow,0);
+            gridGraph->addWidget(leY,plotRow,1);
 
-            grid->addWidget(lblColor,row+i,2+i*5);
-            grid->addWidget(pbColor,row+i,3+i*5);
-            grid->addWidget(lineColor,row+i,4+i*5);
-            row++;
+            gridGraph->addWidget(lblColor,plotRow,2);
+            gridGraph->addWidget(pbColor,plotRow,3);
+            gridGraph->addWidget(lineColor,plotRow,4);
+            plotRow++;
 
-            mainGrid->addWidget(gb);
+            grid->addWidget(gbGraph,0,i);
         }
+          mainGrid->addWidget(gb);
+        row+=2;
+
     }
 
     QDialogButtonBox *btnBox = new QDialogButtonBox(this);

@@ -23,4 +23,3 @@ QString printEigenVector(const Eigen::Vector3d &vec, const QStringList &&args, c
             args[1]+" "+QString::number(vec[1])+ separator + " " +
             args[2]+" "+QString::number(vec[2]));
 }
-

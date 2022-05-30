@@ -1,17 +1,15 @@
 #include "results.h"
-#include "ui_results.h"
 
 Results::Results(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Results)
+    QWidget(parent)
 {
-    ui->setupUi(this);
-
+    auto grid = new QGridLayout(this);
+    tabWidget = new QTabWidget(this);
+    grid->addWidget(tabWidget, 0, 0, 1, 1);
 }
 
 Results::~Results()
 {
-    delete ui;
 }
 
 void Results::SetObservers(QVector<FlightObserver*>obs)
@@ -34,8 +32,8 @@ void Results::paintResults()
 
 void Results::plot()
 {
-    QTabWidget *tab = new QTabWidget(ui->tabWidget);
-    ui->tabWidget->addTab(tab,"Общий");
+    QTabWidget *tab = new QTabWidget(tabWidget);
+    tabWidget->addTab(tab,"Общий");
 
     QVector<QVector<double>> posLatLon,distance,velocity;
     for(auto &fdr: observers)
@@ -71,8 +69,8 @@ void Results::plot()
 
 void Results::plotVelocity()
 {
-    QTabWidget *tabVelocity = new QTabWidget(ui->tabWidget);
-    ui->tabWidget->addTab(tabVelocity,"Скорость");
+    QTabWidget *tabVelocity = new QTabWidget(tabWidget);
+    tabWidget->addTab(tabVelocity,"Скорость");
 
     QVector<QVector<double>> velECEF,velECI,velNED;
     for(auto &fdr: observers)
@@ -110,8 +108,8 @@ void Results::plotVelocity()
 
 void Results::plotPosition()
 {
-    QTabWidget *tabPosition = new QTabWidget(ui->tabWidget);
-    ui->tabWidget->addTab(tabPosition,"Координаты");
+    QTabWidget *tabPosition = new QTabWidget(tabWidget);
+    tabWidget->addTab(tabPosition,"Координаты");
 
     QVector<QVector<double>> posECEF,posECI,posLLH;
     for(auto &fdr: observers)
@@ -157,8 +155,8 @@ void Results::plotPosition()
 
 void Results::plotForce()
 {
-    QTabWidget *tabForce = new QTabWidget(ui->tabWidget);
-    ui->tabWidget->addTab(tabForce,"Силы");
+    QTabWidget *tabForce = new QTabWidget(tabWidget);
+    tabWidget->addTab(tabForce,"Силы");
 
     QVector<QVector<double>> force,forceThrust,forceAero,forceGravity;
     for(auto &fdr: observers)
@@ -206,8 +204,8 @@ void Results::plotForce()
 
 void Results::plotAcceleration()
 {
-    QTabWidget *tabAc = new QTabWidget(ui->tabWidget);
-    ui->tabWidget->addTab(tabAc,"Ускорение");
+    QTabWidget *tabAc = new QTabWidget(tabWidget);
+    tabWidget->addTab(tabAc,"Ускорение");
 
     QVector<QVector<double>> acECI,acBody;
     for(auto &fdr: observers)
@@ -247,8 +245,8 @@ void Results::plotMass()
     }
     wResults *resMass = new wResults(mass,QStringList{"Время","Mass [kg]",
                                                        "Propellant Mass [kg]"},
-                                     stagesCount,ui->tabWidget);
-    ui->tabWidget->addTab(resMass,"Масса");
+                                     stagesCount,tabWidget);
+    tabWidget->addTab(resMass,"Масса");
 
 }
 
@@ -275,11 +273,11 @@ void Results::plotAmtosphere()
 
     wResults *res = new wResults(atmosphere,QStringList{"Высота","Температура",
                                                  "Плотность","Давление"},
-                                 stagesCount,ui->tabWidget);
-    ui->tabWidget->addTab(res,"Атмосфера");
+                                 stagesCount,tabWidget);
+    tabWidget->addTab(res,"Атмосфера");
 }
 
 void Results::resetData()
 {
-    qDebug()<<"void Results::resetData() "<<ui->tabWidget->children();
+    qDebug()<<"void Results::resetData() "<<tabWidget->children();
 }

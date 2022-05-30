@@ -114,6 +114,7 @@ void wSimulation::run()
 
                 next_stage.time_start = stageVector[i].time_separation;
 
+
                 next_stage.rocket->position.ECI[0] = x0[0];
                 next_stage.rocket->position.ECI[1] = x0[1];
                 next_stage.rocket->position.ECI[2] = x0[2];

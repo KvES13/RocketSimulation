@@ -11,7 +11,6 @@
 
 QString printEigenVector(const Eigen::Vector3d &vec, const QStringList&& args, char separator = ',');
 
-
 /*!
 * @brief       Converts an angle in degrees to radians.
 * @ingroup     Geometry

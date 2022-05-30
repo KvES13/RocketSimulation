@@ -41,8 +41,5 @@ protected:
 };
 
 
-std::pair<double, Eigen::Vector3d> IIP(Eigen::Vector3d& pos_ECI, Eigen::Vector3d& vel_ECI);
-
-
 #endif
 

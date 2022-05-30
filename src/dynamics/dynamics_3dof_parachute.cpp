@@ -1,11 +1,6 @@
 
 #include "dynamics_3dof_parachute.h"
 
-//Dynamics3dofParachute::Dynamics3dofParachute(Rocket* rocket,
-//                                             Environment* env) {
-//    p_rocket = rocket;
-//    p_env = env;
-//};
 
 void Dynamics3dofParachute::operator()(const state& x, state& dx, const double t) {
     Coordinate coordinate;
@@ -24,7 +19,8 @@ void Dynamics3dofParachute::operator()(const state& x, state& dx, const double t
     coordinate.setECEF2NED(p_rocket->position.LLH);
 
     p_rocket->velocity.ECI = Eigen::Map<Eigen::Vector3d>(std::vector<double>(x.begin()+3, x.begin()+6).data());
-    p_rocket->velocity.ECEF = coordinate.dcm.ECI2ECEF * (p_rocket->velocity.ECI - coordinate.dcm.EarthRotate * p_rocket->position.ECI);
+    p_rocket->velocity.ECEF = coordinate.dcm.ECI2ECEF *
+            (p_rocket->velocity.ECI - coordinate.dcm.EarthRotate * p_rocket->position.ECI);
     p_rocket->velocity.NED = coordinate.dcm.ECEF2NED * p_rocket->velocity.ECEF;
     double decent_velosity = p_rocket->velocity.NED(2);
 
@@ -34,13 +30,17 @@ void Dynamics3dofParachute::operator()(const state& x, state& dx, const double t
 
     Eigen::Vector3d gravity_NED(0.0, 0.0, p_env->getGravity(altitude));
 
-    Eigen::Vector3d drag_NED(0.0, 0.0, -0.5 * p_env->atmosphere.getDensity() * decent_velosity * abs(decent_velosity) * p_rocket->CdS_parachute);
+    Eigen::Vector3d drag_NED(0.0, 0.0, -0.5 * p_env->atmosphere.getDensity()
+                             * decent_velosity * abs(decent_velosity)
+                             * p_rocket->CdS_parachute);
     Eigen::Vector3d acceleration_NED = drag_NED / (p_rocket->mass.Sum()) + gravity_NED;
     p_rocket->acceleration.ECI = coordinate.dcm.ECEF2ECI * (coordinate.dcm.NED2ECEF * acceleration_NED);
 
     //Eigen::Vector3d wind_NED = p_wind->getNED(altitude);
     //p_rocket->velocity.NED += wind_NED;
-    p_rocket->velocity.ECI = coordinate.dcm.ECEF2ECI * (coordinate.dcm.NED2ECEF * p_rocket->velocity.NED) + coordinate.dcm.EarthRotate * p_rocket->position.ECI;
+    p_rocket->velocity.ECI = coordinate.dcm.ECEF2ECI *
+            (coordinate.dcm.NED2ECEF * p_rocket->velocity.NED)
+            + coordinate.dcm.EarthRotate * p_rocket->position.ECI;
 
     dx[0] = p_rocket->velocity.ECI[0];  // vel_ECI => pos_ECI
     dx[1] = p_rocket->velocity.ECI[1];  // 

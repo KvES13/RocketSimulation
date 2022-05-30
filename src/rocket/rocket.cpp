@@ -64,7 +64,7 @@ Rocket::Rocket(JsonWrapper& json)
     setCmq(InterpolateParameter(js.getSubItem("Constant Cmq").getDouble("Constant Cmq [-]")));
     setCnr(InterpolateParameter(js.getSubItem("Constant Cnr").getDouble("Constant Cnr [-]")));
 
-    setCdSParachute(1.5);
+    setCdSParachute(10);
 
 }
 

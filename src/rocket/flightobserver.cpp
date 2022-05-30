@@ -72,7 +72,7 @@ void FlightObserver::operator()(const DynamicsBase::state& x, const double t)
 
     counter = 0;
 
-    if (p_rocket->position.LLH[2] >= 0.0) {
+    if (p_rocket->position.LLH[2] >= 0.0 && t < 510.0) {
         countup_time.push_back(t);
         countup_burn_time.push_back(p_rocket->burn_clock.countup_time);
         thrust.push_back(p_rocket->engine.thrust);
@@ -196,8 +196,8 @@ void FlightObserver::DumpCsv(const std::string &file_name, bool full_dump) {
 //        ofs << "Cld [-],";
 //        ofs << "Clp [-],";
 //        ofs << "Cmq [-],";
-//        ofs << "AoA [deg],";
-//        ofs << "AoS [deg],";
+        ofs << "AoA [deg],";
+        ofs << "AoS [deg],";
         ofs << "Fx-aero [N],";
         ofs << "Fy-aero [N],";
         ofs << "Fz-aero [N],";
@@ -240,7 +240,7 @@ void FlightObserver::DumpCsv(const std::string &file_name, bool full_dump) {
     ofs << "Latitude [deg],";
     ofs << "Longitude [deg],";
     ofs << "Altitude [m],";
-//    ofs << "Downrange [m],";
+ //   ofs << "Downrange [m],";
     if (full_dump) {
 //        ofs << "Mx-thrust [Nm],";
 //        ofs << "My-thrust [Nm],";
@@ -271,16 +271,6 @@ void FlightObserver::DumpCsv(const std::string &file_name, bool full_dump) {
         ofs << "Elvation [deg],";
         ofs << "Roll [deg],";
     }
-    // pitch
-    // yaw
-    // nutation
-//    if (full_dump) {
-//        ofs << "Time [s],";
-//        ofs << "Time of IIP [s],";
-//        ofs << "Latitude of IIP [deg],";
-//        ofs << "Longitude of IIP [deg],";
-   //     ofs << "Downrange of IIP [m],";
-//    }
 
     ofs << std::endl;
     Environment env;
@@ -294,7 +284,8 @@ void FlightObserver::DumpCsv(const std::string &file_name, bool full_dump) {
         ofs << std::setprecision(4) << countup_time[i] << ",";
         ofs << std::setprecision(4) << countup_burn_time[i] << ",";
         if (full_dump) {
-            ofs << std::setprecision(8) << 322<<",";//distance_surface(position[0].LLH,position[i].LLH)<< ",";
+
+            ofs << std::setprecision(8) << downrage[i]<<",";//distance_surface(position[0].LLH,position[i].LLH)<< ",";
             ofs << std::setprecision(6) << env.atmosphere.getDensity() << ",";
             ofs << std::setprecision(6) << env.atmosphere.getPressure() / 1e3 << ",";  // [kPa]
             ofs << std::setprecision(6) << env.atmosphere.getTemperature() << ",";  // [K]
@@ -323,8 +314,8 @@ void FlightObserver::DumpCsv(const std::string &file_name, bool full_dump) {
 //            ofs << std::setprecision(4) << Cld[i] << ",";
 //            ofs << std::setprecision(4) << Clp[i] << ",";
 //            ofs << std::setprecision(4) << Cmq[i] << ",";
-//            ofs << std::setprecision(8) << rad2deg(angle_of_attack[i]) << ",";  // [deg]
-//            ofs << std::setprecision(8) << rad2deg(sideslip_angle[i]) << ",";  // [deg]
+            ofs << std::setprecision(8) << rad2deg(angle_of_attack[i]) << ",";  // [deg]
+            ofs << std::setprecision(8) << rad2deg(sideslip_angle[i]) << ",";  // [deg]
 
 
             ofs << std::setprecision(8) << force[i].aero [0] << ",";
@@ -369,7 +360,7 @@ void FlightObserver::DumpCsv(const std::string &file_name, bool full_dump) {
         ofs << std::setprecision(8) << position[i].LLH [0] << ",";
         ofs << std::setprecision(8) << position[i].LLH [1] << ",";
         ofs << std::setprecision(8) << position[i].LLH [2] << ",";
-     //   ofs << std::setprecision(8) << vdownrange(position[0].LLH, position[i].LLH).first << ",";
+
         if (full_dump) {
 //            ofs << std::setprecision(8) << moment[i].thrust [0] << ",";
 //            ofs << std::setprecision(8) << moment[i].thrust [1] << ",";
@@ -400,17 +391,6 @@ void FlightObserver::DumpCsv(const std::string &file_name, bool full_dump) {
             ofs << std::setprecision(8) << rad2deg(attitude[i].euler_angle [1]) << ",";  // [deg]
             ofs << std::setprecision(8) << rad2deg(attitude[i].euler_angle [2]) << ",";  // [deg]
         }
-
-
-        if (full_dump) {
-//            ofs << std::setprecision(4) << countup_burn_time[i] << ",";
-//            auto iip = IIP(position[i].ECI, velocity[i].ECI);
-//            ofs << std::setprecision(4) << iip.first << ",";  // [s]
-//            ofs << std::setprecision(8) << iip.second[0] << ",";  // [deg]
-//            ofs << std::setprecision(8) << iip.second[1] << ",";  // [deg]
-  //      ofs << std::setprecision(8) << vdownrange(position[0].LLH, iip.second).first << ",";
-        }
-
         ofs << std::endl;
     }
     ofs.close();

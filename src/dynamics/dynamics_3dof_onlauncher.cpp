@@ -2,24 +2,19 @@
 #include "dynamics_3dof_onlauncher.h"
 
 
-//Dynamics3dofOnLauncher::Dynamics3dofOnLauncher(Rocket* rocket,Environment*env) {
-
-//    p_rocket = rocket;
-//    p_env = env;
-//};
-
-
 Eigen::Vector3d Dynamics3dofOnLauncher::AeroForce(Rocket* p_rocket) {
 
 
     double force_axial = p_rocket->dynamic_pressure * p_rocket->CA * p_rocket->area;
     double force_normal_y_axis = 0.0;
     double force_normal_z_axis = 0.0;
-    Eigen::Vector3d force_aero {-force_axial, force_normal_y_axis, force_normal_z_axis};
+    Eigen::Vector3d force_aero {-force_axial, force_normal_y_axis,
+                force_normal_z_axis};
 
     return force_aero;
 }
-void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double t)
+void Dynamics3dofOnLauncher::operator()(const state& x, state& dx,
+                                        const double t)
 {
     Coordinate coordinate;
 
@@ -30,17 +25,18 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
     // Update Flight Infomation
     coordinate.setECI2ECEF(t);
 
-    p_rocket->position.ECI << x[0],x[1],x[2];//Eigen::Map<Eigen::Vector3d>(std::vector<double>(x.begin()+0, x.begin()+3).data());
+    p_rocket->position.ECI << x[0],x[1],x[2];
     p_rocket->position.ECEF = coordinate.dcm.ECI2ECEF * p_rocket->position.ECI;
     p_rocket->position.LLH = coordinate.ECEF2LLH(p_rocket->position.ECEF);
 
     coordinate.setECEF2NED(p_rocket->position.LLH);
 
-    p_rocket->velocity.ECI << x[3],x[4],x[5] ;//Eigen::Map<Eigen::Vector3d>(std::vector<double>(x.begin()+3, x.begin()+6).data());
-    p_rocket->velocity.ECEF = coordinate.dcm.ECI2ECEF * (p_rocket->velocity.ECI - coordinate.dcm.EarthRotate * p_rocket->position.ECI);
+    p_rocket->velocity.ECI << x[3],x[4],x[5] ;
+    p_rocket->velocity.ECEF = coordinate.dcm.ECI2ECEF *
+            (p_rocket->velocity.ECI - coordinate.dcm.EarthRotate * p_rocket->position.ECI);
     p_rocket->velocity.NED = coordinate.dcm.ECEF2NED * p_rocket->velocity.ECEF;
 
-    p_rocket->attitude.quaternion << Eigen::Vector4d{x[6],x[7],x[8],x[9]}.normalized();//Eigen::Map<Eigen::Vector4d>(std::vector<double>(x.begin()+6, x.begin()+10).data()).normalized();
+    p_rocket->attitude.quaternion << Eigen::Vector4d{x[6],x[7],x[8],x[9]}.normalized();
 
     coordinate.setNED2Body(p_rocket->attitude.quaternion);
 
@@ -59,7 +55,7 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
     // Update Airspeed
     p_rocket->velocity.air_body = coordinate.dcm.NED2body * p_rocket->velocity.NED;
     p_rocket->dynamic_pressure = 0.5 * p_env->atmosphere.getDensity() * std::pow(p_rocket->velocity.air_body.norm(), 2);
-    p_rocket->velocity.mach_number = p_rocket->velocity.air_body.norm() / p_env->atmosphere.getSpeedOfSound();//air.speed_of_sound;
+    p_rocket->velocity.mach_number = p_rocket->velocity.air_body.norm() / p_env->atmosphere.getSpeedOfSound();
 
     // Update time and mach parameter
     p_rocket->inertia_tensor = p_rocket->getInertiaTensor();
@@ -90,7 +86,8 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx, const double 
 
     // Calculate Acceleration
     p_rocket->acceleration.body = p_rocket->force.Sum() / (p_rocket->mass.Sum());
-    p_rocket->acceleration.ECI = coordinate.dcm.ECEF2ECI * (coordinate.dcm.NED2ECEF * (coordinate.dcm.body2NED * p_rocket->acceleration.body));
+    p_rocket->acceleration.ECI = coordinate.dcm.ECEF2ECI *
+            (coordinate.dcm.NED2ECEF * (coordinate.dcm.body2NED * p_rocket->acceleration.body));
     if (p_rocket->acceleration.body(0) < 0.0) {
         p_rocket->acceleration.body << 0.0, 0.0, 0.0;
         p_rocket->acceleration.ECI << 0.0, 0.0, 0.0;

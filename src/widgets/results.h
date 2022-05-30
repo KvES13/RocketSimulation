@@ -10,9 +10,6 @@
 #include "widgets/userplot.h"
 #include "widgets/wresults.h"
 
-namespace Ui {
-class Results;
-}
 
 class Results : public QWidget
 {
@@ -28,7 +25,6 @@ public slots:
     void paintResults();
 
 private:
-    Ui::Results *ui;
 
     void plot();
     void plotVelocity();
@@ -40,6 +36,7 @@ private:
 
     void resetData();
 
+    QTabWidget *tabWidget;
     QVector<FlightObserver*> observers;
     int stagesCount;
 };

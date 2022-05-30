@@ -26,14 +26,14 @@ void Engine::getTotalImpulse(const double thrust, const double burn_duration) {
 
 void Engine::getTotalImpulse(const std::vector<double> &thrust,
                              const double burn_duration) {
-    total_impulse = std::accumulate(thrust.begin(), thrust.end(), 0.0) / thrust.size() * burn_duration;
+    total_impulse = std::accumulate(thrust.begin(), thrust.end(), 0.0) /
+            thrust.size() * burn_duration;
 };
 
 
-Engine::Engine(const double burn_duration,
-              const double thrust_const,
-              const double thrust_coef, const double ISP,const double  diameter_exit,
-              const double area_exit) {
+Engine::Engine(const double burn_duration,const double thrust_const,
+               const double thrust_coef, const double ISP,
+               const double  diameter_exit,const double area_exit) {
     Reset();
     enable_gimbal = false;
 
@@ -52,7 +52,8 @@ Engine::Engine(const double burn_duration,
 
 Engine::Engine(const std::vector<double> &time_vector,
                const std::vector<double> &thrust_vacuum_vector,
-               const double area_exit, const double  diameter_exit,const double isp) {
+               const double area_exit, const double  diameter_exit,
+               const double isp) {
     Reset();
     enable_gimbal = false;
 
@@ -117,7 +118,6 @@ Engine Engine::create(JsonWrapper &json)
         auto jc_const = json.getSubItem("Constant Thrust");
         double thrust_coef = jc_const.getDouble("Thrust coefficient[-]");
         double thrust = jc_const.getDouble("Thrust at vacuum [N]");
-   //     double mdot_p = jc_const.getDouble("Propellant Mass Flow Rate [kg/s]");
         double burn_duration = jc_const.getDouble("Burn Duration [sec]");
        return Engine(burn_duration, thrust,thrust_coef,isp_vac, diameter_exit,area_exit);
        }

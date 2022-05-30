@@ -7,7 +7,8 @@ class Dynamics3dofOnLauncher : public DynamicsBase {
     public:
 
 public:
-    Dynamics3dofOnLauncher(Rocket* rocket, Environment* env) : DynamicsBase(rocket,env){};
+    Dynamics3dofOnLauncher(Rocket* rocket, Environment* env) :
+        DynamicsBase(rocket,env){};
 
     void operator()(const state& x, state& dx, const double t);
 

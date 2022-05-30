@@ -9,28 +9,44 @@ wResults::wResults(const QVector<QVector<double> > &data, QStringList&& header,
     isDisplayedTable(displayTable)
 {
     auto grid = new QGridLayout(this);
-    auto btnSettingsDialog = new QPushButton(this);
-    btnSettingsDialog->setText("Настройка отображения");
+    auto btnSettingsDialog = new QPushButton("Настройка отображения",this);
+    auto btnShowHideTable = new QPushButton("Показать/Скрыть таблицу",this);
     size_t plotsCount = (data.size()-1)/graphsCount;
     vPlots.resize(plotsCount);
 
     grid->addWidget(btnSettingsDialog,0,0);
+    grid->addWidget(btnShowHideTable,0,1);
 
 
     connect(btnSettingsDialog,&QPushButton::clicked,this,&wResults::slotOpenDialog);
 
     //Рисование графиков
+
+    // Задаем одинаковый цвет у графиков ступени
+    QVector<QColor> graphColor;
+    for(int g = 0; g< graphsCount;g++)
+    {
+        auto color = colors[rand() % colors.size()];
+        if (!graphColor.contains(color))
+            graphColor.append(color);
+        else
+            g--;
+    }
+
     for(size_t i = 0; i < plotsCount; i++)
     {
         //Создание объекта класса
         vPlots[i] = new QCustomPlot(this);
-        grid->addWidget(vPlots[i],i+1,0);
+        grid->addWidget(vPlots[i],i+1,0,1,2);
 
 
         double minX = std::numeric_limits<double>::max();
         double minY = minX;
         double maxX = std::numeric_limits<double>::min();
         double maxY = maxX;
+
+
+
         //Добавление графика на полотно
         for(int g = 0; g < graphsCount; g++)
         {
@@ -40,7 +56,7 @@ wResults::wResults(const QVector<QVector<double> > &data, QStringList&& header,
             //Размер и цвет линии
             QPen pen;
             pen.setWidth(3);
-            pen.setColor(colors[rand() % colors.size()]);
+            pen.setColor(graphColor[g]);
             vPlots[i]->graph(g)->setPen(pen);
             //Заполнение данными
             //Индекс, с которого начинаются данные для g графика
@@ -53,6 +69,11 @@ wResults::wResults(const QVector<QVector<double> > &data, QStringList&& header,
                     std::begin(data[first_index]),std::end(data[first_index]));
             auto [graphMinY,graphMaxY] = std::minmax_element(
                     std::begin(data[first_index+i+1]),std::end(data[first_index+i+1]));
+
+//            minX = std::fmin(minX,*graphMinX);
+//            maxX = std::fmax(maxX,*graphMaxX);
+//            minY = std::fmin(minY,*graphMinY);
+//            maxY = std::fmax(maxY,*graphMaxY);
 
             if(minX > *graphMinX) minX = *graphMinX;
             if(maxX < *graphMaxX) maxX = *graphMaxX;
@@ -100,9 +121,10 @@ wResults::wResults(const QVector<QVector<double> > &data, QStringList&& header,
 
     if(isDisplayedTable)
     {
+
         auto tabWidget = new QTabWidget(this);
         tabWidget->setMaximumWidth(450);
-        grid->addWidget(tabWidget,0,0,plotsCount+1,1);
+        grid->addWidget(tabWidget,0,2,plotsCount+1,1);
         //Добавление табличного отображения для каждой ступени
         for(int g = 0 ; g < graphsCount; g++)
         {
@@ -111,9 +133,18 @@ wResults::wResults(const QVector<QVector<double> > &data, QStringList&& header,
             auto tableModel = new MyTableModel(
                         values.mid(g*(plotsCount+1),plotsCount+1),headerData,tableView);
             tableView->setModel(tableModel);
+
         }
 
-        tabWidget->setVisible(false);
+        connect(btnShowHideTable,&QPushButton::clicked,
+                tabWidget,[&]()
+        {
+        qDebug()<<"tab";
+            tabWidget->setVisible(false);
+        });
+
+
+     //   tabWidget->setVisible(false);
     }
 
 
