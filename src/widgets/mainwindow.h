@@ -20,7 +20,7 @@ public slots:
     void uptageWidgets(std::vector<RocketStage>& stages, Environment *env);
 
 private:
-    void setSideBar();
+    void addSideBar();
 
     Ui::MainWindow *ui;
 };

@@ -12,13 +12,26 @@
 
 class Rocket;
 
+///
+/// \brief Класс, описывающий ступень ракеты
+///
 class RocketStage
 {
 public:
+    ///
+    /// \brief Конструктор класса
+    /// \param stageNumber Номер ступени
+    /// \param rocket Указатель на ракету
+    ///
     RocketStage(int stageNumber, std::shared_ptr<Rocket> rocket);
 
-    static RocketStage create(const int stage,
-                              JsonWrapper &json);
+    ///
+    /// \brief Статический метод для создания экземпляра класса
+    /// \param stage Номер ступни
+    /// \param json Класс для работы с json
+    /// \return Экземпляр класса
+    ///
+    static RocketStage create(int stage, JsonWrapper &json);
 
 //    RocketStage(const RocketStage& stage)
 //    {
@@ -47,6 +60,11 @@ public:
 //        time_step = stage.time_step;
 
 //    }
+    ///
+    /// \brief Метод для моделирования
+    /// \param env Окружение
+    /// \param x0 Массив состояния
+    ///
     void FlightSequence(Environment *env, DynamicsBase::state& x0);
 
     int stageNumber;

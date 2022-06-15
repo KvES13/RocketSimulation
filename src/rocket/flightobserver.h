@@ -14,18 +14,20 @@
 #include "rocket/rocket.h"
 #include "dynamics/dynamics_base.h"
 
+///
+/// \brief Класс для записи статистики
+///
 class FlightObserver {
-    public:
+public:
+
+    FlightObserver() = default;
+    explicit FlightObserver(const Rocket* rocket);
 
     void ReserveCapacity(int capacity);
     void operator()(const DynamicsBase::state& x, const double t);
-
     void DumpCsv(const std::string &file_name, bool full_dump = true);
 
     int counter = 0;
-
-    FlightObserver() {};
-    explicit FlightObserver(const Rocket* rocket);
 
     const Rocket* p_rocket;
     Coordinate crd;
@@ -81,7 +83,7 @@ class FlightObserver {
     QVector<QVector<double>> vattitude;
     QVector<QVector<double>> vangular_velocity;
 
-        std::string filePath = "";
+    std::string filePath = "";
 };
 
 

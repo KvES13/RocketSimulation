@@ -1,12 +1,19 @@
 #ifndef MASS_H_
 #define MASS_H_
 
+///
+/// \brief Класс Масса ракеты
+///
 class Mass {
-    public:
-        double inert;
-        double propellant;
+public:
 
-        double Sum() {return inert /*+ propellant*/;}
+    /// \brief Масса конструкции
+    double inert;
+
+    /// \brief Масса топлива
+    double propellant;
+
+    double Sum() {return inert /*+ propellant*/;}
 };
 
 #endif

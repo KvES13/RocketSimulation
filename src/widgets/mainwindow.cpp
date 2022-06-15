@@ -11,20 +11,14 @@ MainWindow::MainWindow(QWidget *parent)
     QDate date(2022, 7, 8);
     QDate leftDay = QDate::currentDate();
     int days = leftDay.daysTo(date);
-    setWindowTitle("RocketSimulation "+QString::number(days));
+    setWindowTitle("Rocket Simulation");
 
     connect(ui->FSettings,SIGNAL(startSim(std::vector<RocketStage>&,Environment*)),
             this, SLOT(uptageWidgets(std::vector<RocketStage>&,Environment*)));
 
-//    connect(ui->Sim,&wSimulation::BackToSettings,ui->stackedWidget,
-//            ([this](){ui->stackedWidget->setCurrentIndex(0);}));
-
     connect(ui->Sim,&wSimulation::finish,ui->Res,&Results::paintResults);
-  //  connect(ui->Sim,&wSimulation::finish,ui->Res,&Results::paintResults);
 
-    setSideBar();
-
-
+    addSideBar();
 }
 
 MainWindow::~MainWindow()
@@ -45,9 +39,9 @@ void MainWindow::uptageWidgets(std::vector<RocketStage> &stages,Environment* env
     ui->Res->SetObservers(obs);
 }
 
-void MainWindow::setSideBar()
+void MainWindow::addSideBar()
 {
-    QStringList names = {"Настройки","Симуляция","Результаты","Траектория"};
+    QStringList names = {"Настройки","Симуляция","Результаты","Траектория","Справка"};
     for(int i = 0; i < names.size();++i)
     {
         QAction *action = new QAction(QIcon(QString(":/icons/icon%1").arg(i)),

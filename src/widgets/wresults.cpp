@@ -70,16 +70,10 @@ wResults::wResults(const QVector<QVector<double> > &data, QStringList&& header,
             auto [graphMinY,graphMaxY] = std::minmax_element(
                     std::begin(data[first_index+i+1]),std::end(data[first_index+i+1]));
 
-//            minX = std::fmin(minX,*graphMinX);
-//            maxX = std::fmax(maxX,*graphMaxX);
-//            minY = std::fmin(minY,*graphMinY);
-//            maxY = std::fmax(maxY,*graphMaxY);
-
-            if(minX > *graphMinX) minX = *graphMinX;
-            if(maxX < *graphMaxX) maxX = *graphMaxX;
-            if(minY > *graphMinY) minY = *graphMinY;
-            if(maxY < *graphMaxY) maxY = *graphMaxY;
-
+            minX = std::fmin(minX,*graphMinX);
+            maxX = std::fmax(maxX,*graphMaxX);
+            minY = std::fmin(minY,*graphMinY);
+            maxY = std::fmax(maxY,*graphMaxY);
         }
 
         //Подписи осей
@@ -114,6 +108,9 @@ wResults::wResults(const QVector<QVector<double> > &data, QStringList&& header,
         //Возможность перемещения
         vPlots[i]->setInteraction(QCP::iRangeDrag,true);
 
+        vPlots[i]->axisRect()->setRangeDrag(Qt::Horizontal);
+        vPlots[i]->axisRect()->setRangeZoom(Qt::Horizontal);
+
         vPlots[i]->legend->setVisible(true);
         vPlots[i]->legend->setFont(QFont("Helvetica", 8));
     }
@@ -136,12 +133,12 @@ wResults::wResults(const QVector<QVector<double> > &data, QStringList&& header,
 
         }
 
-        connect(btnShowHideTable,&QPushButton::clicked,
-                tabWidget,[&]()
-        {
-        qDebug()<<"tab";
-            tabWidget->setVisible(false);
-        });
+//        connect(btnShowHideTable,&QPushButton::clicked,
+//                tabWidget,[&]()
+//        {
+//        qDebug()<<"tab";
+//            tabWidget->setVisible(false);
+//        });
 
 
      //   tabWidget->setVisible(false);

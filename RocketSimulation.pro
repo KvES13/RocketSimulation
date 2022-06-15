@@ -36,6 +36,7 @@ win32 {
     SOURCES     += $$system("where /r .\ *.cpp* 2> nul")
     HEADERS     += $$system("where /r .\ *.h* 2> nul")
     FORMS       += $$system("where /r .\ *.ui 2> nul")
+    RC_ICONS += $${res_dir}/icons/app.ico
 } else {
     SOURCES     += $$system("find '$${src_dir}/' -name '*.cpp*' 2>/dev/null")
     HEADERS     += $$system("find '$${src_dir}/' -name '*.h*' 2>/dev/null")

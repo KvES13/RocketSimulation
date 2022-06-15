@@ -12,8 +12,7 @@ RocketStage::RocketStage(int stageNumber, std::shared_ptr<Rocket> rocket)
     this->rocket = rocket;
 }
 
-RocketStage RocketStage::create(const int stage,
-                                JsonWrapper &json)
+RocketStage RocketStage::create(int stage,JsonWrapper &json)
 {
     RocketStage rs(stage, std::make_shared<Rocket>(json));
 

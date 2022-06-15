@@ -21,7 +21,9 @@
 #include "rocket/parameter/interpolate_parameter.h"
 #include "interpolate.h"
 
-
+///
+/// \brief Класс, описывающий ракету
+///
 class Rocket {
     public:
         Rocket();
