@@ -17,7 +17,7 @@ FlightSettings::FlightSettings(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     ui->dateTimeLaunch->setDateTime(QDateTime::currentDateTime());
 
-    v_wstages = {ui->stage1,ui->stage2,ui->stage3};
+    v_wstages = {ui->stage1,ui->stage2/*,ui->stage3*/};
     for(auto& w: v_wstages) w->setEnabled(false);
 
 

@@ -11,15 +11,22 @@
 
 #include "mytablemodel.h"
 
+struct PlotInfo
+{
+    QVector<QVector<double>> values;
+    int graphsCount;
+    QStringList headerData;
+    QString title = "";
+    bool isDisplayedTable = true;
+};
+
 
 class wResults : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit wResults(const QVector<QVector<double> > &data,
-                      QStringList&& header, int stagesCount,
-                      bool displayTable = true, QWidget *parent = nullptr);
+    explicit wResults(PlotInfo &&info,QWidget *parent = nullptr);
     ~wResults();
 
 public slots:
@@ -27,17 +34,16 @@ public slots:
 
 private:
 
+    void setUI();
+
     static constexpr std::array<Qt::GlobalColor,10> colors =
     {Qt::blue,Qt::red,Qt::darkRed, Qt::green,Qt::darkGreen, Qt::lightGray,
      Qt::yellow,Qt::darkYellow, Qt::darkCyan,Qt::white};
 
     const QVector<QVector<double>> values;
 
-
+    PlotInfo plotInfo;
     QVector<QCustomPlot*> vPlots;
-    QStringList headerData;
-    int graphsCount;
-    bool isDisplayedTable;
 
 
 };

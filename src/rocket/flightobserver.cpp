@@ -140,6 +140,8 @@ void FlightObserver::operator()(const DynamicsBase::state& x, const double t)
         vforce[7].append(p_rocket->force.gravity[1]);
         vforce[8].append(p_rocket->force.gravity[2]);
 
+        mach_number.append(p_rocket->velocity.mach_number);
+
         if(p_rocket->position.LLH[2] > max_alt)
             max_alt = p_rocket->position.LLH[2];
 

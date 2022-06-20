@@ -24,11 +24,11 @@ void WRocket::fillWidget(const RocketStage& stage)
     ui->leMassInert->setText(QString::number(rocket->mass.inert));
     ui->lePropellant->setText(QString::number(rocket->mass.propellant));
     ui->leThrustVac->setText(QString::number(rocket->engine.thrust));
-    ui->leThrustCoef->setText(QString::number(1));
+  //  ui->leThrustCoef->setText(QString::number(1));
     ui->leEngBurnDuration->setText(QString::number(rocket->engine.burn_duration));
     ui->leEngDiameter->setText(QString::number(rocket->engine.getDiameter()));
     ui->leISPVac->setText(QString::number(rocket->engine.getISPvac()));
-    ui->leNozzleExpansionRatio->setText(QString::number(18));
+   // ui->leNozzleExpansionRatio->setText(QString::number(18));
 
     if(stage.enable_separation)
     {
@@ -45,6 +45,7 @@ void WRocket::fillWidget(const RocketStage& stage)
         if(second_parachute)
         {
             ui->leParachuteOpen2->setText(QString::number(stage.time_open_second_parachute));
+            ui->cbSecondParachute->setEnabled(true);
         }
         else
         {

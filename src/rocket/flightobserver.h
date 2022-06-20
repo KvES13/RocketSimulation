@@ -60,6 +60,7 @@ public:
     QVector<double> Cld;
     QVector<double> Clp;
     QVector<double> Cmq;
+    QVector<double> mach_number;
 
     QVector<Position> position;
     QVector<Velocity> velocity;

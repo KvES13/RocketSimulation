@@ -7,7 +7,7 @@ wSimulation::wSimulation(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->pbResults->setEnabled(false);
-    ui->textBrowser->setFontPointSize(12);
+    ui->textBrowser->setFontPointSize(11);
 }
 
 wSimulation::~wSimulation()
@@ -16,15 +16,8 @@ wSimulation::~wSimulation()
 }
 
 void wSimulation::init(std::vector<RocketStage> &stages, Environment *env) {
-    if(&stages != &stageVector)
-    {
-        stageVector = stages;
-        environment = env;
-    }
-    else
-    {
-        qDebug()<<" EEEEEEEEEEEEEEEEE";
-    }
+    stageVector = stages;
+    environment = env;
 }
 
 
@@ -67,14 +60,25 @@ void wSimulation::on_pbStartSim_clicked()
         text = QString::number(msec)+" мс";
 
     ui->textBrowser->append("\n==========================================================="
-                            "\nСимуляция завершена\nВремя расчёта: "+text);
-
+                            "\nСимуляция завершена\nВремя расчёта: "+text + "\nСобытия\n");
+    text.clear();
     for(const auto& stage : stageVector)
     {
-    text =
-            "\nМаксимальная высота: " + QString::number(stage.fdr.max_alt) +
+        if(stage.enable_separation)
+            text += "Время разделения ступеней" + QString::number(stage.time_separation);
+        if(stage.enable_parachute_open)
+            text += "\nСрабатывание 1 парашюта:" + QString::number(stage.time_open_parachute);
+        if(stage.exist_second_parachute)
+            text += "\nСрабатывание 2 парашюта:" + QString::number(stage.time_open_second_parachute);
+    }
+    ui->textBrowser->append(text);
+    for(const auto& stage : stageVector)
+    {
+        text =
+            "\n\nМаксимальная высота: " + QString::number(stage.fdr.max_alt) +
             "м\nМаксимальная скорость: " + QString::number(stage.fdr.max_speed) +
             "м/с\nМаксимальное ускорение: " + QString::number(stage.fdr.max_accelerarion) +
+
             "м/с^2\nРасстояние от точки старта: " + QString::number(stage.fdr.max_downrage) + "м";
     }
 

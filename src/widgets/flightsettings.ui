@@ -20,6 +20,52 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="3" column="1">
+    <widget class="QPushButton" name="btnStartSimulation">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Моделирование</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <spacer name="verticalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="1" column="0" colspan="2">
     <widget class="QTabWidget" name="tabWidget">
      <property name="font">
@@ -611,19 +657,25 @@
        <string>Ракета</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7">
-       <item row="4" column="4">
-        <widget class="QGroupBox" name="groupBox_3">
+       <item row="3" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>3 ступень</string>
+          <string>1 ступень</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_10">
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="0">
-           <widget class="WRocket" name="stage3" native="true"/>
+           <widget class="WRocket" name="stage1" native="true"/>
           </item>
          </layout>
         </widget>
        </item>
-       <item row="0" column="3" colspan="2">
+       <item row="0" column="1">
         <widget class="QSpinBox" name="sbStagesNumber">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -646,25 +698,17 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>1 ступень</string>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-         <property name="checkable">
-          <bool>false</bool>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_8">
-          <item row="0" column="0">
-           <widget class="WRocket" name="stage1" native="true"/>
-          </item>
-         </layout>
         </widget>
        </item>
-       <item row="4" column="3">
+       <item row="3" column="3" colspan="2">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>2 ступень</string>
@@ -676,87 +720,23 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="3">
-        <widget class="QComboBox" name="cbReturnType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <item>
-          <property name="text">
-           <string>Без спасения</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Парашют</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Ракетно-динамический способ</string>
-          </property>
-         </item>
-        </widget>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_50">
          <property name="text">
-          <string>Способ спасения 1 стуепни:</string>
+          <string>Высота стартового участка полёта:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3" colspan="2">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>[м]</string>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
     </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QPushButton" name="btnStartSimulation">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>50</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>200</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Моделирование</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <spacer name="verticalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>
