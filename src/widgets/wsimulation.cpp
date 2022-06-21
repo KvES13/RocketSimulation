@@ -29,17 +29,18 @@ void wSimulation::on_pbStartSim_clicked()
             "\nВремя пуска: "+environment->masterClock.UTC_date_init.toString()+
             "\nКоординаты старта: " +
             printEigenVector(stageVector[0].rocket->position.LLH,QStringList{"Долгота","Широта","Высота"}) +
+    "\nПараметры атмосферы: ГОСТ 4401-81 Атмосфера стандартная" +
     "\nНачальная скорость: "+
     printEigenVector(stageVector[0].rocket->velocity.NED,QStringList{"X","Y","Z"}) +
     "\nВремя полёта: "+ QString::number(stageVector[0].time_end) +
     ", шаг интегрирования: " + QString::number(stageVector[0].time_step) +
+    "\nЧисленный метод решения ДУ: Метод Рунге-Кутты 4 порядка" +
 
 
     "\nКоличество ступеней: " + QString::number(stageVector.size());
     for(const auto& stage : stageVector)
     {
-        text += "\n==========================================================="
-         "\nПараметры " + QString::number(stage.stageNumber) + " ступени:"
+        text + "\nПараметры " + QString::number(stage.stageNumber) + " ступени:"
                 "\nМасса: " + QString::number(stage.rocket->mass.Sum()) +
                 "кг ,длина " + QString::number(stage.rocket->length) +
                 "м ,диаметр " + QString::number(stage.rocket->diameter) + "м";
@@ -59,27 +60,27 @@ void wSimulation::on_pbStartSim_clicked()
     else
         text = QString::number(msec)+" мс";
 
-    ui->textBrowser->append("\n==========================================================="
-                            "\nСимуляция завершена\nВремя расчёта: "+text + "\nСобытия\n");
+    ui->textBrowser->append("==========================================================="
+                            "\nСимуляция завершена\nВремя расчёта: "+text + "\n\nСобытия:\n");
     text.clear();
     for(const auto& stage : stageVector)
     {
         if(stage.enable_separation)
-            text += "Время разделения ступеней" + QString::number(stage.time_separation);
+            text += "Время разделения ступеней: " + QString::number(stage.time_separation);
         if(stage.enable_parachute_open)
-            text += "\nСрабатывание 1 парашюта:" + QString::number(stage.time_open_parachute);
+            text += " сек \nСрабатывание 1 парашюта: " + QString::number(stage.time_open_parachute);
         if(stage.exist_second_parachute)
-            text += "\nСрабатывание 2 парашюта:" + QString::number(stage.time_open_second_parachute);
+            text += " сек\nСрабатывание 2 парашюта: " + QString::number(stage.time_open_second_parachute) + " cек";
     }
     ui->textBrowser->append(text);
     for(const auto& stage : stageVector)
     {
         text =
             "\n\nМаксимальная высота: " + QString::number(stage.fdr.max_alt) +
-            "м\nМаксимальная скорость: " + QString::number(stage.fdr.max_speed) +
-            "м/с\nМаксимальное ускорение: " + QString::number(stage.fdr.max_accelerarion) +
+            " м\nМаксимальная скорость: " + QString::number(stage.fdr.max_speed) +
+            " м/с\nМаксимальное ускорение: " + QString::number(stage.fdr.max_accelerarion) +
 
-            "м/с^2\nРасстояние от точки старта: " + QString::number(stage.fdr.max_downrage) + "м";
+            " м/с^2\nРасстояние от точки старта: " + QString::number(stage.fdr.max_downrage) + " м";
     }
 
     ui->textBrowser->append(text);
@@ -118,6 +119,10 @@ void wSimulation::run()
 
                 next_stage.time_start = stageVector[i].time_separation;
 
+
+                Eigen::Vector3d euler {99,0, 0};
+                euler = euler / 180.0 * Constants::pi;
+                rocket->attitude.Initialize(euler);
 
                 next_stage.rocket->position.ECI[0] = x0[0];
                 next_stage.rocket->position.ECI[1] = x0[1];

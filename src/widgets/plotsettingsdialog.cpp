@@ -1,8 +1,8 @@
 #include "plotsettingsdialog.h"
 
 PlotSettingsDialog::PlotSettingsDialog(QVector<QCustomPlot *> &plots,
-                                       QWidget *parent) :
-    QDialog(parent),vPlots(plots)
+                                       const QStringList& plotTitle,QWidget *parent):
+    QDialog(parent),vPlots(plots), title(plotTitle)
 {
     setUI();
 }
@@ -18,6 +18,7 @@ void PlotSettingsDialog::setUI()
     QGridLayout *mainGrid =  new QGridLayout(this);
 
     int row = 0;
+    int plotIndex = 0;
     for(auto& plot : vPlots)
     {
         QGroupBox *gb = new QGroupBox(this);
@@ -28,7 +29,8 @@ void PlotSettingsDialog::setUI()
         {
 
             auto graph = plot->graph(i); 
-            auto gbGraph = new QGroupBox(graph->name(),gb);
+            auto gbGraph = new QGroupBox(title[plotIndex] +" "+
+                                         QString::number(i+1)+" ступени",gb);
             auto gridGraph = new QGridLayout(gbGraph);
 
             QLabel *lblX = new QLabel(gbGraph);
@@ -96,28 +98,26 @@ void PlotSettingsDialog::setUI()
                 }
             });
 
-            // Все графы одного полотна находятся на одной строке
-            int plotRow =row;
-            // Смещение i графика на
-            gridGraph->addWidget(lblX,plotRow,0);
-            gridGraph->addWidget(leX,plotRow,1);
-            gridGraph->addWidget(lblWidth,plotRow,2);
-            gridGraph->addWidget(spBox,plotRow,3);
+               gridGraph->addWidget(lblX,row+i,0);
+               gridGraph->addWidget(leX,row+i,1);
+               gridGraph->addWidget(lblWidth,row+i,2);
+               gridGraph->addWidget(spBox,row+i,3);
 
-            plotRow++;
+               row++;
 
-            gridGraph->addWidget(lblY,plotRow,0);
-            gridGraph->addWidget(leY,plotRow,1);
+               gridGraph->addWidget(lblY,row+i,0);
+               gridGraph->addWidget(leY,row+i,1);
 
-            gridGraph->addWidget(lblColor,plotRow,2);
-            gridGraph->addWidget(pbColor,plotRow,3);
-            gridGraph->addWidget(lineColor,plotRow,4);
-            plotRow++;
+               gridGraph->addWidget(lblColor,row+i,2);
+               gridGraph->addWidget(pbColor,row+i,3);
+               gridGraph->addWidget(lineColor,row+i,4);
+               row++;
 
-            grid->addWidget(gbGraph,0,i);
+
+            grid->addWidget(gbGraph);
         }
           mainGrid->addWidget(gb);
-        row+=2;
+          plotIndex++;
 
     }
 

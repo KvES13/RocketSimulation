@@ -72,7 +72,7 @@ void FlightObserver::operator()(const DynamicsBase::state& x, const double t)
 
     counter = 0;
 
-    if (p_rocket->position.LLH[2] >= 0.0 && t < 510.0) {
+    if (p_rocket->position.LLH[2] >= 0.0 /*&& t < 510.0*/) {
         countup_time.push_back(t);
         countup_burn_time.push_back(p_rocket->burn_clock.countup_time);
         thrust.push_back(p_rocket->engine.thrust);

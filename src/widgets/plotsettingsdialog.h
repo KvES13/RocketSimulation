@@ -10,7 +10,7 @@ class PlotSettingsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit PlotSettingsDialog(QVector<QCustomPlot*>& plots,
+    explicit PlotSettingsDialog(QVector<QCustomPlot*>& plots,const QStringList& plotTitle,
                                 QWidget *parent = nullptr);
     ~PlotSettingsDialog();
 
@@ -24,6 +24,8 @@ private:
     QVector<QLineEdit*> v_XlineEdit;
     QVector<QLineEdit*> v_YlineEdit;
     QVector<QSpinBox*> v_SpinBox;
+    const QStringList& title;
+
 };
 
 #endif // PLOTSETTINGSDIALOG_H

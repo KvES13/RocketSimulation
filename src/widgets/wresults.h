@@ -16,7 +16,7 @@ struct PlotInfo
     QVector<QVector<double>> values;
     int graphsCount;
     QStringList headerData;
-    QString title = "";
+    QStringList title;
     bool isDisplayedTable = true;
 };
 

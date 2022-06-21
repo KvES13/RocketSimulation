@@ -12,7 +12,7 @@ wResults::wResults(PlotInfo&& info, QWidget *parent)  :
 
 void wResults::slotOpenDialog()
 {
-   PlotSettingsDialog plot(vPlots);
+   PlotSettingsDialog plot(vPlots,plotInfo.title);
    plot.setWindowTitle("Настройка отображения");
 
    plot.exec();
@@ -56,7 +56,7 @@ void wResults::setUI()
         if(!plotInfo.title.isEmpty())
         {
             vPlots[i]->plotLayout()->insertRow(0);
-            auto title = new QCPTextElement(vPlots[i], plotInfo.title, QFont("sans", 12, QFont::Bold));
+            auto title = new QCPTextElement(vPlots[i], plotInfo.title[i], QFont("sans", 12, QFont::Bold));
             title->setTextColor(Qt::white);
             vPlots[i]->plotLayout()->addElement(0, 0, title);
         }
@@ -71,7 +71,7 @@ void wResults::setUI()
         {
             vPlots[i]->addGraph(vPlots[i]->xAxis,vPlots[i]->yAxis);
             //Подпись графика
-            vPlots[i]->graph(g)->setName(QString::number(g+1)+" ступень " +plotInfo.headerData[i+1]);
+            vPlots[i]->graph(g)->setName(QString::number(g+1)+" ступень ");
             //Размер и цвет линии
             QPen pen;
             pen.setWidth(3);
@@ -89,10 +89,10 @@ void wResults::setUI()
             auto [graphMinY,graphMaxY] = std::minmax_element(
                     std::begin(plotInfo.values[first_index+i+1]),std::end(plotInfo.values[first_index+i+1]));
 
-            minX = std::fmin(minX,*graphMinX);
-            maxX = std::fmax(maxX,*graphMaxX);
-            minY = std::fmin(minY,*graphMinY);
-            maxY = std::fmax(maxY,*graphMaxY);
+            minX = std::min(minX,*graphMinX);
+            maxX = std::max(maxX,*graphMaxX);
+            minY = std::min(minY,*graphMinY);
+            maxY = std::max(maxY,*graphMaxY);
         }
 
         //Подписи осей
@@ -100,7 +100,7 @@ void wResults::setUI()
         vPlots[i]->yAxis->setLabel(plotInfo.headerData[i+1]);
 
         //Установка диапазона отображения
-        vPlots[i]->xAxis->setRange(0,maxX);
+        vPlots[i]->xAxis->setRange(minX,maxX);
         vPlots[i]->yAxis->setRange(minY, maxY);
 
         //Фон полотна
