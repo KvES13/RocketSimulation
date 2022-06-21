@@ -7,8 +7,6 @@ wResults::wResults(PlotInfo&& info, QWidget *parent)  :
     QWidget(parent), plotInfo(info)
 {    
 
-
-
     setUI();
 }
 
@@ -26,7 +24,7 @@ void wResults::setUI()
     auto grid = new QGridLayout(this);
     auto btnSettingsDialog = new QPushButton("Настройка отображения",this);
     auto btnShowHideTable = new QPushButton("Показать/Скрыть таблицу",this);
-    size_t plotsCount = (values.size()-1)/plotInfo.graphsCount;
+    size_t plotsCount = (plotInfo.values.size()-1)/plotInfo.graphsCount;
     vPlots.resize(plotsCount);
 
     grid->addWidget(btnSettingsDialog,0,0);
@@ -35,8 +33,6 @@ void wResults::setUI()
     connect(btnSettingsDialog,&QPushButton::clicked,this,&wResults::slotOpenDialog);
 
     //Рисование графиков
-
-    qDebug()<<plotInfo.graphsCount<<" "<< plotInfo.headerData;
 
     // Задаем одинаковый цвет у графиков ступени
     QVector<QColor> graphColor;
@@ -60,7 +56,9 @@ void wResults::setUI()
         if(!plotInfo.title.isEmpty())
         {
             vPlots[i]->plotLayout()->insertRow(0);
-            vPlots[i]->plotLayout()->addElement(0, 0, new QCPTextElement(vPlots[i], plotInfo.title, QFont("sans", 12, QFont::Bold)));
+            auto title = new QCPTextElement(vPlots[i], plotInfo.title, QFont("sans", 12, QFont::Bold));
+            title->setTextColor(Qt::white);
+            vPlots[i]->plotLayout()->addElement(0, 0, title);
         }
 
         double minX = std::numeric_limits<double>::max();
@@ -83,13 +81,13 @@ void wResults::setUI()
             //Индекс, с которого начинаются данные для g графика
             // plotsCount+1 - количество графиков + ось Ох (время)
             int first_index = g*(plotsCount+1);
-            vPlots[i]->graph(g)->setData(values[first_index],values[first_index+i+1]);
+            vPlots[i]->graph(g)->setData(plotInfo.values[first_index],plotInfo.values[first_index+i+1]);
 
             //Поиск минимальных и максимальных значений для осей X,Y
             auto [graphMinX,graphMaxX] = std::minmax_element(
-                    std::begin(values[first_index]),std::end(values[first_index]));
+                    std::begin(plotInfo.values[first_index]),std::end(plotInfo.values[first_index]));
             auto [graphMinY,graphMaxY] = std::minmax_element(
-                    std::begin(values[first_index+i+1]),std::end(values[first_index+i+1]));
+                    std::begin(plotInfo.values[first_index+i+1]),std::end(plotInfo.values[first_index+i+1]));
 
             minX = std::fmin(minX,*graphMinX);
             maxX = std::fmax(maxX,*graphMaxX);
@@ -149,7 +147,7 @@ void wResults::setUI()
             auto tableView = new QTableView(tabWidget);
             tabWidget->addTab(tableView,QString::number(g+1)+" ступень");
             auto tableModel = new MyTableModel(
-                        values.mid(g*(plotsCount+1),plotsCount+1),plotInfo.headerData,tableView);
+                        plotInfo.values.mid(g*(plotsCount+1),plotsCount+1),plotInfo.headerData,tableView);
             tableView->setModel(tableModel);
 
         }

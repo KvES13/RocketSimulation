@@ -22,12 +22,12 @@ void Results::SetObservers(QVector<FlightObserver*>obs)
 void Results::paintResults()
 {
     plot();
-//    plotPosition();
-//    plotVelocity();
-//    plotForce();
-//    plotAcceleration();
-//    plotMass();
-//    plotAmtosphere();
+    plotPosition();
+    plotVelocity();
+    plotForce();
+    plotAcceleration();
+    plotMass();
+    plotAmtosphere();
 }
 
 void Results::plot()

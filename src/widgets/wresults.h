@@ -36,11 +36,10 @@ private:
 
     void setUI();
 
-    static constexpr std::array<Qt::GlobalColor,10> colors =
-    {Qt::blue,Qt::red,Qt::darkRed, Qt::green,Qt::darkGreen, Qt::lightGray,
-     Qt::yellow,Qt::darkYellow, Qt::darkCyan,Qt::white};
+    static constexpr std::array<Qt::GlobalColor,8> colors =
+    {Qt::blue,Qt::red,Qt::darkRed, Qt::green, Qt::lightGray, Qt::yellow,
+     Qt::darkCyan,Qt::white};
 
-    const QVector<QVector<double>> values;
 
     PlotInfo plotInfo;
     QVector<QCustomPlot*> vPlots;
