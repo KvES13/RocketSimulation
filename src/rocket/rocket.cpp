@@ -278,8 +278,10 @@ void Rocket::SeparateUpperStage(const double mass_upper_stage) {
 };
 
 void Rocket::OpenParachute() {
+
     for (size_t i=0; i < CdS_parachute_src.size(); ++i) {
         CdS_parachute += CdS_parachute_src[i];
+        CdS_parachute_src[i] = 0; /// @badcode
     }
 };
 

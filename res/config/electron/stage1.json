@@ -85,11 +85,6 @@
 			"Length [m]": 25.0
 		},
 
-		"Enable Engine Cutoff": false,
-		"Cutoff": {
-			"Cutoff Time [s]": 0.0
-		},
-
 		"Enable Stage Separation": true,
 		"Upper Stage": {
 			"Stage Separation Time [s]": 160.0,
@@ -101,16 +96,31 @@
 			"Jettson Time [s]": 0.0,
 			"Mass [s]": 1.0
 		},
+		
+		"Enable Rocket Dynamic Method" : false,
+		"Rocket Dynamic" : {
+			"First launch [m]" : 70000,
+			"Thrust1 [N]" : 10000,
+			"Work Time [s]" : 15,
+			"Second launch [m]" : 1000,
+			"Thrust1 [N]" : 10000,
+			"Work Time [s]" : 30
+		},
 
 		"Enable Parachute Open": true,
 		"Parachute": {
+			"_comment": "height, time",
+			"Trigger" : "height",
 			"Open Time [s]": 300.0,
-			"Enable Forced Apogee Open": false
+			"Open Height [m]" : 5000.0
 		},
 
 		"Enable Secondary Parachute Open": true,
 		"Secondary Parachute": {
-			"Open Time [s]": 320.0
+			"_comment": "height, time",
+			"Trigger" : "height",
+			"Open Time [s]": 320.0,
+			"Open Height [m]" : 1000.0
 		},
 
 		"Flight End Time [s]": 400.0,

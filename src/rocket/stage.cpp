@@ -26,12 +26,6 @@ RocketStage RocketStage::create(int stage,JsonWrapper &json)
         rs.length_launcher_rail =  js.getSubItem("Rail Launcher").getDouble("Length [m]");
     }
 
-    rs.enable_cutoff =  js.getBool("Enable Engine Cutoff");
-    if (rs.enable_cutoff) {
-        rs.time_cutoff = js.getSubItem("Cutoff").getDouble("Cutoff Time [s]");
-        rs.rocket->engine.burn_duration = rs.time_cutoff;
-    }
-
     rs.enable_separation =  js.getBool("Enable Stage Separation");
     if (rs.enable_separation) {
         auto jc_separation =  js.getSubItem("Upper Stage");
@@ -48,15 +42,44 @@ RocketStage RocketStage::create(int stage,JsonWrapper &json)
 
     rs.enable_parachute_open = js.getBool("Enable Parachute Open");
     if (rs.enable_parachute_open) {
-        auto jc_parachute =  js.getSubItem("Parachute");
-        rs.enable_apogee_parachute_open = jc_parachute.getDouble("Enable Forced Apogee Open");
-        rs.time_open_parachute = jc_parachute.getDouble("Open Time [s]");
+        auto jc_parachute =  js.getSubItem("Parachute");      
+        auto trigger = jc_parachute.getString("Trigger");
+        if (trigger == "time")
+        {
+            rs.parachute_open_height_trigger = false;
+            rs.time_open_parachute = jc_parachute.getDouble("Open Time [s]");
+        }
+        else if(trigger == "height")
+        {
+            rs.parachute_open_height_trigger = true;
+            rs.parachute_height_open =  jc_parachute.getDouble("Open Height [m]");
+        }
+        else
+        {
+            rs.enable_parachute_open = false;
+        }
+
     }
 
     rs.exist_second_parachute = js.getBool("Enable Secondary Parachute Open");
     if (rs.exist_second_parachute) {
         auto jc_secondary_parachute = js.getSubItem("Secondary Parachute");
-        rs.time_open_second_parachute = jc_secondary_parachute.getDouble("Open Time [s]");
+
+        auto trigger = jc_secondary_parachute.getString("Trigger");
+        if (trigger == "time")
+        {
+            rs.second_parachute_open_height_trigger = false;
+            rs.time_open_second_parachute = jc_secondary_parachute.getDouble("Open Time [s]");
+        }
+        else if(trigger == "height")
+        {
+            rs.second_parachute_open_height_trigger = true;
+            rs.second_parachute_height_open =  jc_secondary_parachute.getDouble("Open Height [m]");
+        }
+        else
+        {
+            rs.exist_second_parachute = false;
+        }
     }
 
     rs.time_end =  js.getDouble("Flight End Time [s]");
@@ -133,12 +156,6 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
 
     Dynamics6dofAero aero(rocket.get(), env);
 
-    if (enable_cutoff) {
-        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
-                                time_cutoff, time_step, std::ref(fdr));
-        start = time_cutoff;
-        rocket->CutoffEngine();
-    }
 
     if (enable_fairing_jettson) {
         odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
@@ -159,55 +176,76 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
         odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
                                 time_end, time_step, std::ref(fdr));
     } else {
-        if (enable_apogee_parachute_open) {
-
+        // Если парашют срабатывает на заданной высоте
+        if (parachute_open_height_trigger) {
             Rocket rocket_apogee_estimate = *rocket.get();
             Environment env_apogee = *env;
-            DynamicsBase::state x0_apogee_estimate = x0;
+            DynamicsBase::state x0_apogee_estimate = x0_in_stage;
             FlightObserver fdr_apogee_estimate(&rocket_apogee_estimate);
-            aero.reset(rocket.get(), &env_apogee);
+            aero.reset(&rocket_apogee_estimate, &env_apogee);
             odeint::integrate_const(stepper, std::ref(aero), x0_apogee_estimate,
                                     start, time_end, time_step,
                                     std::ref(fdr_apogee_estimate));
-            double max_alt = 0.0;
-            for (int i=0; i < fdr_apogee_estimate.position.size(); ++i) {
-                double alt = fdr_apogee_estimate.position[i].LLH(2);
-                if (max_alt < alt) {
-                    max_alt = alt;
-                } else {
-                    end = fdr_apogee_estimate.countup_time[i];
-                    break;
-                }
-            }
-        } else {
-            end = time_open_parachute;
+
+            time_open_parachute = timeSearchByHeight(fdr_apogee_estimate,parachute_height_open);
         }
+
+        // Интегрирование до t срабатывания парашюта
         aero.reset(rocket.get(), env);
         odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
-                                end, time_step, std::ref(fdr));
-        start = end;
+                                time_open_parachute, time_step, std::ref(fdr));
+        start = time_open_parachute;
+
+        rocket->OpenParachute();
         double time_step_decent_parachute = 0.1;
         odeint::runge_kutta4<DynamicsBase::state> stepper;
-        rocket->OpenParachute();
         Dynamics3dofParachute parachute(rocket.get(), env);
 
+        // Если существует 2 парашют
         if (exist_second_parachute) {
+            // Если парашют срабатывает на заданной высоте
+            if(second_parachute_height_open)
+            {
+                Rocket first_parachute = *rocket.get();
+                Environment env_apogee = *env;
+                DynamicsBase::state x0_first_parachute = x0_in_stage;
+                FlightObserver fdr_parachute(&first_parachute);
+                Dynamics3dofParachute par(&first_parachute, &env_apogee);
+                odeint::integrate_const(stepper, par, x0_first_parachute, start,
+                                        time_end,time_step_decent_parachute, std::ref(fdr_parachute));
+                time_open_second_parachute = timeSearchByHeight(fdr_parachute,second_parachute_height_open);
+            }
 
+            // Интегрирование до t срабатывания 2 парашюта
             odeint::integrate_const(stepper, parachute, x0_in_stage, start,
                                     time_open_second_parachute,
                                     time_step_decent_parachute, std::ref(fdr));
             rocket->OpenParachute();
+            // Интегрирование до конца
             odeint::integrate_const(stepper, parachute, x0_in_stage,
                                     time_open_second_parachute, time_end,
                                     time_step_decent_parachute, std::ref(fdr));
-        } else {
-            QElapsedTimer tp;
-            tp.start();
+        }
+
+        else
+        {
             odeint::integrate_const(stepper, parachute, x0_in_stage, start,
                                     time_end, time_step_decent_parachute,
                                     std::ref(fdr));
         }
     }
+}
+
+double RocketStage::timeSearchByHeight(const FlightObserver& obs,double height)
+{
+    for (int i=0; i < obs.position.size(); ++i) {
+        double alt = obs.position[i].LLH(2);
+        if (height >= alt) {
+             return obs.countup_time[i];
+        }
+    }
+
+    return obs.position[0].LLH(2);
 }
 
 
