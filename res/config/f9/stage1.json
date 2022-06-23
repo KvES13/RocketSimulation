@@ -12,7 +12,7 @@
 			"Burn Duration [sec]": 162,
 			"Thrust coefficient[-]": 1.00
 		},
-		"Const Isp vac[s]": 311.0,
+		"Const Isp vac[s]": 321.0,
 		"nozzle expansion ratio[-]": 18.86
 	},
 	
@@ -47,7 +47,7 @@
 		"X-ThrustLoadingPoint from BodyTail [m]": 0.300,
 
 		"Constant CA": {
-			"Constant CA [-]": 0.4,
+			"Constant CA [-]": 0.6,
 			"Constant BurnOut CA [-]": 0.5
 		},
 
@@ -88,7 +88,7 @@
 		"Enable Stage Separation": true,
 		"Upper Stage": {
 			"Stage Separation Time [s]": 180.0,
-			"Upper Stage Mass [kg]": 116000.0
+			"Upper Stage Mass [kg]": 100000.0
 		},
 
 		"Enable Fairing Jettson": false,
@@ -97,17 +97,12 @@
 			"Mass [s]": 1.0
 		},
 
-		"Enable Rocket Dynamic Method" : false,
+		"Enable Rocket Dynamic Method" : true,
 		"Rocket Dynamic" : {
-			"Enable Program ": false,
-			"Engine Launch Program File Path": "engine_launch.csv"
-			
-			"First launch [m]" : 70000,
-			"Thrust1 [N]" : 10000,
-			"Work Time [s]" : 15,
-			"Second launch [m]" : 1000,
-			"Thrust1 [N]" : 10000,
-			"Work Time [s]" : 30
+
+			"Launch Height [m]" : [70000,5000,1000],
+			"Thrust [N]": [2742333,2742333,914111],
+			"Work Time [s]" : [30,20,10]
 		},
 
 		"Enable Parachute Open": false,
@@ -126,7 +121,7 @@
 			"Open Height [m]" : 1000.0
 		},
 
-		"Flight End Time [s]": 600.0,
+		"Flight End Time [s]": 1000.0,
 		"Time Step [s]": 0.1
 	}
 }

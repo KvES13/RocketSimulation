@@ -7,6 +7,7 @@ class Dynamics3dofOnLauncher : public DynamicsBase {
     public:
 
 public:
+    Dynamics3dofOnLauncher() = default;
     Dynamics3dofOnLauncher(Rocket* rocket, Environment* env) :
         DynamicsBase(rocket,env){};
 

@@ -10,6 +10,7 @@
 #include "dynamics/dynamics_3dof_parachute.h"
 #include "jsonwrapper.h"
 
+#include "dynamics/dynamictest.h"
 class Rocket;
 
 ///
@@ -40,6 +41,8 @@ public:
     ///
     void FlightSequence(Environment *env, DynamicsBase::state& x0);
 
+
+    double tempIntegrate(DynamicsBase *base,Environment env, DynamicsBase::state x0,double start,double height);
     double timeSearchByHeight(const FlightObserver& obs, double height);
 
     int stageNumber;
@@ -64,6 +67,7 @@ public:
     ///////////////////////
 
     ///////////////////////
+    bool enable_rocket_dynamic = false;
     bool enable_parachute_open= false;
     bool parachute_open_height_trigger = false;
     double time_open_parachute= 0;

@@ -1,5 +1,5 @@
 {
-	"Model ID": "sample",
+	"Model ID": "f9",
 	
 	"Launch DateTime": "2022/04/22 9:00:00.0",
 	"Launch Condition": {
@@ -7,7 +7,7 @@
 		"Longitude [deg]": 63.3167,
 		"Height for WGS84 [deg]": 20.0,
 		
-		"Azimuth [deg]": 120.0,
+		"Azimuth [deg]": 44.98,
 		"Elevation [deg]": 75.0,
 		
 		"North Velocity [m/s]": 0.0,
@@ -28,7 +28,7 @@
 		"Wind File Path": "sample_wind.csv"
 	},
 
-	"Number of Stage": 2,
+	"Number of Stage": 1,
 	"Stage1 Config File": "stage1.json",
 	"Stage2 Config File": "stage2.json"
 	

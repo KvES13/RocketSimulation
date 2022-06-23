@@ -18,6 +18,7 @@
 class DynamicsBase {
 public:
     DynamicsBase(Rocket* rocket, Environment* env) :p_rocket(rocket), p_env(env) {};
+    DynamicsBase() = default;
     virtual ~DynamicsBase(){};
 
     using state = std::array<double,14>;
@@ -36,8 +37,8 @@ public:
     void reset(Rocket* rocket, Environment* env);
 
 protected:
-    Rocket* p_rocket;
-    Environment* p_env;
+    Rocket* p_rocket = nullptr;
+    Environment* p_env = nullptr;
 };
 
 

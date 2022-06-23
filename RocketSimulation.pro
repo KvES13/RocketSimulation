@@ -46,5 +46,3 @@ win32 {
 RESOURCES += $${res_dir}/styles/dark/style.qrc $${res_dir}/resource.qrc
 #RESOURCES += $${res_dir}/styles/light/style.qrc $${res_dir}/resource.qrc
 
-
-

@@ -94,6 +94,7 @@
 			"Upper Stage Mass [kg]": 7000.0
 		},
 		"Enable Fairing Jettson": false,
+		"Enable Rocket Dynamic Method" : false,
 		"Enable Parachute Open": false,
 		"Enable Secondary Parachute Open": false,
 

@@ -73,11 +73,14 @@ void Dynamics6dofAero::operator()(const state& x, state& dx, const double t)
                 p_rocket->velocity.air_body.norm());
     }
 
+
     // Calculate Force
     p_rocket->force.thrust = p_rocket->getThrust(p_env->atmosphere.getPressure());
     p_rocket->force.aero = AeroForce();
     p_rocket->force.gravity = (coordinate.dcm.NED2body * gravity_NED) *
             p_rocket->mass.Sum();
+
+   // qDebug()<<" "<<p_rocket->mass.Sum();
 
     // Calculate Acceleration
     p_rocket->acceleration.body = p_rocket->force.Sum() / p_rocket->mass.Sum();
@@ -96,6 +99,12 @@ void Dynamics6dofAero::operator()(const state& x, state& dx, const double t)
 
 //    // Calculate Quaternion
 //    p_rocket->quaternion_dot =  0.5 *(QuaternionDiff(p_rocket) * p_rocket->attitude.quaternion) ;
+
+
+ //   p_rocket->mass.inert -= p_rocket->engine.mdot_prop;
+
+ //   qDebug()<<p_rocket->mass.inert<<" "<<p_rocket->engine.mdot_prop;
+
 
 
     dx[0] = p_rocket->velocity.ECI[0];  // vel_ECI => pos_ECI

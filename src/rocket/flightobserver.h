@@ -80,7 +80,7 @@ public:
     QVector<QVector<double>> vposition = QVector(9,QVector<double>());
     QVector<QVector<double>> vvelocity= QVector(9,QVector<double>());
     QVector<QVector<double>> vacceleration= QVector(6,QVector<double>());
-    QVector<QVector<double>> vforce= QVector(9,QVector<double>());
+    QVector<QVector<double>> vforce= QVector(12,QVector<double>());
     QVector<QVector<double>> vattitude;
     QVector<QVector<double>> vangular_velocity;
 

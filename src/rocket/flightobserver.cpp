@@ -43,7 +43,7 @@ void FlightObserver::ReserveCapacity(int capacity) {
 
     vposition.resize(9);
     vvelocity.resize(9);
-    vforce.resize(9);
+    vforce.resize(12);
     vacceleration.resize(6);
     for(int i = 0; i < 9; i++)
     {
@@ -139,6 +139,13 @@ void FlightObserver::operator()(const DynamicsBase::state& x, const double t)
         vforce[6].append(p_rocket->force.gravity[0]);
         vforce[7].append(p_rocket->force.gravity[1]);
         vforce[8].append(p_rocket->force.gravity[2]);
+
+        auto sum = p_rocket->force.thrust + p_rocket->force.aero + p_rocket->force.gravity;
+
+        vforce[9].append(sum[0]);
+        vforce[10].append(sum[1]);
+        vforce[11].append(sum[2]);
+
 
         mach_number.append(p_rocket->velocity.mach_number);
 

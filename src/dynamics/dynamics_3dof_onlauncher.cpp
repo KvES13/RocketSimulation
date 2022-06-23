@@ -93,6 +93,9 @@ void Dynamics3dofOnLauncher::operator()(const state& x, state& dx,
         p_rocket->acceleration.ECI << 0.0, 0.0, 0.0;
     }
 
+//    p_rocket->mass.inert -= p_rocket->engine.mdot_prop;
+
+//    qDebug()<<p_rocket->mass.inert<<" "<<p_rocket->engine.mdot_prop;
 
     dx[0] = p_rocket->velocity.ECI[0];  // vel_ECI => pos_ECI
     dx[1] = p_rocket->velocity.ECI[1];  // 

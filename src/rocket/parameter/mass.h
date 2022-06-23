@@ -13,7 +13,7 @@ public:
     /// \brief Масса топлива
     double propellant;
 
-    double Sum() {return inert /*+ propellant*/;}
+    double Sum() {return inert + propellant;}
 };
 
 #endif

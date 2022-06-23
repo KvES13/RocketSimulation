@@ -178,7 +178,7 @@ void Results::plotForce()
     QTabWidget *tabForce = new QTabWidget(tabWidget);
     tabWidget->addTab(tabForce,"Силы");
 
-    QVector<QVector<double>> force,forceThrust,forceAero,forceGravity;
+    QVector<QVector<double>> force,forceThrust,forceAero,forceGravity,sum;
     for(auto &fdr: observers)
     {
         force.push_back(fdr->countup_time);
@@ -198,10 +198,22 @@ void Results::plotForce()
         forceGravity.push_back(std::move(fdr->vforce[6]));
         forceGravity.push_back(std::move(fdr->vforce[7]));
         forceGravity.push_back(std::move(fdr->vforce[8]));
+
+        sum.push_back(fdr->countup_time);
+        sum.push_back(std::move(fdr->vforce[9]));
+        sum.push_back(std::move(fdr->vforce[10]));
+        sum.push_back(std::move(fdr->vforce[11]));
     }
     wResults  *resForce = new wResults(
                 PlotInfo{force,stagesCount,
                          QStringList{"Время","Thrust [N]]"},{"Тяга двигателя"}},tabForce);
+
+    wResults *sumForce = new wResults(
+                PlotInfo{sum,stagesCount,
+                         QStringList{"Время","Fx [N]", "Fx [N]", "Fz [N]"},
+                         {"Сила по координате Х",
+                          "Сила по координате Y",
+                          "Сила по координате Z"}},tabForce);
 
     wResults *resThrust = new wResults(
                 PlotInfo{forceThrust,stagesCount,
@@ -227,7 +239,8 @@ void Results::plotForce()
                           "Гравитационные силы по координате Y",
                           "Гравитационные силы по координате Z"}},tabForce);
 
-    tabForce->addTab(resForce,"Общая");
+    tabForce->addTab(resForce,"Тяга двигателя");
+    tabForce->addTab(sumForce,"Сумма сил");
     tabForce->addTab(resThrust,"Сила тяги");
     tabForce->addTab(resAero,"Аэродинамические силы");
     tabForce->addTab(resGravity,"Вес");

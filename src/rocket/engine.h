@@ -68,6 +68,7 @@ public:
     /// \return Тяга двигателя в вакууме
     ///
     double getThrustVacuum()  {return thrust_vacuum_src(0.0);}
+    void setThrust(double value) {thrust_vacuum_src = InterpolateParameter(value);}
 
     double getDiameter() const {return diameter;}
 

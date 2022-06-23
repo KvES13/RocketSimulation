@@ -75,7 +75,8 @@ void Engine::Update(const double t, const double pressure) {
     }
 
     if (burning) {
-        this->thrust = thrust_vacuum_src(t) - (pressure * area_exit);//(pressure *0.3);// area_exit);
+        const double coeff = 4;
+        this->thrust = thrust_vacuum_src(t) - (pressure * coeff*area_exit);
         mdot_prop = thrust/ISPvac/Constants::g_earth;
     } else {
         thrust = 0.0;
@@ -105,7 +106,6 @@ Engine Engine::create(JsonWrapper &json)
     JsonWrapper jsEngine(json);
     double diameter_exit = json.getDouble("Throat diameter[m]");
     double isp_vac =json.getDouble("Const Isp vac[s]");
-    double nozzle_expansion_ratio = json.getDouble("nozzle expansion ratio[-]");
 
     double area_exit = 0.25 * std::pow(diameter_exit, 2) * Constants::pi;
 

@@ -8,7 +8,7 @@
 			"Thrust at vacuum File Path": "sample_thrust.csv"
 		},
 		"Constant Thrust": {
-			"Thrust at vacuum [N]": 190000.0,
+			"Thrust at vacuum [N]": 192000.0,
 			"Burn Duration [sec]": 155,
 			"Thrust coefficient[-]": 1.00
 		},
@@ -47,12 +47,12 @@
 		"X-ThrustLoadingPoint from BodyTail [m]": 0.300,
 
 		"Constant CA": {
-			"Constant CA [-]": 0.4,
+			"Constant CA [-]": 0.9,
 			"Constant BurnOut CA [-]": 0.5
 		},
 
 		"Constant CNa": {
-			"Constant CNa [1/rad]": 10.0
+			"Constant CNa [1/rad]": 10
 		},
 
 		"Fin Cant Angle [deg]": 0.0,
@@ -98,21 +98,12 @@
 		},
 		
 		"Enable Rocket Dynamic Method" : false,
-		"Rocket Dynamic" : {
-			"First launch [m]" : 70000,
-			"Thrust1 [N]" : 10000,
-			"Work Time [s]" : 15,
-			"Second launch [m]" : 1000,
-			"Thrust1 [N]" : 10000,
-			"Work Time [s]" : 30
-		},
-
 		"Enable Parachute Open": true,
 		"Parachute": {
 			"_comment": "height, time",
 			"Trigger" : "height",
 			"Open Time [s]": 300.0,
-			"Open Height [m]" : 5000.0
+			"Open Height [m]" : 10000.0
 		},
 
 		"Enable Secondary Parachute Open": true,
@@ -123,7 +114,7 @@
 			"Open Height [m]" : 1000.0
 		},
 
-		"Flight End Time [s]": 400.0,
+		"Flight End Time [s]": 1000.0,
 		"Time Step [s]": 0.1
 	}
 }

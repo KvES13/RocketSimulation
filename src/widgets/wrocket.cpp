@@ -38,6 +38,16 @@ void WRocket::fillWidget(const RocketStage& stage)
         ui->leTimeSeparation->setText(QString::number(stage.time_separation));
         ui->leUpperStageMass->setText(QString::number(stage.mass_upper_stage));
     }
+
+    if(stage.enable_rocket_dynamic)
+    {
+        ui->gbRocketDynamic->setEnabled(true);
+        ui->gbRocketDynamic->setChecked(true);
+        QVector<QVector<double>> v {{1,2,3},{70000,5000,1000},{2742333,2742333,914111},{30,20,10}};
+        QStringList header = {"№","Высота [м]","Тяга двигателя [N]","Время работы [c]"};
+        auto tableModel = new MyTableModel(v,header,ui->tableView);
+        ui->tableView->setModel(tableModel);
+    }
     // Ступень имеет парашют
     if(stage.enable_parachute_open)
     {

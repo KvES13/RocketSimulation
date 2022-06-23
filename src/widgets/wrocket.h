@@ -2,7 +2,9 @@
 #define WROCKET_H
 
 #include <QWidget>
-#include <stage.h>
+#include "stage.h"
+
+#include "mytablemodel.h"
 
 namespace Ui {
 class WRocket;
