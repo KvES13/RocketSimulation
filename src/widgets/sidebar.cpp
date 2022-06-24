@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QEvent>
 
-#define action_height 80
+#define action_height 84
 
 SideBar::SideBar(QWidget *parent)
     : QWidget(parent), mCheckedAction(nullptr), mOverAction(nullptr) {
@@ -17,6 +17,7 @@ void SideBar::paintEvent(QPaintEvent *event) {
 
     QFont fontText(p.font());
     fontText.setFamily("Helvetica Neue");
+    fontText.setPointSize(10);
     p.setFont(fontText);
 
     int action_y = 0;

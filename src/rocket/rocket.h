@@ -72,8 +72,8 @@ class Rocket {
         void JettsonFairing(const double mass_fairing);
         void SeparateUpperStage(const double mass_upper_stage);
 
-        void OpenParachute();
-
+        void OpenFirstParachute();
+        void OpenSecondParachute();
 
         SequenceClock burn_clock;
         Engine engine;

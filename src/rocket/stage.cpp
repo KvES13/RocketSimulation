@@ -173,9 +173,9 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
         rocket->SeparateUpperStage(mass_upper_stage);
         x0 = x0_in_stage;
 
-        Eigen::Vector3d euler {99,0, 0};
-        euler = euler / 180.0 * Constants::pi;
-        rocket->attitude.Initialize(euler);
+//        Eigen::Vector3d euler {99,0, 0};
+//        euler = euler / 180.0 * Constants::pi;
+//        rocket->attitude.Initialize(euler);
     }
 
 
@@ -185,54 +185,55 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
     }
     else if(enable_rocket_dynamic)
     {
-
-        // 1 Включение
-        double t =tempIntegrate(&aero,*env,x0_in_stage,start,70000);
-        qDebug()<<"t" <<t;
-        aero.reset(rocket.get(), env);
-
         odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
-                                t, time_step, std::ref(fdr));
-
-        double burn = t+30;
-        rocket->engine.burn_duration = burn;
-   //     rocket->mass.inert +=50000;
-        rocket->engine.setThrust(3274233); //2742333 3274233
-
-       // DynamicTest launcher(rocket.get(),env);
-        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, t,
-                                burn, time_step, std::ref(fdr));
-
-        // 2 Включение
-        double t2 =tempIntegrate(&aero,*env,x0_in_stage,burn,10000);
-        aero.reset(rocket.get(), env);
-           qDebug()<<"t2" <<t2;
-
-
-        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, burn,
-                                t2, time_step, std::ref(fdr));
-
-        rocket->engine.burn_duration = t2+30;
-        rocket->engine.setThrust(3000000); //2742333
-
-
-        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, t2,
                                 time_end, time_step, std::ref(fdr));
+//        // 1 Включение
+//        double t =tempIntegrate(&aero,*env,x0_in_stage,start,70000);
+//        qDebug()<<"t" <<t;
+//        aero.reset(rocket.get(), env);
+
+//        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
+//                                t, time_step, std::ref(fdr));
+
+//        double burn = t+30;
+//        rocket->engine.burn_duration = burn;
+//   //     rocket->mass.inert +=50000;
+//        rocket->engine.setThrust(4274233); //2742333 3274233
+
+//       // DynamicTest launcher(rocket.get(),env);
+//        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, t,
+//                                burn, time_step, std::ref(fdr));
+
+//        // 2 Включение
+//        double t2 =tempIntegrate(&aero,*env,x0_in_stage,burn,10000);
+//        aero.reset(rocket.get(), env);
+//           qDebug()<<"t2" <<t2;
+
+
+//        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, burn,
+//                                t2, time_step, std::ref(fdr));
+
+//        rocket->engine.burn_duration = t2+20;
+//        rocket->engine.setThrust(3000000); //2742333
+
+
+//        odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, t2,
+//                                time_end, time_step, std::ref(fdr));
 
     }
     else {
         // Если парашют срабатывает на заданной высоте
         if (parachute_open_height_trigger) {
-            time_open_parachute =750;// tempIntegrate(&aero,*env,x0_in_stage,start,parachute_height_open);
+            time_open_parachute = 556;//tempIntegrate(&aero,*env,x0_in_stage,start,parachute_height_open);
         }
 
         // Интегрирование до t срабатывания парашюта
-    //    aero.reset(rocket.get(), env);
+     //   aero.reset(rocket.get(), env);
         odeint::integrate_const(stepper, std::ref(aero), x0_in_stage, start,
                                 time_open_parachute, time_step, std::ref(fdr));
         start = time_open_parachute;
 
-        rocket->OpenParachute();
+        rocket->OpenFirstParachute();
         double time_step_decent_parachute = 0.1;
         odeint::runge_kutta4<DynamicsBase::state> stepper;
         Dynamics3dofParachute parachute(rocket.get(), env);
@@ -250,7 +251,7 @@ void RocketStage::FlightSequence(Environment *env, DynamicsBase::state &x0)
             odeint::integrate_const(stepper, parachute, x0_in_stage, start,
                                     time_open_second_parachute,
                                     time_step_decent_parachute, std::ref(fdr));
-            rocket->OpenParachute();
+            rocket->OpenSecondParachute();
             // Интегрирование до конца
             odeint::integrate_const(stepper, parachute, x0_in_stage,
                                     time_open_second_parachute, time_end,

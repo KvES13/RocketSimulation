@@ -66,24 +66,27 @@ void wSimulation::on_pbStartSim_clicked()
     for(const auto& stage : stageVector)
     {
         if(stage.enable_separation)
-            text += "Время разделения ступеней: " + QString::number(stage.time_separation);
+            text += "Время разделения "+QString::number(stage.stageNumber)+" ступени: " + QString::number(stage.time_separation);
         if(stage.enable_parachute_open)
             text += " сек \nСрабатывание 1 парашюта: " + QString::number(stage.time_open_parachute);
         if(stage.exist_second_parachute)
             text += " сек\nСрабатывание 2 парашюта: " + QString::number(stage.time_open_second_parachute) + " cек";
+        ui->textBrowser->append(text);
+        text.clear();
     }
-    ui->textBrowser->append(text);
+
     for(const auto& stage : stageVector)
     {
-        text =
-            "\n\nМаксимальная высота: " + QString::number(stage.fdr.max_alt) +
+        text = "\n"+QString::number(stage.stageNumber)+" ступень"+
+            "\nМаксимальная высота: " + QString::number(stage.fdr.max_alt) +
             " м\nМаксимальная скорость: " + QString::number(stage.fdr.max_speed) +
             " м/с\nМаксимальное ускорение: " + QString::number(stage.fdr.max_accelerarion) +
 
             " м/с^2\nРасстояние от точки старта: " + QString::number(stage.fdr.max_downrage) + " м";
+        ui->textBrowser->append(text);
     }
 
-    ui->textBrowser->append(text);
+
     ui->pbResults->setEnabled(true);
     ui->pbStartSim->setEnabled(false);
 

@@ -68,6 +68,30 @@ Engine::Engine(const std::vector<double> &time_vector,
 
 
 void Engine::Update(const double t, const double pressure) {
+
+    if(t > 510 && t < 540)
+    {
+         Ignittion();
+        this->thrust = 3274233 - (pressure * 1*area_exit);
+        mdot_prop = thrust/ISPvac/Constants::g_earth;
+        return;
+    }
+    else if (t > 570 && t < 590)
+    {
+         Ignittion();
+       this->thrust = 2742333 - (pressure * 1*area_exit);
+        mdot_prop = thrust/ISPvac/Constants::g_earth;
+       return;
+    }
+    else if (t > 600 && t < 620)
+    {
+         Ignittion();
+       this->thrust = 450000 - (pressure * 1*area_exit);
+        mdot_prop = thrust/ISPvac/Constants::g_earth;
+       return;
+    }
+
+
     if (t <= burn_duration) {
         Ignittion();
     } else {
@@ -75,7 +99,7 @@ void Engine::Update(const double t, const double pressure) {
     }
 
     if (burning) {
-        const double coeff = 4;
+        const double coeff = 4;//15;
         this->thrust = thrust_vacuum_src(t) - (pressure * coeff*area_exit);
         mdot_prop = thrust/ISPvac/Constants::g_earth;
     } else {

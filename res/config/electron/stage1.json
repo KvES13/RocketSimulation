@@ -103,7 +103,7 @@
 			"_comment": "height, time",
 			"Trigger" : "height",
 			"Open Time [s]": 300.0,
-			"Open Height [m]" : 10000.0
+			"Open Height [m]" : 8000.0
 		},
 
 		"Enable Secondary Parachute Open": true,

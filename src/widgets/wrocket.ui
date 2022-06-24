@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>522</width>
-    <height>563</height>
+    <width>467</width>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,8 +45,32 @@
         <bool>false</bool>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="leParachuteTimeOpen1"/>
+        <item row="3" column="4">
+         <widget class="QLineEdit" name="leParachuteHeightOpen2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="leParachuteTimeOpen2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QLabel" name="label_18">
+          <property name="text">
+           <string>[с]</string>
+          </property>
+         </widget>
         </item>
         <item row="3" column="3">
          <widget class="QLabel" name="label_30">
@@ -55,8 +79,26 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="4">
-         <widget class="QLineEdit" name="leParachuteHeightOpen2"/>
+        <item row="1" column="5">
+         <widget class="QLabel" name="label_12">
+          <property name="text">
+           <string>[м]</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_15">
+          <property name="text">
+           <string>[с]</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="5">
+         <widget class="QLabel" name="label_21">
+          <property name="text">
+           <string>[м]</string>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0" colspan="5">
          <widget class="QCheckBox" name="cbSecondParachute">
@@ -67,6 +109,48 @@
           </property>
           <property name="text">
            <string>Наличие 2 парашюта</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLabel" name="label_29">
+          <property name="text">
+           <string>Высота открытия:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QRadioButton" name="rbTimeTrigger">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Срабатывание по времени</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="leParachuteTimeOpen1">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_25">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Время открытия:</string>
           </property>
          </widget>
         </item>
@@ -83,75 +167,22 @@
          </widget>
         </item>
         <item row="1" column="4">
-         <widget class="QLineEdit" name="leParachuteHeightOpen1"/>
+         <widget class="QLineEdit" name="leParachuteHeightOpen1">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
         </item>
         <item row="0" column="3" colspan="2">
          <widget class="QRadioButton" name="rbHeightTrigger">
           <property name="text">
            <string>Срабатывание по высоте</string>
           </property>
-         </widget>
-        </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QRadioButton" name="rbTimeTrigger">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Срабатывание по времени</string>
-          </property>
           <property name="checked">
            <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="leParachuteTimeOpen2"/>
-        </item>
-        <item row="1" column="5">
-         <widget class="QLabel" name="label_12">
-          <property name="text">
-           <string>[м]</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_25">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Время открытия:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QLabel" name="label_29">
-          <property name="text">
-           <string>Высота открытия:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="label_15">
-          <property name="text">
-           <string>[с]</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QLabel" name="label_18">
-          <property name="text">
-           <string>[с]</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="5">
-         <widget class="QLabel" name="label_21">
-          <property name="text">
-           <string>[м]</string>
           </property>
          </widget>
         </item>
@@ -236,7 +267,14 @@
        </property>
        <layout class="QGridLayout" name="gridLayout_5">
         <item row="0" column="1">
-         <widget class="QLineEdit" name="leTimeSeparation"/>
+         <widget class="QLineEdit" name="leTimeSeparation">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_44">
@@ -270,7 +308,14 @@
          </widget>
         </item>
         <item row="0" column="4">
-         <widget class="QLineEdit" name="leUpperStageMass"/>
+         <widget class="QLineEdit" name="leUpperStageMass">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
         </item>
         <item row="0" column="5">
          <widget class="QLabel" name="label_45">
@@ -284,6 +329,12 @@
      </item>
      <item row="3" column="1" colspan="2">
       <widget class="QLineEdit" name="leMassInert">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="font">
         <font>
          <pointsize>10</pointsize>
@@ -341,6 +392,12 @@
      </item>
      <item row="2" column="1" colspan="2">
       <widget class="QLineEdit" name="leLenght">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="font">
         <font>
          <pointsize>10</pointsize>
@@ -362,6 +419,12 @@
      </item>
      <item row="4" column="5">
       <widget class="QLineEdit" name="leEngDiameter">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="font">
         <font>
          <pointsize>10</pointsize>
@@ -371,6 +434,12 @@
      </item>
      <item row="4" column="1" colspan="2">
       <widget class="QLineEdit" name="lePropellant">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="font">
         <font>
          <pointsize>10</pointsize>
@@ -380,6 +449,12 @@
      </item>
      <item row="2" column="5">
       <widget class="QLineEdit" name="leThrustVac">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="font">
         <font>
          <pointsize>10</pointsize>
@@ -413,6 +488,12 @@
      </item>
      <item row="1" column="1" colspan="2">
       <widget class="QLineEdit" name="leDiameter">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="font">
         <font>
          <pointsize>10</pointsize>
@@ -422,6 +503,12 @@
      </item>
      <item row="3" column="5">
       <widget class="QLineEdit" name="leISPVac">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="font">
         <font>
          <pointsize>10</pointsize>
@@ -491,6 +578,12 @@
      </item>
      <item row="1" column="5">
       <widget class="QLineEdit" name="leEngBurnDuration">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="font">
         <font>
          <pointsize>10</pointsize>

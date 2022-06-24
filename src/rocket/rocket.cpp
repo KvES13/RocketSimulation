@@ -64,7 +64,7 @@ Rocket::Rocket(JsonWrapper& json)
     setCmq(InterpolateParameter(js.getSubItem("Constant Cmq").getDouble("Constant Cmq [-]")));
     setCnr(InterpolateParameter(js.getSubItem("Constant Cnr").getDouble("Constant Cnr [-]")));
 
-    setCdSParachute(1.5);
+    setCdSParachute(3);
 
 }
 
@@ -277,12 +277,10 @@ void Rocket::SeparateUpperStage(const double mass_upper_stage) {
     if (mass.inert <= 0.0) mass.inert = 1.0;
 };
 
-void Rocket::OpenParachute() {
-
-    for (size_t i=0; i < CdS_parachute_src.size(); ++i) {
-        CdS_parachute += CdS_parachute_src[i];
-        CdS_parachute_src[i] = 0; /// @badcode
-    }
+void Rocket::OpenFirstParachute() {
+    CdS_parachute += CdS_parachute_src[0];
 };
-
+void Rocket::OpenSecondParachute() {
+    CdS_parachute += CdS_parachute_src[1];
+};
 
