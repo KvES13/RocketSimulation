@@ -56,11 +56,7 @@ private slots:
     /// \brief Обработка события нажатия на кнопку "Обзор" файла для сохранения
     ///
     void on_btnSelectSaveFile_clicked();
-    ///
-    /// \brief on_sbStagesNumber_valueChanged
-    /// \param arg1
-    ///
-    void on_sbStagesNumber_valueChanged(int arg1);
+
 
     void on_leStartLongtitude_editingFinished();
 

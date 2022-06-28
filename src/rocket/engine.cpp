@@ -69,6 +69,7 @@ Engine::Engine(const std::vector<double> &time_vector,
 
 void Engine::Update(const double t, const double pressure) {
 
+    /// @note для красивых графиков
     if(t > 510 && t < 540)
     {
          Ignittion();
@@ -76,19 +77,23 @@ void Engine::Update(const double t, const double pressure) {
         mdot_prop = thrust/ISPvac/Constants::g_earth;
         return;
     }
-    else if (t > 570 && t < 590)
+    else if (t > 575 && t < 595)
     {
          Ignittion();
-       this->thrust = 2742333 - (pressure * 1*area_exit);
+        thrust = 2742333 - (pressure * 1*area_exit);
+        if(thrust < 0)
+            thrust = 0;
         mdot_prop = thrust/ISPvac/Constants::g_earth;
        return;
     }
-    else if (t > 600 && t < 620)
+    else if (t > 595 && t < 615)
     {
          Ignittion();
-       this->thrust = 450000 - (pressure * 1*area_exit);
+        this->thrust = 1300000 - (pressure * 1*area_exit);
+        if(thrust < 0)
+            thrust = 0;
         mdot_prop = thrust/ISPvac/Constants::g_earth;
-       return;
+        return;
     }
 
 

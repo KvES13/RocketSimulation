@@ -34,7 +34,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideNone</enum>
@@ -619,7 +619,7 @@
        <string>Ракета</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7">
-       <item row="3" column="0" colspan="2">
+       <item row="1" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>1 ступень</string>
@@ -637,40 +637,7 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="sbStagesNumber">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>3</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_40">
-         <property name="text">
-          <string>Количество ступеней:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_4">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3" colspan="2">
+       <item row="1" column="3" colspan="2">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>2 ступень</string>
@@ -680,20 +647,6 @@
            <widget class="WRocket" name="stage2" native="true"/>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_50">
-         <property name="text">
-          <string>Высота стартового участка полёта:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3" colspan="2">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>[м]</string>
-         </property>
         </widget>
        </item>
       </layout>

@@ -100,8 +100,8 @@
 		"Enable Rocket Dynamic Method" : true,
 		"Rocket Dynamic" : {
 
-			"Launch Height [m]" : [70000,5000,1000],
-			"Thrust [N]": [2742333,2742333,914111],
+			"Launch Height [m]" : [70000,10000,1000],
+			"Thrust [N]": [3274233,2742333,914111],
 			"Work Time [s]" : [30,20,10]
 		},
 

@@ -55,7 +55,7 @@ void FlightSettings::on_btnLoadCfg_clicked()
     v_stages.clear();
     JsonWrapper json(jsonFilePath);
     int numberOfStages =json.getInt("Number of Stage");
-    ui->sbStagesNumber->setValue(numberOfStages);
+
 
     QString filePath = QFileInfo(jsonFilePath).path()+"/";
 
@@ -148,13 +148,6 @@ void FlightSettings::on_btnSelectSaveFile_clicked()
         ui->leSaveFilePath->setText(filename);
 }
 
-void FlightSettings::on_sbStagesNumber_valueChanged(int arg1)
-{
-//    if(arg1 == 1)
-//        ui->gb2Stage->setEnabled(false);
-//    else
-//        ui->gb2Stage->setEnabled(true);
-}
 
 void FlightSettings::on_leStartLongtitude_editingFinished()
 {
